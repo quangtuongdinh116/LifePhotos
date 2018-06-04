@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.forabetterlife.dtq.myunsplash">
+
+    <permission android:name="com.forabetterlife.dtq.myunsplash.photos.PRIVATE_PERMISSON" />
+
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+    <uses-permission android:name="android.permission.SET_WALLPAPER" />
+    <uses-permission android:name="android.permission.SET_WALLPAPER_HINTS" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="com.forabetterlife.dtq.myunsplash.photos.PRIVATE_PERMISSON" />
+
+    <application
+        android:name=".MyUnSplash"
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_launcher_photo_camera"
+        android:label="@string/app_name"
+        android:largeHeap="true"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:supportsRtl="true"
+        android:theme="@style/AppTheme">
+        <activity
+            android:name=".photos.PhotosActivity"
+            android:label="@string/app_name"
+            android:theme="@style/AppTheme.NoActionBar"
+            android:screenOrientation="portrait">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".photo.PhotoDetailActivity"
+            android:parentActivityName=".photos.PhotosActivity"
+            android:theme="@style/AppTheme.NoActionBar"
+            android:screenOrientation="portrait">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".photos.PhotosActivity" />
+        </activity>
+        <activity
+            android:name=".setting.SettingsPrefActivity"
+            android:parentActivityName=".photos.PhotosActivity"
+            android:screenOrientation="portrait">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".photos.PhotosActivity" />
+        </activity>
+
+        <service
+            android:name=".data.remote.wantedphoto.WantedPhotoService"
+            android:exported="true"
+            android:permission="android.permission.BIND_JOB_SERVICE"></service>
+
+        <service
+            android:name=".data.local.wallpaper.WallpaperService"
+            android:exported="true"
+            android:permission="android.permission.BIND_JOB_SERVICE"></service>
+
+        <receiver
+            android:name=".photos.WantedPhotoBroadcastReceiver"
+            android:exported="false"
+            android:permission="com.forabetterlife.dtq.myunsplash.photos.PRIVATE_PERMISSON">
+            <intent-filter android:priority="-999">
+                <action android:name="com.forabetterlife.dtq.myunsplash.photos.BROADCAST_ACTION" />
+            </intent-filter>
+        </receiver>
+
+        <activity android:name=".wallpaper.WallpaperActivity"
+            android:theme="@style/AppTheme.NoActionBar"
+            android:screenOrientation="portrait"></activity>
+    </application>
+
+</manifest>

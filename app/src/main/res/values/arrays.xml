@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="pref_wallpaper_quality_entries">
+        <item>RAW</item>
+        <item>FULL</item>
+        <item>REGULAR</item>
+        <item>SMALL</item>
+        <item>THUMB</item>
+    </string-array>
+    <string-array name="pref_wallpaper_quality_values">
+        <item>RAW</item>
+        <item>FULL</item>
+        <item>REGULAR</item>
+        <item>SMALL</item>
+        <item>THUMB</item>
+    </string-array>
+</resources>
+
+

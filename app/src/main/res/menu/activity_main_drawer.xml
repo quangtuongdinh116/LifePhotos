@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:showIn="navigation_view">
+
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/nav_all_photos"
+            android:icon="@drawable/ic_photo_library_black_24dp"
+            android:iconTint="@android:color/white"
+            android:title="All Photos" />
+        <item
+            android:id="@+id/nav_wallpaper"
+            android:icon="@drawable/ic_wallpaper_black_24dp"
+            android:iconTint="@android:color/white"
+            android:title="Wallpaper" />
+        <item
+            android:id="@+id/nav_favorite"
+            android:icon="@drawable/ic_favorite_black_24dp"
+            android:iconTint="@android:color/white"
+            android:title="Favorites" />
+        <item android:id="@+id/nav_downloaded_photo"
+            android:title="Downloaded Photos"
+            android:icon="@drawable/ic_file_download_black_24dp"
+            android:iconTint="@android:color/white"/>
+        <item android:id="@+id/nav_wanted_photo"
+            android:title="Wanted Photos"
+            android:icon="@drawable/ic_wanted_photo_black_24dp"
+            android:iconTint="@android:color/white"/>
+        <item
+            android:id="@+id/nav_settings"
+            android:icon="@drawable/ic_settings_black_24dp"
+            android:iconTint="@android:color/white"
+            android:title="Settings" />
+
+    </group>
+
+
+
+</menu>

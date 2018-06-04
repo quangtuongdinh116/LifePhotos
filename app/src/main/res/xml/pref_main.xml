@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+    <PreferenceCategory android:title="Quality">
+        <ListPreference
+            android:key="show_quality_list_key"
+            android:title="Photo Quality"
+            android:dialogTitle="Choose the quality of showing photos"
+            android:entries="@array/list_preference_entries"
+            android:entryValues="@array/list_preference_entry_values"
+            android:summary="Quality of showing photos"
+            android:defaultValue="REGULAR"
+            >
+
+        </ListPreference>
+        <ListPreference
+            android:key="download_quality_list_key"
+            android:title="Download Quality"
+            android:dialogTitle="Choose the quality of download photo"
+            android:entries="@array/list_preference_entries"
+            android:entryValues="@array/list_preference_entry_values"
+            android:summary="Quality of downloaded photo"
+            android:defaultValue="REGULAR"
+            >
+
+        </ListPreference>
+    </PreferenceCategory>
+    <PreferenceCategory android:title="Wanted Photos">
+        <EditTextPreference
+            android:key="@string/photo_wanted_edit_text_preference_key"
+            android:title="Keyword to search"
+            android:dialogTitle="Enter your keyword for searching"
+            >
+
+        </EditTextPreference>
+
+        <SwitchPreference
+            android:key="@string/photo_wanted_switch_preference_key"
+            android:defaultValue="false"
+            android:title="Notification"
+            android:summary="Send notification when new photo arrives">
+
+        </SwitchPreference>
+
+    </PreferenceCategory>
+
+</PreferenceScreen>
