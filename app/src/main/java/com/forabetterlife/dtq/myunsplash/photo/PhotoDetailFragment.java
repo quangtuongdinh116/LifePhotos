@@ -94,6 +94,7 @@ public class PhotoDetailFragment extends DaggerFragment implements PhotoDetailCo
     public boolean onOptionsItemSelected(MenuItem item) {
         int itemId = item.getItemId();
         if (itemId == R.id.menu_item_set_wallpaper) {
+            Utils.isStoragePermissionGranted(getActivity());
             if (Utils.isStoragePermissionGranted(getActivity()) && !mPresenter.isPhotoNull()) {
                 wallpaperDialog = new WallpaperDialog();
                 wallpaperDialog.setListener(new WallpaperDialog.WallpaperDialogListener() {

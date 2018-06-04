@@ -6,7 +6,6 @@ import android.net.ConnectivityManager;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
@@ -24,8 +23,6 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.Priority;
-import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.RequestOptions;
 import com.forabetterlife.dtq.myunsplash.R;
 import com.forabetterlife.dtq.myunsplash.data.model.PhotoResponse;
@@ -33,8 +30,6 @@ import com.forabetterlife.dtq.myunsplash.di.ActivityScoped;
 import com.forabetterlife.dtq.myunsplash.photo.PhotoDetailActivity;
 import com.forabetterlife.dtq.myunsplash.utils.PhotoCategory;
 import com.forabetterlife.dtq.myunsplash.utils.Utils;
-import com.inthecheesefactory.thecheeselibrary.widget.AdjustableImageView;
-import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -63,9 +58,9 @@ public class PhotosFragment extends PhotosVisibleFragment implements PhotosContr
 
     private RecyclerView mRecyclerView;
 
-    private LinearLayout mErrorContainer;
+    private LinearLayout mMessageContainer;
 
-    private TextView mErrorMessageTV;
+    private TextView mMessageTV;
 
     private RecyclerView.LayoutManager mLayoutManager;
 
@@ -102,8 +97,8 @@ public class PhotosFragment extends PhotosVisibleFragment implements PhotosContr
         View rootView = inflater.inflate(R.layout.fragment_all_photos, container, false);
 
         mRecyclerView = (RecyclerView) rootView.findViewById(R.id.all_photos_recycler_view);
-        mErrorContainer = (LinearLayout) rootView.findViewById(R.id.error_container);
-        mErrorMessageTV = (TextView) rootView.findViewById(R.id.error_message);
+        mMessageContainer = (LinearLayout) rootView.findViewById(R.id.message_container);
+        mMessageTV = (TextView) rootView.findViewById(R.id.message);
 
         setUpRecyclerView();
 
@@ -281,11 +276,11 @@ public class PhotosFragment extends PhotosVisibleFragment implements PhotosContr
         Log.i(TAG, "inside showAllPhotos with list size = " + list.size());
         if (list != null && list.size() == 0) {
             mRecyclerView.setVisibility(View.GONE);
-            mErrorContainer.setVisibility(View.VISIBLE);
-            mErrorMessageTV.setText("NO PHOTOS");
+            mMessageContainer.setVisibility(View.VISIBLE);
+            mMessageTV.setText("NO PHOTOS");
         } else if (list != null && list.size() != 0) {
             mRecyclerView.setVisibility(View.VISIBLE);
-            mErrorContainer.setVisibility(View.GONE);
+            mMessageContainer.setVisibility(View.GONE);
             if (isNew) {
                 Log.i(TAG, "inside isNew");
                 mPhotosAdapter.setList(list, photoQuality);
@@ -330,20 +325,34 @@ public class PhotosFragment extends PhotosVisibleFragment implements PhotosContr
     @Override
     public void showNoInternetError() {
         mRecyclerView.setVisibility(View.GONE);
-        mErrorContainer.setVisibility(View.VISIBLE);
-        mErrorMessageTV.setText("Please connect to Internet to load photos");
+        mMessageContainer.setVisibility(View.VISIBLE);
+        mMessageTV.setText("Please connect to Internet to load photos");
     }
 
     @Override
     public void showTurnOnWantedFunction() {
 
         mRecyclerView.setVisibility(View.GONE);
-        mErrorContainer.setVisibility(View.VISIBLE);
-        mErrorMessageTV.setText("You can add keyword for wanted photos in settings");
+        mMessageContainer.setVisibility(View.VISIBLE);
+        mMessageTV.setVisibility(View.VISIBLE);
+        mMessageTV.setText("You can add keyword for wanted photos in settings");
     }
 
     @Override
     public void setLoadingIndicator(final boolean active) {
+        if (mMessageTV != null && active) {
+            Log.i(TAG, "INSIDE mMessageTV != null && active");
+            mRecyclerView.setVisibility(View.GONE);
+            mMessageContainer.setVisibility(View.VISIBLE);
+            mMessageTV.setVisibility(View.VISIBLE);
+            mMessageTV.setText("LOADING...");
+        }
+        if (mMessageTV != null && !active) {
+            Log.i(TAG, "INSIDE mMessageTV != null && !active");
+            mRecyclerView.setVisibility(View.VISIBLE);
+            mMessageContainer.setVisibility(View.GONE);
+            mMessageTV.setVisibility(View.GONE);
+        }
 //        if (getView() == null) {
 //            return;
 //        }
@@ -433,7 +442,9 @@ public class PhotosFragment extends PhotosVisibleFragment implements PhotosContr
 //                    .load(photoUrl)
 //                    .into(mImageView);
 
-            Glide.with(getContext())
+//            RequestOptions options = RequestOptions.placeholderOf(R.drawable.loading_mark);
+
+            Glide.with(mImageView.getContext())
                     .load(photoUrl)
                     .into(mImageView);
 

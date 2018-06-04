@@ -18,7 +18,7 @@
                 android:layout_height="match_parent"></android.support.v7.widget.RecyclerView>
 
             <LinearLayout
-                android:id="@+id/error_container"
+                android:id="@+id/message_container"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerInParent="true"
@@ -26,7 +26,7 @@
                 >
 
                 <TextView
-                    android:id="@+id/error_message"
+                    android:id="@+id/message"
                     android:textSize="25sp"
                     android:fontFamily="sans-serif-condensed"
                     android:textStyle="bold"
