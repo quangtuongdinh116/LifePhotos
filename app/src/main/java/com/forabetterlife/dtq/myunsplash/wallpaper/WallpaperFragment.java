@@ -76,7 +76,7 @@ public class WallpaperFragment extends Fragment implements WallpaperContract.Vie
 
             }
         });
-        mIntervalTV = (TextView) root.findViewById(R.id.message_for_interval);
+
 
 
         ArrayList<String> spinnerValues = new ArrayList<>();

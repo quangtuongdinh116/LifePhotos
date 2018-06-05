@@ -123,5 +123,10 @@ public class PhotoRepository implements PhotoDataSource {
 
     }
 
+    @Override
+    public void clearMemory(Context context) {
+        mLocalDataSource.clearMemory(context);
+    }
+
 
 }

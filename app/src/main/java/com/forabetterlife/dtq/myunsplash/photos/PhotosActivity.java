@@ -234,6 +234,7 @@ public class PhotosActivity extends DaggerAppCompatActivity
     }
 
     public void restoreToNewState() {
+        mPresenter.clearMemory(this);
         mPresenter.setIsNewStatus();
         mPresenter.resetToFirstPage();
         mPresenter.setIsSearching(false);

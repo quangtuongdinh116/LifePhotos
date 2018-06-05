@@ -1,5 +1,6 @@
 package com.forabetterlife.dtq.myunsplash.photos;
 
+import android.content.Context;
 import android.net.ConnectivityManager;
 
 import com.forabetterlife.dtq.myunsplash.data.model.PhotoResponse;
@@ -29,6 +30,7 @@ public interface PhotosContract {
         void resetToFirstPage();
         boolean isSearching();
         String getSearchQuery();
+        void clearMemory(Context context);
     }
     public interface View {
         void setPresenter(PhotosContract.Presenter presenter);

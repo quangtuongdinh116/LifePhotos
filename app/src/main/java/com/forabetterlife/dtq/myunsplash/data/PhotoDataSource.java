@@ -30,6 +30,7 @@ public interface PhotoDataSource {
     void saveLastSearchWantedPhotoId(String lastSearchId);
     void changeWallpaperStatus(long duration, String type, Context context,PhotoDataSource.ScheduleChangeWallpaper callback);
     void loadWallpaperStatus(LoadWallpaperStatus callback);
+    void clearMemory(Context context);
 
     public interface LoadAllPhotosCallback {
         void onLoadSuccess(List<PhotoResponse> photoResponseList);

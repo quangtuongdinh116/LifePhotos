@@ -9,6 +9,7 @@ import android.os.PersistableBundle;
 import android.support.annotation.NonNull;
 import android.util.Log;
 
+import com.bumptech.glide.Glide;
 import com.forabetterlife.dtq.myunsplash.MyUnSplash;
 import com.forabetterlife.dtq.myunsplash.data.PhotoDataSource;
 import com.forabetterlife.dtq.myunsplash.data.local.wallpaper.WallpaperService;
@@ -309,6 +310,20 @@ public class LocalDataSource implements PhotoDataSource {
         Log.i(TAG, "type: " + String.valueOf(type));
         long duration = mSharedPreferences.getLong(PREFENCE_KEY_DURATION, 0);
         callback.onLoadSuccess(type, isOn, duration);
+    }
+
+    @Override
+    public void clearMemory(final Context context) {
+        Log.i(TAG, "inside changeFavoriteStatus");
+        Runnable runnable = new Runnable() {
+            @Override
+            public void run() {
+                Glide.get(context)
+                        .clearDiskCache();
+            }
+        };
+        mAppExecutors.getDiskIO().execute(runnable);
+
     }
 
     public String getWantedPhotoSearchQuery() {

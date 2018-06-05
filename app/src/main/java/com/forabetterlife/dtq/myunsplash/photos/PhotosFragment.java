@@ -6,6 +6,7 @@ import android.net.ConnectivityManager;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.design.widget.Snackbar;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
@@ -23,6 +24,8 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.DecodeFormat;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.RequestOptions;
 import com.forabetterlife.dtq.myunsplash.R;
 import com.forabetterlife.dtq.myunsplash.data.model.PhotoResponse;
@@ -167,6 +170,7 @@ public class PhotosFragment extends PhotosVisibleFragment implements PhotosContr
                 public boolean onQueryTextSubmit(String query) {
                     mPhotosAdapter = new PhotosAdapter(new ArrayList<PhotoResponse>());
                     mRecyclerView.setAdapter(mPhotosAdapter);
+                    mPresenter.clearMemory(getContext());
                     mPresenter.setIsSearching(true);
                     mPresenter.setIsNewStatus();
                     mPresenter.searchPhotoByQuery(query);
@@ -198,7 +202,13 @@ public class PhotosFragment extends PhotosVisibleFragment implements PhotosContr
         return super.onOptionsItemSelected(item);
     }
 
-
+//    @Override
+//    public void onDestroyView() {
+//        if (mRecyclerView != null) {
+//            mRecyclerView.setAdapter(null);
+//        }
+//        super.onDestroyView();
+//    }
 
     private void setUpRecyclerView() {
         mLayoutManager = new LinearLayoutManager(getContext());
@@ -251,9 +261,11 @@ public class PhotosFragment extends PhotosVisibleFragment implements PhotosContr
                     mRecyclerView.getRecycledViewPool().clear();
                     if (mPresenter.isSearching()) {
                         Log.i(TAG, "inside addOnScrollListener isSearching");
+//                        mPresenter.clearMemory(getContext());
                         mPresenter.nextPageSearchPhotos();
                     } else {
                         Log.i(TAG, "inside addOnScrollListener isSearching else");
+//                        mPresenter.clearMemory(getContext());
                         mPresenter.nextPageAllPhotos();
                     }
                     isLoadingMorePage = false;
@@ -277,6 +289,7 @@ public class PhotosFragment extends PhotosVisibleFragment implements PhotosContr
         if (list != null && list.size() == 0) {
             mRecyclerView.setVisibility(View.GONE);
             mMessageContainer.setVisibility(View.VISIBLE);
+            mMessageTV.setVisibility(View.VISIBLE);
             mMessageTV.setText("NO PHOTOS");
         } else if (list != null && list.size() != 0) {
             mRecyclerView.setVisibility(View.VISIBLE);
@@ -293,7 +306,7 @@ public class PhotosFragment extends PhotosVisibleFragment implements PhotosContr
 
     @Override
     public void showLoadAllPhotosError() {
-//        Snackbar.make(getView(),"Error occured when loaded photos",Snackbar.LENGTH_LONG).show();
+        Snackbar.make(getView(),"Error occured when loaded photos",Snackbar.LENGTH_LONG).show();
         Log.i(TAG, "inside show load photos error");
     }
 
@@ -331,6 +344,7 @@ public class PhotosFragment extends PhotosVisibleFragment implements PhotosContr
 
     @Override
     public void showTurnOnWantedFunction() {
+        Log.i(TAG, "INSIDE showTurnOnWantedFunction");
 
         mRecyclerView.setVisibility(View.GONE);
         mMessageContainer.setVisibility(View.VISIBLE);
@@ -415,6 +429,13 @@ public class PhotosFragment extends PhotosVisibleFragment implements PhotosContr
         public int getItemCount() {
             return mPhotoList == null? 0 : mPhotoList.size();
         }
+
+//        @Override
+//        public void onViewRecycled(@NonNull PhotoViewHolder holder) {
+//            super.onViewRecycled(holder);
+////            holder.recycle();
+//
+//        }
     }
 
     public class PhotoViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
@@ -442,9 +463,12 @@ public class PhotosFragment extends PhotosVisibleFragment implements PhotosContr
 //                    .load(photoUrl)
 //                    .into(mImageView);
 
-//            RequestOptions options = RequestOptions.placeholderOf(R.drawable.loading_mark);
+//            RequestOptions options = new RequestOptions();
+//            options.diskCacheStrategy(DiskCacheStrategy.NONE)
+//                    .format(DecodeFormat.PREFER_ARGB_8888);
 
             Glide.with(mImageView.getContext())
+//                    .applyDefaultRequestOptions(options)
                     .load(photoUrl)
                     .into(mImageView);
 
@@ -454,6 +478,12 @@ public class PhotosFragment extends PhotosVisibleFragment implements PhotosContr
         @Override
         public void onClick(View v) {
             mOnItemClickListener.onPhotoItemClick(mPhoto);
+        }
+
+        public void recycle() {
+//            Glide.get(mImageView.getContext())
+//                    .clearMemory();
+//            mPresenter.clearMemory(mImageView.getContext());
         }
     }
 

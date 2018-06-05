@@ -122,6 +122,11 @@ public class RemoteDataSource implements PhotoDataSource {
 
     }
 
+    @Override
+    public void clearMemory(Context context) {
+
+    }
+
 
     SearchService.OnRequestPhotosListener mSearchPhotoListener = new SearchService.OnRequestPhotosListener() {
         @Override

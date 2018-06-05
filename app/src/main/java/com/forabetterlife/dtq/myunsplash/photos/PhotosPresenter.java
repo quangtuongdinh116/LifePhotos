@@ -1,5 +1,6 @@
 package com.forabetterlife.dtq.myunsplash.photos;
 
+import android.content.Context;
 import android.net.ConnectivityManager;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -80,12 +81,14 @@ public class PhotosPresenter implements PhotosContract.Presenter {
             mView.showNoInternetError();
             return;
         }
-        if (mView != null) {
-            Log.i(TAG, "inside mView != null");
-            mView.setLoadingIndicator(true);
-        }
 
         if (isFirstPage) {
+
+            if (mView != null) {
+                Log.i(TAG, "inside mView != null");
+                mView.setLoadingIndicator(true);
+            }
+
             mCurrentPage = 1;
         } else {
             mCurrentPage++;
@@ -107,6 +110,9 @@ public class PhotosPresenter implements PhotosContract.Presenter {
 
                 @Override
                 public void onLoadFail() {
+                    if (mView == null || !mView.isActive()) {
+                        return;
+                    }
                     mView.showLoadAllPhotosError();
                 }
             }, mCurrentPage);
@@ -192,7 +198,6 @@ public class PhotosPresenter implements PhotosContract.Presenter {
         if (mView == null || !mView.isActive()) {
             return;
         }
-        mView.setLoadingIndicator(false);
         showCategoryTitle();
     }
 
@@ -213,6 +218,12 @@ public class PhotosPresenter implements PhotosContract.Presenter {
         } else {
             mCurrentPage++;
         }
+
+        if (mView != null) {
+            Log.i(TAG, "inside mView != null");
+            mView.setLoadingIndicator(true);
+        }
+
         Log.i(TAG, "inside searchPhotoByQuery with mCurrentPage: " + mCurrentPage);
         mRepository.searchPhotoByQuery(query, new PhotoDataSource.SearchPhotoByQueryCallback() {
             @Override
@@ -318,6 +329,11 @@ public class PhotosPresenter implements PhotosContract.Presenter {
     @Override
     public String getSearchQuery() {
         return mSearchQuery;
+    }
+
+    @Override
+    public void clearMemory(Context context) {
+        mRepository.clearMemory(context);
     }
 
 
