@@ -99,11 +99,11 @@
     <string name="wallpaper_label">Wallpaper:</string>
     <string name="favorite_label">Favotite:</string>
     <string name="wanted_label">Wanted:</string>
-    <string name="wallexplain"> You can set photo as wallpaper by 2 ways:\nThe first way is clicking any photo to move to photo detail page. From there, click on the three dot icon at the top right corner then select set as wallpaper\nThe second way is choosing wallpaper section in menu. Choose your source of photos, interval then click start button.:</string>
+    <string name="wallexplain"> You can set photo as wallpaper by 2 ways:\nThe first way is clicking any photo to move to photo detail page. From there, click on the three dot icon at the top right corner then select \"Set Wallpaper\"\nThe second way is choosing \"Wallpaper\" section in menu. Choose your source of photos, interval then click start button.</string>
     <string name="favoriteexplain">You can choose which photo you like by clicking the heart icon at the bottom right in photo detail page.
-Your favorite photos will appear in "Favorites" section in menu.</string>
-    <string name="wantedexplain">You can view all photos which relates to a keyword, such as "flower", "forest", "building"...
-Set your keyword in "Settings" then view "Wanted Photos" in "Wanted Photos" section in menu</string>
+Your favorite photos will appear in \"Favorites\" section in menu.</string>
+    <string name="wantedexplain">You can view all photos which relate to a keyword, such as \"flower\", \"forest\", \"building\"...
+Set your keyword in \"Settings\" then view \"Wanted Photos\" in \"Wanted Photos\" section in menu</string>
     <string name="introduction">Life Photos gets more than 500.000 photos from https://unsplash.com/ gifted by the world’s most generous community of photographers.\n\nHere are some tips to use Life Photos:</string>
     <string name="author_explain">My name\'s Quang. I live in Ho Chi Minh City, Viet Nam. I am looking for a job as Android Developer.\nPlease contact me at: quangdinhtuong@gmail.com\nThank you for your concern.</string>
 </resources>
