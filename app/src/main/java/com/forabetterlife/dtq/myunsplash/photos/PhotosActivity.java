@@ -24,6 +24,7 @@ import android.view.MenuItem;
 
 import com.forabetterlife.dtq.myunsplash.MyUnSplash;
 import com.forabetterlife.dtq.myunsplash.R;
+import com.forabetterlife.dtq.myunsplash.about.AboutFragment;
 import com.forabetterlife.dtq.myunsplash.data.model.Photo;
 
 import com.forabetterlife.dtq.myunsplash.setting.SettingsPrefActivity;
@@ -224,8 +225,12 @@ public class PhotosActivity extends DaggerAppCompatActivity
                 AlertDialog alertDialog = builder.create();
                 alertDialog.show();
             }
-
-
+        } else if (id == R.id.nav_about) {
+            restoreToNewState();
+            AboutFragment aboutFragment = new AboutFragment();
+            getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.contentFrame, aboutFragment)
+                    .commit();
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);

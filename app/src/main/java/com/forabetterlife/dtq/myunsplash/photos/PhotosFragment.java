@@ -126,7 +126,7 @@ public class PhotosFragment extends PhotosVisibleFragment implements PhotosContr
 //        });
 
         mPresenter.takeView(this);
-//        loadPhotos();
+        loadPhotos();
 
         return rootView;
     }
@@ -137,7 +137,7 @@ public class PhotosFragment extends PhotosVisibleFragment implements PhotosContr
         super.onResume();
         mPresenter.takeView(this);
 //        if (mPresenter.getCategory() == PhotoCategory.SHOW_FAVORITE || mPresenter.getCategory() == PhotoCategory.SHOW_WANTED) {
-            loadPhotos();
+//            loadPhotos();
 //        }
 
         closeKeyboard();
