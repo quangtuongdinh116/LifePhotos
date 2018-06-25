@@ -14,7 +14,7 @@ import javax.inject.Singleton;
  */
 
 
-@Database(entities = {FavoriteEntity.class}, version = 3)
+@Database(entities = {FavoriteEntity.class}, version = 4)
 public abstract class MyUnsplashDatabase extends RoomDatabase {
     private static MyUnsplashDatabase INSTANCE;
 
@@ -27,7 +27,7 @@ public abstract class MyUnsplashDatabase extends RoomDatabase {
         if (INSTANCE == null) {
             synchronized (mObjectLock) {
                 INSTANCE = Room.databaseBuilder(context.getApplicationContext(),MyUnsplashDatabase.class
-                ,"LifePhotoss.db").build();
+                ,"LifePhotossss.db").build();
             }
         }
         return INSTANCE;

@@ -33,6 +33,13 @@ public class MyUnSplash extends DaggerApplication {
 
     public static final int DEFAULT_PER_PAGE = 50;
 
+    public static final String KEY_WALLPAPER_TYPE = "KEY_WALLPAPER_TYPE";
+
+    public static final String TAG_OUTPUT = "OUTPUT";
+
+    // The name of the image manipulation work
+    public static final String CHANGE_WALLPAPER_WORK_NAME = "change_wallpaper_work_name";
+
     @Override
     public void onCreate() {
         super.onCreate();

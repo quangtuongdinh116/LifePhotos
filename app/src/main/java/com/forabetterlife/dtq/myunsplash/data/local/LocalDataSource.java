@@ -2,21 +2,24 @@ package com.forabetterlife.dtq.myunsplash.data.local;
 
 import android.app.job.JobInfo;
 import android.app.job.JobScheduler;
+import android.arch.lifecycle.LiveData;
+import android.arch.lifecycle.Observer;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.PersistableBundle;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.util.Log;
 
 import com.bumptech.glide.Glide;
 import com.forabetterlife.dtq.myunsplash.MyUnSplash;
 import com.forabetterlife.dtq.myunsplash.data.PhotoDataSource;
 import com.forabetterlife.dtq.myunsplash.data.local.wallpaper.WallpaperService;
+import com.forabetterlife.dtq.myunsplash.data.local.wallpaper.WallpaperWorker;
 import com.forabetterlife.dtq.myunsplash.data.remote.wantedphoto.WantedPhotoService;
 import com.forabetterlife.dtq.myunsplash.data.service.PhotoService;
 import com.forabetterlife.dtq.myunsplash.utils.AppExecutors;
-import com.forabetterlife.dtq.myunsplash.utils.WallpaperType;
 import com.google.common.base.Strings;
 
 import java.util.ArrayList;
@@ -25,6 +28,15 @@ import java.util.concurrent.TimeUnit;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
+
+import androidx.work.Constraints;
+import androidx.work.Data;
+
+import androidx.work.NetworkType;
+import androidx.work.PeriodicWorkRequest;
+import androidx.work.State;
+import androidx.work.WorkManager;
+import androidx.work.WorkStatus;
 
 /**
  * Created by DTQ on 3/22/2018.
@@ -63,22 +75,27 @@ public class LocalDataSource implements PhotoDataSource {
     @NonNull
     private JobScheduler mJobScheduler;
 
+    @NonNull
+    private WorkManager mWorkManager;
+
     private boolean isFavorite = false;
 
+    private LiveData<List<WorkStatus>> mScheduleStatus;
+
     @Inject
-    public LocalDataSource(@NonNull FavoriteDao favoriteDao, @NonNull AppExecutors appExecutors, @NonNull SharedPreferences sharedPreferences, @NonNull JobScheduler jobScheduler) {
+    public LocalDataSource(@NonNull FavoriteDao favoriteDao, @NonNull AppExecutors appExecutors, @NonNull SharedPreferences sharedPreferences) {
         mFavoriteDao = favoriteDao;
         mAppExecutors = appExecutors;
         mSharedPreferences = sharedPreferences;
-        mJobScheduler = jobScheduler;
+        mWorkManager = WorkManager.getInstance();
+        mScheduleStatus = mWorkManager.getStatusesByTag(MyUnSplash.TAG_OUTPUT);
     }
 
     public static LocalDataSource getInstance(@NonNull FavoriteDao favoriteDao,
                                               @NonNull AppExecutors appExecutors,
-                                              @NonNull SharedPreferences sharedPreferences,
-                                              @NonNull JobScheduler jobScheduler) {
+                                              @NonNull SharedPreferences sharedPreferences) {
         if (INSTANCE == null) {
-            INSTANCE = new LocalDataSource(favoriteDao,appExecutors,sharedPreferences,jobScheduler);
+            INSTANCE = new LocalDataSource(favoriteDao,appExecutors,sharedPreferences);
         }
         return INSTANCE;
     }
@@ -252,6 +269,57 @@ public class LocalDataSource implements PhotoDataSource {
                 .apply();
     }
 
+//    @Override
+//    public void changeWallpaperStatus(long duration, String type, Context context,PhotoDataSource.ScheduleChangeWallpaper callback) {
+//        boolean isOnInPreference = mSharedPreferences.getBoolean(PREFERENCE_KEY_IS_ON_WALLPAPER, false);
+//        Log.i(TAG, "isOnInPreference is " + String.valueOf(isOnInPreference));
+//        Log.i(TAG, "TYPE IS : " + type);
+//        boolean needTurnOffNow = true;
+//        boolean needTurnOnNow = false;
+//        if (isOnInPreference) {
+//            needTurnOffNow = true;
+//            needTurnOnNow = false;
+//        } else if (!isOnInPreference) {
+//            needTurnOffNow = false;
+//            needTurnOnNow = true;
+//        }
+//        if (needTurnOffNow) {
+//            Log.i(TAG, "inside needTurnOffNow");
+//            //turn off
+//            mJobScheduler.cancel(jobIdWallpaper);
+//            mSharedPreferences.edit()
+//                    .putBoolean(PREFERENCE_KEY_IS_ON_WALLPAPER, false).apply();
+//            callback.onStopSuccess();
+//        } else if (needTurnOnNow) {
+//            Log.i(TAG, "inside needTurnOnNow");
+//            //turn on
+//            mJobScheduler.cancel(jobIdWallpaper);
+////            mSharedPreferences.edit()
+////                    .putBoolean(PREFERENCE_KEY_IS_ON_WALLPAPER, false).apply();
+//            int result = mJobScheduler.schedule(getJobInfoWallpaper(context,type,duration));
+//            if (result == JobScheduler.RESULT_SUCCESS) {
+//                Log.i(TAG, "inside needTurnOnNow RESULT_SUCCESS ");
+//                mSharedPreferences.edit()
+//                        .putBoolean(PREFERENCE_KEY_IS_ON_WALLPAPER, true).apply();
+//                callback.onScheduleSuccess();
+//            } else {
+//                Log.i(TAG, "inside needTurnOnNow RESULT_FAIL ");
+//                mSharedPreferences.edit()
+//                        .putBoolean(PREFERENCE_KEY_IS_ON_WALLPAPER, false).apply();
+//                callback.onScheduleFail();
+//            }
+//        }
+//        mSharedPreferences.edit()
+//                .putString(PREFERENCE_KEY_WALLPAPER_TYPE, type).apply();
+//        mSharedPreferences.edit()
+//                .putLong(PREFENCE_KEY_DURATION, duration).apply();
+//
+////        //test after
+////        boolean isOnInPreferenceAfter = mSharedPreferences.getBoolean(PREFERENCE_KEY_IS_ON_WALLPAPER, false);
+////        Log.i(TAG, "isOnInPreferenceAfter: " + String.valueOf(isOnInPreferenceAfter));
+//    }
+
+
     @Override
     public void changeWallpaperStatus(long duration, String type, Context context,PhotoDataSource.ScheduleChangeWallpaper callback) {
         boolean isOnInPreference = mSharedPreferences.getBoolean(PREFERENCE_KEY_IS_ON_WALLPAPER, false);
@@ -269,28 +337,80 @@ public class LocalDataSource implements PhotoDataSource {
         if (needTurnOffNow) {
             Log.i(TAG, "inside needTurnOffNow");
             //turn off
-            mJobScheduler.cancel(jobIdWallpaper);
+            mWorkManager.cancelAllWorkByTag(MyUnSplash.CHANGE_WALLPAPER_WORK_NAME);
             mSharedPreferences.edit()
                     .putBoolean(PREFERENCE_KEY_IS_ON_WALLPAPER, false).apply();
             callback.onStopSuccess();
         } else if (needTurnOnNow) {
             Log.i(TAG, "inside needTurnOnNow");
             //turn on
-            mJobScheduler.cancel(jobIdWallpaper);
-//            mSharedPreferences.edit()
-//                    .putBoolean(PREFERENCE_KEY_IS_ON_WALLPAPER, false).apply();
-            int result = mJobScheduler.schedule(getJobInfoWallpaper(context,type,duration));
-            if (result == JobScheduler.RESULT_SUCCESS) {
-                Log.i(TAG, "inside needTurnOnNow RESULT_SUCCESS ");
-                mSharedPreferences.edit()
+            mWorkManager.cancelAllWorkByTag(MyUnSplash.TAG_OUTPUT);
+
+//            mWorkManager.enqueue(MyUnSplash.CHANGE_WALLPAPER_WORK_NAME,
+//                    ExistingPeriodicWorkPolicy.REPLACE,
+//                    getRequest(context, type, duration));
+            mWorkManager.enqueue(getRequest(context, type, duration));
+            mSharedPreferences.edit()
                         .putBoolean(PREFERENCE_KEY_IS_ON_WALLPAPER, true).apply();
-                callback.onScheduleSuccess();
-            } else {
-                Log.i(TAG, "inside needTurnOnNow RESULT_FAIL ");
-                mSharedPreferences.edit()
-                        .putBoolean(PREFERENCE_KEY_IS_ON_WALLPAPER, false).apply();
-                callback.onScheduleFail();
-            }
+            callback.onScheduleSuccess();
+
+//            if (mScheduleStatus.getValue() != null && !mScheduleStatus.getValue().isEmpty()) {
+//                Log.i(TAG, "inside mScheduleStatus.getValue() != null && !mScheduleStatus.getValue().isEmpty()");
+//                WorkStatus workStatus = mScheduleStatus.getValue().get(0);
+//                if (workStatus.equals(State.ENQUEUED)) {
+//                    Log.i(TAG, "inside workStatus.equals(State.ENQUEUED)");
+//                    mSharedPreferences.edit()
+//                        .putBoolean(PREFERENCE_KEY_IS_ON_WALLPAPER, true).apply();
+//                callback.onScheduleSuccess();
+//                } else {
+//                    Log.i(TAG, "inside workStatus.equals(State.ENQUEUED) else");
+//                    mSharedPreferences.edit()
+//                        .putBoolean(PREFERENCE_KEY_IS_ON_WALLPAPER, false).apply();
+//                callback.onScheduleFail();
+//                }
+//            }
+
+//            if (workStatuses != null && workStatuses.getValue() != null && workStatuses.getValue().size() > 0) {
+//                WorkStatus workStatus = mScheduleStatus.getValue().get(0);
+//                switch (workStatus.getState()) {
+//                    case ENQUEUED:
+//                        Log.i(TAG, "ENQUEUE");
+//                        break;
+//                    case FAILED:
+//                        Log.i(TAG, "FAILED");
+//                        break;
+//                    case BLOCKED:
+//                        Log.i(TAG, "BLOCKED");
+//                        break;
+//                    case RUNNING:
+//                        Log.i(TAG, "RUNNING");
+//                        break;
+//                    case SUCCEEDED:
+//                        Log.i(TAG, "SUCCEEDED");
+//                        break;
+//                    case CANCELLED:
+//                        Log.i(TAG, "CANCELLED");
+//                        break;
+//                }
+//            } else {
+//                Log.i(TAG, "SIZE IS 0");
+//            }
+
+
+
+
+//            int result = mJobScheduler.schedule(getJobInfoWallpaper(context,type,duration));
+//            if (result == JobScheduler.RESULT_SUCCESS) {
+//                Log.i(TAG, "inside needTurnOnNow RESULT_SUCCESS ");
+//                mSharedPreferences.edit()
+//                        .putBoolean(PREFERENCE_KEY_IS_ON_WALLPAPER, true).apply();
+//                callback.onScheduleSuccess();
+//            } else {
+//                Log.i(TAG, "inside needTurnOnNow RESULT_FAIL ");
+//                mSharedPreferences.edit()
+//                        .putBoolean(PREFERENCE_KEY_IS_ON_WALLPAPER, false).apply();
+//                callback.onScheduleFail();
+//            }
         }
         mSharedPreferences.edit()
                 .putString(PREFERENCE_KEY_WALLPAPER_TYPE, type).apply();
@@ -324,6 +444,11 @@ public class LocalDataSource implements PhotoDataSource {
         };
         mAppExecutors.getDiskIO().execute(runnable);
 
+    }
+
+    @Override
+    public LiveData<List<WorkStatus>> getScheduleStatus() {
+        return mScheduleStatus;
     }
 
     public String getWantedPhotoSearchQuery() {
@@ -369,6 +494,35 @@ public class LocalDataSource implements PhotoDataSource {
                 .build();
 
         return jobInfo;
+    }
+
+    private PeriodicWorkRequest getRequest(Context context, String type, long duration) {
+        Log.i(TAG, String.format("inside getRequest with duration is %s", String.valueOf(duration)));
+
+        Constraints constraints = new Constraints.Builder()
+                .setRequiredNetworkType(NetworkType.CONNECTED)
+                .setRequiresCharging(false)
+                .setRequiresBatteryNotLow(false)
+                .setRequiresStorageNotLow(false)
+                .build();
+
+
+        PeriodicWorkRequest.Builder builder =
+                new PeriodicWorkRequest.Builder(WallpaperWorker.class, duration, TimeUnit.MILLISECONDS)
+                .setConstraints(constraints)
+                        .setInputData(createInputDataForType(type))
+                .addTag(MyUnSplash.TAG_OUTPUT);
+
+        PeriodicWorkRequest request = builder.build();
+        return request;
+    }
+
+    private Data createInputDataForType(String type) {
+        Data.Builder builder = new Data.Builder();
+        if (!Strings.isNullOrEmpty(type)) {
+            builder.putString(MyUnSplash.KEY_WALLPAPER_TYPE, type);
+        }
+        return builder.build();
     }
 
 

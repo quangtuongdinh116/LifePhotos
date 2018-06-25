@@ -1,5 +1,6 @@
 package com.forabetterlife.dtq.myunsplash.data.remote;
 
+import android.arch.lifecycle.LiveData;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.util.Log;
@@ -18,6 +19,7 @@ import java.util.List;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
+import androidx.work.WorkStatus;
 import retrofit2.Call;
 import retrofit2.Response;
 
@@ -125,6 +127,11 @@ public class RemoteDataSource implements PhotoDataSource {
     @Override
     public void clearMemory(Context context) {
 
+    }
+
+    @Override
+    public LiveData<List<WorkStatus>> getScheduleStatus() {
+        return null;
     }
 
 

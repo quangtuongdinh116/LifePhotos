@@ -94,6 +94,9 @@ public class WallpaperHelper {
         }
     }
 
+
+
+
     private void changeRandomWallpapers(final JobParameters jobParameters) {
 
         int randomPage = Utils.generateRandomNumber(100);

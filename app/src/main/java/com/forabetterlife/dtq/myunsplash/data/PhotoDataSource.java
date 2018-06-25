@@ -1,5 +1,6 @@
 package com.forabetterlife.dtq.myunsplash.data;
 
+import android.arch.lifecycle.LiveData;
 import android.content.Context;
 
 import com.forabetterlife.dtq.myunsplash.data.local.DownloadedPhotoEntity;
@@ -10,6 +11,8 @@ import com.forabetterlife.dtq.myunsplash.data.service.PhotoService;
 import com.forabetterlife.dtq.myunsplash.utils.WallpaperType;
 
 import java.util.List;
+
+import androidx.work.WorkStatus;
 
 /**
  * Created by DTQ on 3/22/2018.
@@ -31,6 +34,7 @@ public interface PhotoDataSource {
     void changeWallpaperStatus(long duration, String type, Context context,PhotoDataSource.ScheduleChangeWallpaper callback);
     void loadWallpaperStatus(LoadWallpaperStatus callback);
     void clearMemory(Context context);
+    LiveData<List<WorkStatus>> getScheduleStatus();
 
     public interface LoadAllPhotosCallback {
         void onLoadSuccess(List<PhotoResponse> photoResponseList);

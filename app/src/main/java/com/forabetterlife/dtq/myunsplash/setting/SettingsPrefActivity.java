@@ -88,7 +88,7 @@ public class SettingsPrefActivity extends AppCompatPreferenceActivity{
             final ListPreference ListDownloadQualityPref = (ListPreference) findPreference("download_quality_list_key");
             final ListPreference ListLoadQualityPref = (ListPreference) findPreference("show_quality_list_key");
             final EditTextPreference photoSearchKeywordPref = (EditTextPreference) findPreference(getResources().getString(R.string.photo_wanted_edit_text_preference_key));
-            final SwitchPreference photoSearchSwitchPref = (SwitchPreference) findPreference(getResources().getString(R.string.photo_wanted_switch_preference_key));
+//            final SwitchPreference photoSearchSwitchPref = (SwitchPreference) findPreference(getResources().getString(R.string.photo_wanted_switch_preference_key));
 
 
             setListPreferenceData(ListDownloadQualityPref);
@@ -115,7 +115,7 @@ public class SettingsPrefActivity extends AppCompatPreferenceActivity{
             });
 
             addListenerToPreference(photoSearchKeywordPref,sPreferenceChangeListener);
-            addListenerToBooleanPreference(photoSearchSwitchPref,sPreferenceChangeListener);
+//            addListenerToBooleanPreference(photoSearchSwitchPref,sPreferenceChangeListener);
 
 
         }

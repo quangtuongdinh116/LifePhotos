@@ -1,5 +1,6 @@
 package com.forabetterlife.dtq.myunsplash.data;
 
+import android.arch.lifecycle.LiveData;
 import android.content.Context;
 import android.support.annotation.NonNull;
 
@@ -10,8 +11,12 @@ import com.forabetterlife.dtq.myunsplash.data.service.PhotoService;
 import com.forabetterlife.dtq.myunsplash.utils.WallpaperType;
 import com.google.common.base.Strings;
 
+import java.util.List;
+
 import javax.inject.Inject;
 import javax.inject.Singleton;
+
+import androidx.work.WorkStatus;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
@@ -126,6 +131,11 @@ public class PhotoRepository implements PhotoDataSource {
     @Override
     public void clearMemory(Context context) {
         mLocalDataSource.clearMemory(context);
+    }
+
+    @Override
+    public LiveData<List<WorkStatus>> getScheduleStatus() {
+        return mLocalDataSource.getScheduleStatus();
     }
 
 

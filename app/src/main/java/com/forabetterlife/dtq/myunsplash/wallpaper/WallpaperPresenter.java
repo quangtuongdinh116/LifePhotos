@@ -1,5 +1,6 @@
 package com.forabetterlife.dtq.myunsplash.wallpaper;
 
+import android.arch.lifecycle.LiveData;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.util.Log;
@@ -9,7 +10,11 @@ import com.forabetterlife.dtq.myunsplash.data.PhotoDataSource;
 import com.forabetterlife.dtq.myunsplash.data.PhotoRepository;
 import com.forabetterlife.dtq.myunsplash.utils.WallpaperType;
 
+import java.util.List;
+
 import javax.annotation.Nullable;
+
+import androidx.work.WorkStatus;
 
 /**
  * Created by DTQ on 5/27/2018.
@@ -134,5 +139,10 @@ public class WallpaperPresenter implements WallpaperContract.Presenter {
     @NonNull
     public long getDuration() {
         return mDuration;
+    }
+
+    @Override
+    public LiveData<List<WorkStatus>> getScheduleStatus() {
+        return mRepository.getScheduleStatus();
     }
 }

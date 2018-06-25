@@ -33,13 +33,13 @@
 
         </EditTextPreference>
 
-        <SwitchPreference
-            android:key="@string/photo_wanted_switch_preference_key"
-            android:defaultValue="false"
-            android:title="Notification"
-            android:summary="Send notification when new photo arrives">
+        <!--<SwitchPreference-->
+            <!--android:key="@string/photo_wanted_switch_preference_key"-->
+            <!--android:defaultValue="false"-->
+            <!--android:title="Notification"-->
+            <!--android:summary="Send notification when new photo arrives">-->
 
-        </SwitchPreference>
+        <!--</SwitchPreference>-->
 
     </PreferenceCategory>
 

@@ -34,8 +34,8 @@ public class PhotoRepositoryModule {
     @Singleton
     @Provides
     @Local
-    PhotoDataSource providePhotosLocalDataSource(FavoriteDao favoriteDao, AppExecutors appExecutors, SharedPreferences sharedPreferences, JobScheduler jobScheduler) {
-        return new LocalDataSource(favoriteDao, appExecutors, sharedPreferences, jobScheduler);
+    PhotoDataSource providePhotosLocalDataSource(FavoriteDao favoriteDao, AppExecutors appExecutors, SharedPreferences sharedPreferences) {
+        return new LocalDataSource(favoriteDao, appExecutors, sharedPreferences);
     }
 
 
@@ -58,11 +58,11 @@ public class PhotoRepositoryModule {
         return SearchService.getService();
     }
 
-    @Singleton
-    @Provides
-    JobScheduler provideJobScheduler(Application context) {
-        return (JobScheduler) context.getSystemService(Context.JOB_SCHEDULER_SERVICE);
-    }
+//    @Singleton
+//    @Provides
+//    JobScheduler provideJobScheduler(Application context) {
+//        return (JobScheduler) context.getSystemService(Context.JOB_SCHEDULER_SERVICE);
+//    }
 
     @Singleton
     @Provides

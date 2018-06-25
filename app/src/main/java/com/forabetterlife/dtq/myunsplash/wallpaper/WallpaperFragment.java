@@ -1,6 +1,7 @@
 package com.forabetterlife.dtq.myunsplash.wallpaper;
 
 import android.app.Activity;
+import android.arch.lifecycle.Observer;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -8,6 +9,7 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,6 +25,10 @@ import com.forabetterlife.dtq.myunsplash.wallpaper.durationpicker.TimeDurationPi
 import com.forabetterlife.dtq.myunsplash.wallpaper.durationpicker.TimeDurationUtil;
 
 import java.util.ArrayList;
+import java.util.List;
+
+import androidx.work.State;
+import androidx.work.WorkStatus;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
@@ -43,6 +49,8 @@ public class WallpaperFragment extends Fragment implements WallpaperContract.Vie
     private ArrayAdapter<String> mArrayAdapter;
 
     private WallpaperContract.Presenter mPresenter;
+
+    private static final String TAG = "WallpaperFragment";
 
     @Nullable
     @Override
@@ -94,6 +102,48 @@ public class WallpaperFragment extends Fragment implements WallpaperContract.Vie
 
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+
+        mPresenter.getScheduleStatus().observe(this, new Observer<List<WorkStatus>>() {
+            @Override
+            public void onChanged(@Nullable List<WorkStatus> workStatuses) {
+                // If there are no matching work statuses, do nothing
+                if (workStatuses == null || workStatuses.isEmpty()) {
+                    Log.i(TAG, "INSIDE workStatuses == null || workStatuses.isEmpty()");
+                    return;
+                }
+
+                // We only care about the one output status.
+                // Every continuation has only one worker tagged TAG_OUTPUT
+                WorkStatus workStatus = workStatuses.get(0);
+                if (workStatus != null) {
+                    switch (workStatus.getState()) {
+                        case ENQUEUED:
+                            Log.i(TAG, "ENQUEUE");
+                            break;
+                        case FAILED:
+                            Log.i(TAG, "FAILED");
+                            break;
+                        case BLOCKED:
+                            Log.i(TAG, "BLOCKED");
+                            break;
+                        case RUNNING:
+                            Log.i(TAG, "RUNNING");
+                            break;
+                        case SUCCEEDED:
+                            Log.i(TAG, "SUCCEEDED");
+                            break;
+                        case CANCELLED:
+                            Log.i(TAG, "CANCELLED");
+                            break;
+                    }
+                } else {
+                    Log.i(TAG, "WORKsTATUS == NULL");
+                }
+
+
 
             }
         });
