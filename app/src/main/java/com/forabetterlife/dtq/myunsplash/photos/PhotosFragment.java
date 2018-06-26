@@ -16,6 +16,7 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
@@ -33,6 +34,12 @@ import com.forabetterlife.dtq.myunsplash.di.ActivityScoped;
 import com.forabetterlife.dtq.myunsplash.photo.PhotoDetailActivity;
 import com.forabetterlife.dtq.myunsplash.utils.PhotoCategory;
 import com.forabetterlife.dtq.myunsplash.utils.Utils;
+import com.mikepenz.fastadapter.IAdapter;
+import com.mikepenz.fastadapter.adapters.ItemAdapter;
+import com.mikepenz.fastadapter.commons.adapters.FastItemAdapter;
+import com.mikepenz.fastadapter.listeners.OnClickListener;
+import com.mikepenz.fastadapter_extensions.items.ProgressItem;
+import com.mikepenz.fastadapter_extensions.scroll.EndlessRecyclerOnScrollListener;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -67,11 +74,14 @@ public class PhotosFragment extends PhotosVisibleFragment implements PhotosContr
 
     private RecyclerView.LayoutManager mLayoutManager;
 
-    private PhotosAdapter mPhotosAdapter;
+//    private PhotosAdapter mPhotosAdapter;
 
     private Toolbar mToolbar;
 
     private Menu mMenu;
+
+    private FastItemAdapter<PhotoResponse> mPhotoAdapter;
+    private ItemAdapter mFooterAdapter;
 
     Boolean isScrolling = false;
     int currentItems, totalItems, scrollOutItems;
@@ -90,7 +100,8 @@ public class PhotosFragment extends PhotosVisibleFragment implements PhotosContr
         Log.i(TAG, "INSIDE onCreate");
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
-        mPhotosAdapter = new PhotosAdapter(new ArrayList<PhotoResponse>());
+//        mPhotosAdapter = new PhotosAdapter(new ArrayList<PhotoResponse>());
+
     }
 
     @Nullable
@@ -168,9 +179,13 @@ public class PhotosFragment extends PhotosVisibleFragment implements PhotosContr
             searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
                 @Override
                 public boolean onQueryTextSubmit(String query) {
-                    mPhotosAdapter = new PhotosAdapter(new ArrayList<PhotoResponse>());
-                    mRecyclerView.setAdapter(mPhotosAdapter);
-                    mPresenter.clearMemory(getContext());
+//                    mPhotosAdapter = new PhotosAdapter(new ArrayList<PhotoResponse>());
+//                    mPhotoAdapter = new FastItemAdapter<>();
+//                    mRecyclerView.setAdapter(mPhotosAdapter);
+//                    mRecyclerView.setAdapter(mPhotoAdapter);
+//                    mPresenter.clearMemory(getContext());
+                    mRecyclerView.setVisibility(View.GONE);
+                    mPhotoAdapter.clear();
                     mPresenter.setIsSearching(true);
                     mPresenter.setIsNewStatus();
                     mPresenter.searchPhotoByQuery(query);
@@ -213,43 +228,32 @@ public class PhotosFragment extends PhotosVisibleFragment implements PhotosContr
     private void setUpRecyclerView() {
         mLayoutManager = new LinearLayoutManager(getContext());
 
+        mPhotoAdapter = new FastItemAdapter<>();
+        mFooterAdapter = new ItemAdapter();
+        mPhotoAdapter.addAdapter(1, mFooterAdapter);
+        mPhotoAdapter.withOnClickListener(onClickListener);
+
 //        mRecyclerView.setHasFixedSize(true);
         mRecyclerView.setLayoutManager(mLayoutManager);
-        mRecyclerView.setAdapter(mPhotosAdapter);
+        mRecyclerView.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                return false;
+            }
+        });
+        mRecyclerView.setItemViewCacheSize(15);
+//        mRecyclerView.setAdapter(mPhotosAdapter);
+        mRecyclerView.setAdapter(mPhotoAdapter);
 
 
         mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
-//            @Override
-//            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
-//                Log.i(TAG, "INSIDE onScrollStateChanged");
-//                super.onScrollStateChanged(recyclerView, newState);
-//                if (isLoadingMorePage) {
-//                    return;
-//                }
-//                if (mPresenter.getCategory() == PhotoCategory.SHOW_FAVORITE) {
-//                    return;
-//                }
-//                if (!mRecyclerView.canScrollVertically(1) && !isLoadingMorePage) {
-//                    isLoadingMorePage = true;
-//                    Log.i(TAG, "cr7");
-//                    mRecyclerView.getRecycledViewPool().clear();
-//                    if (mPresenter.isSearching()) {
-//                        Log.i(TAG, "inside addOnScrollListener isSearching");
-//                        mPresenter.nextPageSearchPhotos();
-//                    } else {
-//                        Log.i(TAG, "inside addOnScrollListener isSearching else");
-//                        mPresenter.nextPageAllPhotos();
-//                    }
-//                } else {
-//                    Log.i(TAG, "INSIDE mRecyclerView.canScrollVertically ELSE");
-//                }
-//            }
 
             @Override
-            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
-                Log.i(TAG, "INSIDE onScrolled");
-                if (isLoadingMorePage || dy < 0) {
-                    Log.i(TAG, "isLoadingMorePage || dy < 0");
+            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+                Log.i(TAG, "INSIDE onScrollStateChanged");
+                Log.i(TAG, "isLoadingMorePage IS : " + String.valueOf(isLoadingMorePage));
+                super.onScrollStateChanged(recyclerView, newState);
+                if (isLoadingMorePage) {
                     return;
                 }
                 if (mPresenter.getCategory() == PhotoCategory.SHOW_FAVORITE) {
@@ -258,24 +262,78 @@ public class PhotosFragment extends PhotosVisibleFragment implements PhotosContr
                 if (!mRecyclerView.canScrollVertically(1) && !isLoadingMorePage) {
                     isLoadingMorePage = true;
                     Log.i(TAG, "cr7");
-                    mRecyclerView.getRecycledViewPool().clear();
+//                    mRecyclerView.getRecycledViewPool().clear();
                     if (mPresenter.isSearching()) {
                         Log.i(TAG, "inside addOnScrollListener isSearching");
-//                        mPresenter.clearMemory(getContext());
                         mPresenter.nextPageSearchPhotos();
                     } else {
                         Log.i(TAG, "inside addOnScrollListener isSearching else");
-//                        mPresenter.clearMemory(getContext());
                         mPresenter.nextPageAllPhotos();
                     }
-                    isLoadingMorePage = false;
                 } else {
                     Log.i(TAG, "INSIDE mRecyclerView.canScrollVertically ELSE");
                 }
             }
+
+//            @Override
+//            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+//                Log.i(TAG, "INSIDE onScrolled");
+//                if (isLoadingMorePage || dy < 0) {
+//                    Log.i(TAG, "isLoadingMorePage || dy < 0");
+//                    return;
+//                }
+//                if (mPresenter.getCategory() == PhotoCategory.SHOW_FAVORITE) {
+//                    return;
+//                }
+//                if (!mRecyclerView.canScrollVertically(1) && !isLoadingMorePage) {
+//                    isLoadingMorePage = true;
+//                    Log.i(TAG, "cr7");
+////                    mRecyclerView.getRecycledViewPool().clear();
+//                    if (mPresenter.isSearching()) {
+//                        Log.i(TAG, "inside addOnScrollListener isSearching");
+////                        mPresenter.clearMemory(getContext());
+//                        mPresenter.nextPageSearchPhotos();
+//                    } else {
+//                        Log.i(TAG, "inside addOnScrollListener isSearching else");
+////                        mPresenter.clearMemory(getContext());
+//                        mPresenter.nextPageAllPhotos();
+//                    }
+//                    isLoadingMorePage = false;
+//                } else {
+//                    Log.i(TAG, "INSIDE mRecyclerView.canScrollVertically ELSE");
+//                }
+//            }
         });
 
+//        mRecyclerView.addOnScrollListener(new EndlessRecyclerOnScrollListener(mFooterAdapter) {
+//            @Override
+//            public void onLoadMore(int currentPage) {
+//                Log.i(TAG, "inside onLoadMore");
+//                if (isLoadingMorePage) {
+//                    return;
+//                }//                mFooterAdapter.clear();
+////                mFooterAdapter.add(new ProgressItem().withEnabled(false));
+//                loadMore();
+//            }
+//        });
 
+
+    }
+
+    private void loadMore() {
+        isLoadingMorePage = true;
+        if (mPresenter.getCategory() == PhotoCategory.SHOW_FAVORITE) {
+            return;
+        }
+        if (mPresenter.isSearching()) {
+            Log.i(TAG, "inside addOnScrollListener isSearching");
+//                        mPresenter.clearMemory(getContext());
+            mPresenter.nextPageSearchPhotos();
+        } else {
+            Log.i(TAG, "inside addOnScrollListener isSearching else");
+//                        mPresenter.clearMemory(getContext());
+            mPresenter.nextPageAllPhotos();
+        }
     }
 
     @Override
@@ -285,6 +343,8 @@ public class PhotosFragment extends PhotosVisibleFragment implements PhotosContr
 
     @Override
     public void showAllPhotos(List<PhotoResponse> list,String photoQuality, boolean isNew) {
+        mFooterAdapter.clear();
+        mPhotoAdapter.clear();
         Log.i(TAG, "inside showAllPhotos with list size = " + list.size());
         if (list != null && list.size() == 0) {
             mRecyclerView.setVisibility(View.GONE);
@@ -292,15 +352,35 @@ public class PhotosFragment extends PhotosVisibleFragment implements PhotosContr
             mMessageTV.setVisibility(View.VISIBLE);
             mMessageTV.setText("NO PHOTOS");
         } else if (list != null && list.size() != 0) {
-            mRecyclerView.setVisibility(View.VISIBLE);
+            Log.i(TAG,"inside list != null && list.size() != 0");
             mMessageContainer.setVisibility(View.GONE);
-            if (isNew) {
-                Log.i(TAG, "inside isNew");
-                mPhotosAdapter.setList(list, photoQuality);
-            } else {
-                Log.i(TAG, "inside isNew else");
-                mPhotosAdapter.addItems(list);
+            mRecyclerView.setVisibility(View.VISIBLE);
+            List<PhotoResponse> finalList = new ArrayList<>();
+            for(PhotoResponse photoResponse : list) {
+                photoResponse.withQuality(photoQuality);
+                finalList.add(photoResponse);
             }
+            Log.i(TAG,"final list size is: " + String.valueOf(finalList.size()));
+//            if (isNew) {
+////                Log.i(TAG, "inside isNew");
+////                mPhotoAdapter.clear();
+//////                mPhotoAdapter.add(list);
+////
+////
+////                mPhotoAdapter.add(finalList);
+//////                mPhotosAdapter.setList(list, photoQuality);
+////            } else {
+////                Log.i(TAG, "inside isNew else");
+////                mPhotoAdapter.add(list);
+//////                mPhotosAdapter.addItems(list);
+////            }
+
+            Log.i(TAG,"before add finalList to adapter");
+            mPhotoAdapter.add(finalList);
+            isLoadingMorePage = false;
+
+
+
         }
     }
 
@@ -490,6 +570,14 @@ public class PhotosFragment extends PhotosVisibleFragment implements PhotosContr
     public interface OnItemClickListener {
         void onPhotoItemClick(PhotoResponse photoResponse);
     }
+
+    private OnClickListener<PhotoResponse> onClickListener = new OnClickListener<PhotoResponse>() {
+        @Override
+        public boolean onClick(@javax.annotation.Nullable View v, IAdapter<PhotoResponse> adapter, PhotoResponse item, int position) {
+            mOnItemClickListener.onPhotoItemClick(item);
+            return false;
+        }
+    };
 
 
 }

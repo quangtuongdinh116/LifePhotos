@@ -91,7 +91,8 @@ public class PhotosActivity extends DaggerAppCompatActivity
         if (savedInstanceState != null) {
             PhotoCategory currentCategory =
                     (PhotoCategory) savedInstanceState.getSerializable(CURRENT_CATEGORY_KEY);
-            mPresenter.setCategory(currentCategory);
+            if (mPresenter != null)
+                mPresenter.setCategory(currentCategory);
         }
     }
 

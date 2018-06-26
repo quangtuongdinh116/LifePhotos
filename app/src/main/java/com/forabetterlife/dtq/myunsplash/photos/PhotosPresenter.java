@@ -84,14 +84,13 @@ public class PhotosPresenter implements PhotosContract.Presenter {
 
         if (isFirstPage) {
 
-            if (mView != null) {
-                Log.i(TAG, "inside mView != null");
-                mView.setLoadingIndicator(true);
-            }
-
             mCurrentPage = 1;
         } else {
             mCurrentPage++;
+        }
+        if (mView != null) {
+            Log.i(TAG, "inside mView != null");
+            mView.setLoadingIndicator(true);
         }
         Log.i(TAG, "CURRENT PAGE IS: " + mCurrentPage);
 
@@ -106,6 +105,7 @@ public class PhotosPresenter implements PhotosContract.Presenter {
                         return;
                     }
                     mView.showAllPhotos(photoResponseList, mRepository.getPhotoShowingQuality(), isFirstPage);
+                    isFirstPage = false;
                 }
 
                 @Override
@@ -143,6 +143,7 @@ public class PhotosPresenter implements PhotosContract.Presenter {
                         return;
                     }
                     mView.showAllPhotos(photoResponseList, mRepository.getPhotoShowingQuality(), isFirstPage);
+                    isFirstPage = false;
                 }
 
                 @Override
@@ -219,10 +220,11 @@ public class PhotosPresenter implements PhotosContract.Presenter {
             mCurrentPage++;
         }
 
-        if (mView != null) {
-            Log.i(TAG, "inside mView != null");
-            mView.setLoadingIndicator(true);
-        }
+            if (mView != null) {
+                Log.i(TAG, "inside mView != null");
+                mView.setLoadingIndicator(true);
+            }
+
 
         Log.i(TAG, "inside searchPhotoByQuery with mCurrentPage: " + mCurrentPage);
         mRepository.searchPhotoByQuery(query, new PhotoDataSource.SearchPhotoByQueryCallback() {
@@ -237,6 +239,7 @@ public class PhotosPresenter implements PhotosContract.Presenter {
 
                 }
                 mView.showAllPhotos(photoResponseList, mRepository.getPhotoShowingQuality(), isFirstPage);
+                isFirstPage = false;
             }
 
             @Override

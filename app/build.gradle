@@ -104,4 +104,8 @@ dependencies {
     implementation "android.arch.work:work-runtime:1.0.0-alpha02"
 
     implementation "android.arch.lifecycle:extensions:1.1.1"
+
+    implementation 'com.mikepenz:fastadapter:3.2.7'
+    implementation 'com.mikepenz:fastadapter-commons:3.2.7'
+    implementation 'com.mikepenz:fastadapter-extensions:3.2.7'
 }

@@ -4,11 +4,22 @@ package com.forabetterlife.dtq.myunsplash.data.model;
  * Created by DTQ on 3/22/2018.
  */
 
+import android.support.annotation.NonNull;
+import android.support.v7.widget.RecyclerView;
+import android.util.Log;
+import android.view.View;
+import android.widget.ImageView;
+
 import java.util.List;
+
+import com.bumptech.glide.Glide;
+import com.forabetterlife.dtq.myunsplash.R;
+import com.forabetterlife.dtq.myunsplash.utils.Utils;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
+import com.mikepenz.fastadapter.items.AbstractItem;
 
-public class PhotoResponse {
+public class PhotoResponse extends AbstractItem<PhotoResponse, PhotoResponse.PhotoViewHolder> {
 
     @SerializedName("id")
     @Expose
@@ -174,6 +185,58 @@ public class PhotoResponse {
 
     public void setCurrentUserCollections(List<Object> currentUserCollections) {
         this.currentUserCollections = currentUserCollections;
+    }
+
+    private String quality;
+
+    public PhotoResponse withQuality(String quality) {
+        this.quality = quality;
+        return this;
+    }
+
+
+
+    @NonNull
+    @Override
+    public PhotoViewHolder getViewHolder(View v) {
+        return new PhotoViewHolder(v);
+    }
+
+    @Override
+    public int getType() {
+        return R.id.photo_item_container;
+    }
+
+    @Override
+    public int getLayoutRes() {
+       return R.layout.photo_item;
+    }
+
+    @Override
+    public void bindView(PhotoViewHolder holder, List<Object> payloads) {
+        super.bindView(holder, payloads);
+        Glide.with(holder.mImageView.getContext())
+//                    .applyDefaultRequestOptions(options)
+                .load(Utils.getPhotoUrlBaseOnQuality(quality,this))
+                .into(holder.mImageView);
+
+    }
+
+    protected static class PhotoViewHolder extends RecyclerView.ViewHolder{
+        private ImageView mImageView;
+        private PhotoResponse mPhoto;
+
+        public PhotoViewHolder(View itemView) {
+            super(itemView);
+            mImageView = itemView.findViewById(R.id.photo_image);
+        }
+
+
+        public void recycle() {
+//            Glide.get(mImageView.getContext())
+//                    .clearMemory();
+//            mPresenter.clearMemory(mImageView.getContext());
+        }
     }
 
 }

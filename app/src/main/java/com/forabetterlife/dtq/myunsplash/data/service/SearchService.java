@@ -28,7 +28,7 @@ public class SearchService {
 
 
     public void requestPhotos(int page, String query, String access_key, final SearchService.OnRequestPhotosListener l, final PhotoDataSource.SearchPhotoByQueryCallback callback) {
-        Call<SearchPhotoResponse> getPhotos = buildApi(buildClient()).searchPhotoByQuery(page,100,query ,access_key);
+        Call<SearchPhotoResponse> getPhotos = buildApi(buildClient()).searchPhotoByQuery(page,30,query ,access_key);
         getPhotos.enqueue(new Callback<SearchPhotoResponse>() {
             @Override
             public void onResponse(Call<SearchPhotoResponse> call, Response<SearchPhotoResponse> response) {
