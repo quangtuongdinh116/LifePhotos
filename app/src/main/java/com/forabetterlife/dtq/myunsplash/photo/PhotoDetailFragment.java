@@ -27,6 +27,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.forabetterlife.dtq.myunsplash.MyUnSplash;
 import com.forabetterlife.dtq.myunsplash.R;
 import com.forabetterlife.dtq.myunsplash.data.model.Photo;
 import com.forabetterlife.dtq.myunsplash.data.model.PhotoResponse;
@@ -134,9 +135,15 @@ public class PhotoDetailFragment extends DaggerFragment implements PhotoDetailCo
     public void showInformationAboutPhoto(PhotoResponse photo, boolean isFavorite, String photoQuality) {
         String photoUrl = Utils.getPhotoUrlBaseOnQuality(photoQuality, photo);
 
-        Glide.with(getContext())
-                .load(photoUrl)
-                .into(photoIV);
+        if (MyUnSplash.getInstance().getDrawable() != null) {
+            photoIV.setImageDrawable(MyUnSplash.getInstance().getDrawable());
+            MyUnSplash.getInstance().setDrawable(null);
+        } else {
+            Glide.with(getContext())
+                    .load(photoUrl)
+                    .into(photoIV);
+        }
+
 //        Picasso.get()
 //                .load(photoUrl)
 //                .into(photoIV);

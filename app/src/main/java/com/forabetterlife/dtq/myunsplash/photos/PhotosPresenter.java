@@ -88,7 +88,7 @@ public class PhotosPresenter implements PhotosContract.Presenter {
         } else {
             mCurrentPage++;
         }
-        if (mView != null) {
+        if (mView != null && isFirstPage) {
             Log.i(TAG, "inside mView != null");
             mView.setLoadingIndicator(true);
         }
@@ -117,6 +117,9 @@ public class PhotosPresenter implements PhotosContract.Presenter {
                 }
             }, mCurrentPage);
         } else if (PHOTO_CATEGORY == PhotoCategory.SHOW_FAVORITE) {
+            if (mView != null) {
+                mView.setLoadingIndicator(true);
+            }
 //            Log.i(TAG, "inside show favorite else");
             mRepository.loadFavorites(new PhotoDataSource.LoadFavoritesCallback() {
                 @Override
@@ -220,7 +223,7 @@ public class PhotosPresenter implements PhotosContract.Presenter {
             mCurrentPage++;
         }
 
-            if (mView != null) {
+            if (mView != null && isFirstPage) {
                 Log.i(TAG, "inside mView != null");
                 mView.setLoadingIndicator(true);
             }
@@ -239,7 +242,7 @@ public class PhotosPresenter implements PhotosContract.Presenter {
 
                 }
                 mView.showAllPhotos(photoResponseList, mRepository.getPhotoShowingQuality(), isFirstPage);
-                isFirstPage = false;
+
             }
 
             @Override

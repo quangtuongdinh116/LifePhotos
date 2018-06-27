@@ -2,6 +2,7 @@ package com.forabetterlife.dtq.myunsplash;
 
 import android.app.Application;
 import android.content.Context;
+import android.graphics.drawable.Drawable;
 
 import com.forabetterlife.dtq.myunsplash.data.PhotoRepository;
 import com.forabetterlife.dtq.myunsplash.di.DaggerAppComponent;
@@ -19,6 +20,7 @@ import dagger.android.DaggerApplication;
 public class MyUnSplash extends DaggerApplication {
     @Inject
     PhotoRepository photoRepository;
+
 
     public static final String UNSPLASH_API_BASE_URL = "https://api.unsplash.com/";
     public static final String DATE_FORMAT = "yyyy/MM/dd";
@@ -39,6 +41,8 @@ public class MyUnSplash extends DaggerApplication {
 
     // The name of the image manipulation work
     public static final String CHANGE_WALLPAPER_WORK_NAME = "change_wallpaper_work_name";
+
+    private Drawable drawable;
 
     @Override
     public void onCreate() {
@@ -69,5 +73,13 @@ public class MyUnSplash extends DaggerApplication {
 
     public PhotoRepository getPhotoRepository() {
         return photoRepository;
+    }
+
+    public void setDrawable(Drawable d) {
+        this.drawable = d;
+    }
+
+    public Drawable getDrawable() {
+        return drawable;
     }
 }
