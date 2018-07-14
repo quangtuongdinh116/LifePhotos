@@ -112,8 +112,34 @@ public class PhotoDetailFragment extends DaggerFragment implements PhotoDetailCo
         } else if (itemId == R.id.menu_item_download) {
             mPresenter.downloadImage((DownloadManager) getActivity().getSystemService(Context.DOWNLOAD_SERVICE),true);
             mPresenter.setAction(PhotoDetailAction.DOWNLOAD_ONLY);
+            return true;
+        } else if (itemId == R.id.menu_item_share) {
+            shareTextUrl();
+            return true;
+        } else if (itemId == R.id.menu_item_web) {
+            if(!mPresenter.isPhotoNull()) {
+                Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(mPresenter.getmPhotoResponse().getLinks().getHtml() + MyUnSplash.UNSPLASH_UTM_PARAMETERS));
+                if (intent.resolveActivity(getActivity().getPackageManager()) != null)
+                    startActivity(Intent.createChooser(intent, "Choose application to open"));
+                else
+                    Toast.makeText(getActivity(), "You do not have browser app to view", Toast.LENGTH_SHORT).show();
+            }
+            return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    private void shareTextUrl() {
+        if(!mPresenter.isPhotoNull()) {
+            Intent share = new Intent(Intent.ACTION_SEND);
+            share.setType("text/plain");
+            share.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+
+            share.putExtra(Intent.EXTRA_SUBJECT, getString(R.string.unsplash_image));
+            share.putExtra(Intent.EXTRA_TEXT,  mPresenter.getmPhotoResponse().getLinks().getHtml() + MyUnSplash.UNSPLASH_UTM_PARAMETERS);
+
+            startActivity(Intent.createChooser(share, getString(R.string.share_via)));
+        }
     }
 
     IntentFilter filter = new IntentFilter(DownloadManager.ACTION_DOWNLOAD_COMPLETE);

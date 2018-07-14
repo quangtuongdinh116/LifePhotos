@@ -238,4 +238,9 @@ public class PhotoDetailPresenter implements PhotoDetailContract.Presenter {
     public void takeView(PhotoDetailContract.View view) {
         mView = view;
     }
+
+    @NonNull
+    public PhotoResponse getmPhotoResponse() {
+        return mPhotoResponse;
+    }
 }

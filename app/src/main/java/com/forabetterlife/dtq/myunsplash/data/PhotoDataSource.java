@@ -30,6 +30,7 @@ public interface PhotoDataSource {
     String getPhotoShowingQuality();
     String getSearchQueryWantedPhoto();
     void changeWantedPhotoServiceStatus(boolean turnOn, PhotoDataSource.ScheduleFetchNewWantedPhoto callback, Context context);
+    void changeWallpaperStatusAPIBelow21(long duration, String type, Context context,PhotoDataSource.ScheduleChangeWallpaper callback);
     void saveLastSearchWantedPhotoId(String lastSearchId);
     void changeWallpaperStatus(long duration, String type, Context context,PhotoDataSource.ScheduleChangeWallpaper callback);
     void loadWallpaperStatus(LoadWallpaperStatus callback);

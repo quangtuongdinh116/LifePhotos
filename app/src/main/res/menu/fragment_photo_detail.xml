@@ -12,4 +12,16 @@
         app:showAsAction="never">
     </item>
 
+    <item android:id="@+id/menu_item_share"
+        android:title="SHARE"
+        android:icon="@drawable/ic_share_white_24dp"
+        android:iconTint="@android:color/white"
+        app:showAsAction="always"/>
+
+    <item android:id="@+id/menu_item_web"
+        android:title="WEB"
+        android:icon="@drawable/ic_open_in_browser_white_24dp"
+        android:iconTint="@android:color/white"
+        app:showAsAction="always"/>
+
 </menu>

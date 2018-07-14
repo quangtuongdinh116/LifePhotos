@@ -82,6 +82,9 @@
     <string name="photo_wanted_edit_text_preference_key">photo_wanted_edit_text_preference_key</string>
     <string name="photo_wanted_switch_preference_key">photo_wanted_switch_preference_key</string>
 
+    <string name="unsplash_image">Unsplash Image</string>
+    <string name="share_via">Share by</string>
+
     <string name="all_photo_toolbar_title">My Unsplash</string>
     <string name="favorite_toolbar_title">Favorite</string>
     <string name="wanted_photo_toolbar_title">Wanted Photos</string>
@@ -90,17 +93,18 @@
     <string name="start_button">START</string>
     <string name="stop_button">STOP</string>
     <string name="choose_interval">Choose interval</string>
-    <string name="not_enough_interval">Interval must be greater than 30 seconds</string>
+    <string name="not_enough_interval_30seconds">Interval must be greater than 30 seconds</string>
+    <string name="not_enough_interval_15minutes">Interval must be greater than 15 minutues</string>
     <string name="wallpaper_title">Wallpaper</string>
     <string name="about_title">About</string>
     <string name="interval">Interval</string>
     <string name="author_tab_lable">Author</string>
     <string name="life_photo_tab_lable">Life Photos</string>
     <string name="wallpaper_label">Wallpaper:</string>
-    <string name="favorite_label">Favotite:</string>
+    <string name="favorite_label">Favorite:</string>
     <string name="wanted_label">Wanted:</string>
-    <string name="wallexplain"> You can set photo as wallpaper by 2 ways:\nThe first way is clicking any photo to move to photo detail page. From there, click on the three dot icon at the top right corner then select \"Set Wallpaper\"\nThe second way is choosing \"Wallpaper\" section in menu. Choose your source of photos, interval then click start button.</string>
-    <string name="favoriteexplain">You can choose which photo you like by clicking the heart icon at the bottom right in photo detail page.
+    <string name="wallexplain"> You can set photo as wallpaper by 2 ways:\nThe first way is tapping any photo to move to photo detail page. From there, tap on the three dot icon at the top right corner then select \"Set Wallpaper\"\nThe second way is choosing \"Wallpaper\" section in menu. Choose your source of photos, interval then tap start button.</string>
+    <string name="favoriteexplain">You can choose which photo you like by tapping the heart icon at the bottom right in photo detail page.
 Your favorite photos will appear in \"Favorites\" section in menu.</string>
     <string name="wantedexplain">You can view all photos which relate to a keyword, such as \"flower\", \"forest\", \"building\"...
 Set your keyword in \"Settings\" then view \"Wanted Photos\" in \"Wanted Photos\" section in menu</string>

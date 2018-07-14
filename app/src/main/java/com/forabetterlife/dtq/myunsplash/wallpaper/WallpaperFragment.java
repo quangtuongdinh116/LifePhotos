@@ -3,6 +3,7 @@ package com.forabetterlife.dtq.myunsplash.wallpaper;
 import android.app.Activity;
 import android.arch.lifecycle.Observer;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -154,10 +155,18 @@ public class WallpaperFragment extends Fragment implements WallpaperContract.Vie
     }
 
     private boolean validate() {
-        if (mPresenter.getDuration() < 30000) {
-            Snackbar.make(getView(), getString(R.string.not_enough_interval),Snackbar.LENGTH_LONG).show();
-            return false;
+        if(Build.VERSION.SDK_INT >= 21) {
+            if (mPresenter.getDuration() < 30000) {
+                Snackbar.make(getView(), getString(R.string.not_enough_interval_15minutes),Snackbar.LENGTH_LONG).show();
+                return false;
+            }
+        } else {
+            if (mPresenter.getDuration() < 900000) {
+                Snackbar.make(getView(), getString(R.string.not_enough_interval_30seconds), Snackbar.LENGTH_LONG).show();
+                return false;
+            }
         }
+
         return true;
     }
 

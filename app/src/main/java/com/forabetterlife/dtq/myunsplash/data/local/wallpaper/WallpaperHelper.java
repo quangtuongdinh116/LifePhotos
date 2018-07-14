@@ -9,6 +9,7 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Point;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.provider.MediaStore;
@@ -18,13 +19,18 @@ import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.NotificationManagerCompat;
 import android.util.DisplayMetrics;
 import android.util.Log;
+import android.view.Display;
 import android.view.View;
 import android.view.WindowManager;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.DataSource;
+import com.bumptech.glide.load.engine.GlideException;
 import com.bumptech.glide.request.Request;
+import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.target.SizeReadyCallback;
 import com.bumptech.glide.request.transition.Transition;
+import com.forabetterlife.dtq.myunsplash.GlideApp;
 import com.forabetterlife.dtq.myunsplash.MyUnSplash;
 import com.forabetterlife.dtq.myunsplash.R;
 import com.forabetterlife.dtq.myunsplash.data.PhotoDataSource;
@@ -251,65 +257,165 @@ public class WallpaperHelper {
 
     private void setWallpaper(final String url, final JobParameters jobParameters) {
 
-        target = new Target() {
-            @Override
-            public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
-                Log.i(TAG, "inside  onBitmapLoaded");
-                Log.i(TAG, "url is: " + url);
-                Log.i(TAG, "BITMAP SIZE height: " + bitmap.getHeight() + "bitmap width: " + bitmap.getWidth());
-                if (bitmap.getHeight() < 1000) {
-                    mService.jobFinished(jobParameters, true);
-                    return;
-                }
-                DisplayMetrics displayMetrics = new DisplayMetrics();
-                    WindowManager windowManager = (WindowManager) mService.getSystemService(Context.WINDOW_SERVICE);
-                    windowManager.getDefaultDisplay().getMetrics(displayMetrics);
-                    int height = displayMetrics.heightPixels;
-
-                    int width = displayMetrics.widthPixels;
-                Log.i(TAG, " height: " + String.valueOf(height));
-                Log.i(TAG, " width: " + String.valueOf(width));
-                WallpaperManager wallpaperManager = WallpaperManager.getInstance(mService);
-                try {
-//                    DisplayMetrics displayMetrics = new DisplayMetrics();
+//        target = new Target() {
+//            @Override
+//            public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
+//                Log.i(TAG, "inside  onBitmapLoaded");
+//                Log.i(TAG, "url is: " + url);
+//                Log.i(TAG, "BITMAP SIZE height: " + bitmap.getHeight() + "bitmap width: " + bitmap.getWidth());
+//                if (bitmap.getHeight() < 1000) {
+//                    mService.jobFinished(jobParameters, true);
+//                    return;
+//                }
+//                DisplayMetrics displayMetrics = new DisplayMetrics();
 //                    WindowManager windowManager = (WindowManager) mService.getSystemService(Context.WINDOW_SERVICE);
 //                    windowManager.getDefaultDisplay().getMetrics(displayMetrics);
 //                    int height = displayMetrics.heightPixels;
+//
 //                    int width = displayMetrics.widthPixels;
-//                    Bitmap scaledBitmap = Bitmap.createScaledBitmap(bitmap, width, height, true);
-
-//                    WallpaperManager wm = WallpaperManager.getInstance(mService);
-//                    int w = bitmap.getWidth();
-//                    int h = bitmap.getHeight();
-//                    wallpaperManager.clear();
-                    wallpaperManager.setBitmap(bitmap);
-//                    wallpaperManager.suggestDesiredDimensions(w, h);
-                    mService.jobFinished(jobParameters,true);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-
-            @Override
-            public void onBitmapFailed(Drawable errorDrawable) {
-                Log.i(TAG, "INSIDE onBitmapFailed");
-                mService.jobFinished(jobParameters, false);
-            }
-
-
-            @Override
-            public void onPrepareLoad(Drawable placeHolderDrawable) {
-                Log.i(TAG, "INSIDE onPrepareLoad");
-            }
-        };
-        Picasso.Builder builder = new Picasso.Builder(mService);
-//        Picasso.get().load(url)
+//                Log.i(TAG, " height: " + String.valueOf(height));
+//                Log.i(TAG, " width: " + String.valueOf(width));
+//                WallpaperManager wallpaperManager = WallpaperManager.getInstance(mService);
+//                try {
+////                    DisplayMetrics displayMetrics = new DisplayMetrics();
+////                    WindowManager windowManager = (WindowManager) mService.getSystemService(Context.WINDOW_SERVICE);
+////                    windowManager.getDefaultDisplay().getMetrics(displayMetrics);
+////                    int height = displayMetrics.heightPixels;
+////                    int width = displayMetrics.widthPixels;
+////                    Bitmap scaledBitmap = Bitmap.createScaledBitmap(bitmap, width, height, true);
+//
+////                    WallpaperManager wm = WallpaperManager.getInstance(mService);
+////                    int w = bitmap.getWidth();
+////                    int h = bitmap.getHeight();
+////                    wallpaperManager.clear();
+//                    wallpaperManager.setBitmap(bitmap);
+////                    wallpaperManager.suggestDesiredDimensions(w, h);
+//                    mService.jobFinished(jobParameters,true);
+//                } catch (IOException e) {
+//                    e.printStackTrace();
+//                }
+//            }
+//
+//            @Override
+//            public void onBitmapFailed(Drawable errorDrawable) {
+//                Log.i(TAG, "INSIDE onBitmapFailed");
+//                mService.jobFinished(jobParameters, false);
+//            }
+//
+//
+//            @Override
+//            public void onPrepareLoad(Drawable placeHolderDrawable) {
+//                Log.i(TAG, "INSIDE onPrepareLoad");
+//            }
+//        };
+//        Picasso.Builder builder = new Picasso.Builder(mService);
+////        Picasso.get().load(url)
+////                .into(target);
+//        Picasso.with(mService.getApplicationContext())
+//                .setLoggingEnabled(true);
+//        Picasso.with(mService.getApplicationContext())
+//                .load(url)
 //                .into(target);
-        Picasso.with(mService.getApplicationContext())
-                .setLoggingEnabled(true);
-        Picasso.with(mService.getApplicationContext())
-                .load(url)
-                .into(target);
+
+
+        WindowManager wm = (WindowManager) mService.getApplicationContext().getSystemService(Context.WINDOW_SERVICE);
+        Display display = wm.getDefaultDisplay();
+        Point size = new Point();
+        display.getSize(size);
+        int width = size.x;
+        int height = size.y;
+        //GLide
+        GlideApp.with(mService.getApplicationContext())
+                .asBitmap().load(url)
+                .override(width,height)
+                .centerCrop()
+                .listener(new RequestListener<Bitmap>() {
+                    @Override
+                    public boolean onLoadFailed(@Nullable GlideException e, Object model, com.bumptech.glide.request.target.Target<Bitmap> target, boolean isFirstResource) {
+                        // Log the GlideException here (locally or with a remote logging framework):
+                        Log.e(TAG, "Load failed", e);
+
+                        // You can also log the individual causes:
+                        for (Throwable t : e.getRootCauses()) {
+                            Log.e(TAG, "Caused by", t);
+                        }
+                        // Or, to log all root causes locally, you can use the built in helper method:
+                        e.logRootCauses(TAG);
+
+                        return false; // Allow calling onLoadFailed on the Target.
+                    }
+
+                    @Override
+                    public boolean onResourceReady(Bitmap resource, Object model, com.bumptech.glide.request.target.Target<Bitmap> target, DataSource dataSource, boolean isFirstResource) {
+                        Log.i(TAG, "Load success");
+                        return false;
+                    }
+                })
+                .into(new com.bumptech.glide.request.target.Target<Bitmap>() {
+                    @Override
+                    public void onLoadStarted(@Nullable Drawable placeholder) {
+                        Log.i(TAG, "INSIDE onLoadStarted");
+                    }
+
+                    @Override
+                    public void onLoadFailed(@Nullable Drawable errorDrawable) {
+                        Log.i(TAG, "INSIDE onLoadFailed");
+                        mService.jobFinished(jobParameters, true);
+                    }
+
+                    @Override
+                    public void onResourceReady(@NonNull Bitmap resource, @Nullable Transition<? super Bitmap> transition) {
+                        Log.i(TAG, "INSIDE onResourceReady");
+                        WallpaperManager wallpaperManager = WallpaperManager.getInstance(mService.getApplicationContext());
+                        try {
+                            wallpaperManager.setBitmap(resource);
+                            mService.jobFinished(jobParameters,false);
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    }
+
+                    @Override
+                    public void onLoadCleared(@Nullable Drawable placeholder) {
+
+                    }
+
+                    @Override
+                    public void getSize(@NonNull SizeReadyCallback cb) {
+
+                    }
+
+                    @Override
+                    public void removeCallback(@NonNull SizeReadyCallback cb) {
+
+                    }
+
+                    @Override
+                    public void setRequest(@Nullable Request request) {
+
+                    }
+
+                    @Nullable
+                    @Override
+                    public Request getRequest() {
+                        return null;
+                    }
+
+                    @Override
+                    public void onStart() {
+
+                    }
+
+                    @Override
+                    public void onStop() {
+
+                    }
+
+                    @Override
+                    public void onDestroy() {
+
+                    }
+                });
 
     }
 

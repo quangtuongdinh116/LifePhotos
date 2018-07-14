@@ -21,6 +21,7 @@ public interface PhotoDetailContract {
         void setAction(PhotoDetailAction action);
         void dropView();
         void takeView(PhotoDetailContract.View view);
+        PhotoResponse getmPhotoResponse();
     }
     public interface View {
         void setPresenter(PhotoDetailContract.Presenter presenter);

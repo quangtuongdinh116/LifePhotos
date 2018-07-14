@@ -23,9 +23,9 @@ public class Inject {
     public static PhotoRepository provideRepository(Context context) {
         MyUnsplashDatabase database = MyUnsplashDatabase.getInstance(context);
         FavoriteDao dao = database.favoriteDao();
-//        JobScheduler jobScheduler = (JobScheduler) context.getSystemService(Context.JOB_SCHEDULER_SERVICE);
+        JobScheduler jobScheduler = (JobScheduler) context.getSystemService(Context.JOB_SCHEDULER_SERVICE);
         return PhotoRepository.getInstance(LocalDataSource.getInstance(dao,new AppExecutors(),
-                PreferenceManager.getDefaultSharedPreferences(context.getApplicationContext())),RemoteDataSource.getInstance(PhotoService.getService(),SearchService.getService()));
+                PreferenceManager.getDefaultSharedPreferences(context.getApplicationContext()),jobScheduler),RemoteDataSource.getInstance(PhotoService.getService(),SearchService.getService()));
     }
 
     public static SearchWantedPhotoService provideWantedPhotoService() {

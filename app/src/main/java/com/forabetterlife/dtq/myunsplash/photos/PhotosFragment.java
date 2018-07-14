@@ -42,6 +42,7 @@ import com.mikepenz.fastadapter.commons.adapters.FastItemAdapter;
 import com.mikepenz.fastadapter.listeners.OnClickListener;
 import com.mikepenz.fastadapter_extensions.items.ProgressItem;
 import com.mikepenz.fastadapter_extensions.scroll.EndlessRecyclerOnScrollListener;
+import com.squareup.leakcanary.RefWatcher;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -137,25 +138,9 @@ public class PhotosFragment extends PhotosVisibleFragment implements PhotosContr
 
         setUpRecyclerView();
 
-        mToolbar = getActivity().findViewById(R.id.toolbar);
 
-        //Set up progress indicator
-//        final SwipeRefreshLayout swipeRefreshLayout = rootView.findViewById(R.id.swipe_refresh_layout);
-//        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-//            @Override
-//            public void onRefresh() {
-//                mPresenter.takeView(PhotosFragment.this);
-//                if (mPresenter.isSearching()) {
-//                    mPresenter.setIsSearching(false);
-//                    mPresenter.setIsNewStatus();
-//                    loadPhotos();
-////                    mPresenter.searchPhotoByQuery(mPresenter.getSearchQuery());
-//                    closeKeyboard();
-//                } else {
-//                    loadPhotos();
-//                }
-//            }
-//        });
+
+        mToolbar = getActivity().findViewById(R.id.toolbar);
 
         mPresenter.takeView(this);
         loadPhotos();
@@ -168,7 +153,9 @@ public class PhotosFragment extends PhotosVisibleFragment implements PhotosContr
         Log.i(TAG, "INSIDE onResume");
         super.onResume();
         mPresenter.takeView(this);
+
         if (mPresenter.getCategory() == PhotoCategory.SHOW_FAVORITE || mPresenter.getCategory() == PhotoCategory.SHOW_WANTED) {
+            setUpRecyclerView();
             loadPhotos();
         }
 
@@ -183,6 +170,8 @@ public class PhotosFragment extends PhotosVisibleFragment implements PhotosContr
     public void onDestroy() {
         super.onDestroy();
         mPresenter.dropView();
+        RefWatcher refWatcher = MyUnSplash.getRefWatcher(getActivity());
+        refWatcher.watch(this);
 
     }
 
@@ -200,13 +189,7 @@ public class PhotosFragment extends PhotosVisibleFragment implements PhotosContr
             searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
                 @Override
                 public boolean onQueryTextSubmit(String query) {
-//                    mPhotosAdapter = new PhotosAdapter(new ArrayList<PhotoResponse>());
-//                    mPhotoAdapter = new FastItemAdapter<>();
-//                    mRecyclerView.setAdapter(mPhotosAdapter);
-//                    mRecyclerView.setAdapter(mPhotoAdapter);
-//                    mPresenter.clearMemory(getContext());
-//                    mRecyclerView.setVisibility(View.GONE);
-//                    mPhotoAdapter.clear();
+
                     setUpRecyclerView();
                     mPresenter.setIsSearching(true);
                     mPresenter.setIsNewStatus();
@@ -254,7 +237,6 @@ public class PhotosFragment extends PhotosVisibleFragment implements PhotosContr
         mFooterAdapter = new ItemAdapter();
         mPhotoAdapter.addAdapter(1, mFooterAdapter);
         mPhotoAdapter.withOnClickListener(onClickListener);
-
 //        mRecyclerView.setHasFixedSize(true);
         mRecyclerView.setLayoutManager(mLayoutManager);
         mRecyclerView.setOnTouchListener(new View.OnTouchListener() {
@@ -399,7 +381,14 @@ public class PhotosFragment extends PhotosVisibleFragment implements PhotosContr
             if (mSwipeContainer.isRefreshing()) {
                 mSwipeContainer.setRefreshing(false);
             }
-            mPhotoAdapter.add(finalList);
+            if(mPresenter.getCategory().equals(PhotoCategory.SHOW_FAVORITE)) {
+                //do nothing
+                mPhotoAdapter.clear();
+                mPhotoAdapter.add(finalList);
+            } else {
+                mPhotoAdapter.add(finalList);
+            }
+
             setLoadingIndicator(false);
 //            isLoadingMorePage = false;
 

@@ -83,19 +83,21 @@ public class LocalDataSource implements PhotoDataSource {
     private LiveData<List<WorkStatus>> mScheduleStatus;
 
     @Inject
-    public LocalDataSource(@NonNull FavoriteDao favoriteDao, @NonNull AppExecutors appExecutors, @NonNull SharedPreferences sharedPreferences) {
+    public LocalDataSource(@NonNull FavoriteDao favoriteDao, @NonNull AppExecutors appExecutors, @NonNull SharedPreferences sharedPreferences, @NonNull JobScheduler jobScheduler) {
         mFavoriteDao = favoriteDao;
         mAppExecutors = appExecutors;
         mSharedPreferences = sharedPreferences;
         mWorkManager = WorkManager.getInstance();
         mScheduleStatus = mWorkManager.getStatusesByTag(MyUnSplash.TAG_OUTPUT);
+        mJobScheduler = jobScheduler;
     }
 
     public static LocalDataSource getInstance(@NonNull FavoriteDao favoriteDao,
                                               @NonNull AppExecutors appExecutors,
-                                              @NonNull SharedPreferences sharedPreferences) {
+                                              @NonNull SharedPreferences sharedPreferences,
+                                                @NonNull JobScheduler jobScheduler) {
         if (INSTANCE == null) {
-            INSTANCE = new LocalDataSource(favoriteDao,appExecutors,sharedPreferences);
+            INSTANCE = new LocalDataSource(favoriteDao,appExecutors,sharedPreferences, jobScheduler);
         }
         return INSTANCE;
     }
@@ -269,59 +271,59 @@ public class LocalDataSource implements PhotoDataSource {
                 .apply();
     }
 
-//    @Override
-//    public void changeWallpaperStatus(long duration, String type, Context context,PhotoDataSource.ScheduleChangeWallpaper callback) {
-//        boolean isOnInPreference = mSharedPreferences.getBoolean(PREFERENCE_KEY_IS_ON_WALLPAPER, false);
-//        Log.i(TAG, "isOnInPreference is " + String.valueOf(isOnInPreference));
-//        Log.i(TAG, "TYPE IS : " + type);
-//        boolean needTurnOffNow = true;
-//        boolean needTurnOnNow = false;
-//        if (isOnInPreference) {
-//            needTurnOffNow = true;
-//            needTurnOnNow = false;
-//        } else if (!isOnInPreference) {
-//            needTurnOffNow = false;
-//            needTurnOnNow = true;
-//        }
-//        if (needTurnOffNow) {
-//            Log.i(TAG, "inside needTurnOffNow");
-//            //turn off
-//            mJobScheduler.cancel(jobIdWallpaper);
+    @Override
+    public void changeWallpaperStatus(long duration, String type, Context context,PhotoDataSource.ScheduleChangeWallpaper callback) {
+        boolean isOnInPreference = mSharedPreferences.getBoolean(PREFERENCE_KEY_IS_ON_WALLPAPER, false);
+        Log.i(TAG, "isOnInPreference is " + String.valueOf(isOnInPreference));
+        Log.i(TAG, "TYPE IS : " + type);
+        boolean needTurnOffNow = true;
+        boolean needTurnOnNow = false;
+        if (isOnInPreference) {
+            needTurnOffNow = true;
+            needTurnOnNow = false;
+        } else if (!isOnInPreference) {
+            needTurnOffNow = false;
+            needTurnOnNow = true;
+        }
+        if (needTurnOffNow) {
+            Log.i(TAG, "inside needTurnOffNow");
+            //turn off
+            mJobScheduler.cancel(jobIdWallpaper);
+            mSharedPreferences.edit()
+                    .putBoolean(PREFERENCE_KEY_IS_ON_WALLPAPER, false).apply();
+            callback.onStopSuccess();
+        } else if (needTurnOnNow) {
+            Log.i(TAG, "inside needTurnOnNow");
+            //turn on
+            mJobScheduler.cancel(jobIdWallpaper);
 //            mSharedPreferences.edit()
 //                    .putBoolean(PREFERENCE_KEY_IS_ON_WALLPAPER, false).apply();
-//            callback.onStopSuccess();
-//        } else if (needTurnOnNow) {
-//            Log.i(TAG, "inside needTurnOnNow");
-//            //turn on
-//            mJobScheduler.cancel(jobIdWallpaper);
-////            mSharedPreferences.edit()
-////                    .putBoolean(PREFERENCE_KEY_IS_ON_WALLPAPER, false).apply();
-//            int result = mJobScheduler.schedule(getJobInfoWallpaper(context,type,duration));
-//            if (result == JobScheduler.RESULT_SUCCESS) {
-//                Log.i(TAG, "inside needTurnOnNow RESULT_SUCCESS ");
-//                mSharedPreferences.edit()
-//                        .putBoolean(PREFERENCE_KEY_IS_ON_WALLPAPER, true).apply();
-//                callback.onScheduleSuccess();
-//            } else {
-//                Log.i(TAG, "inside needTurnOnNow RESULT_FAIL ");
-//                mSharedPreferences.edit()
-//                        .putBoolean(PREFERENCE_KEY_IS_ON_WALLPAPER, false).apply();
-//                callback.onScheduleFail();
-//            }
-//        }
-//        mSharedPreferences.edit()
-//                .putString(PREFERENCE_KEY_WALLPAPER_TYPE, type).apply();
-//        mSharedPreferences.edit()
-//                .putLong(PREFENCE_KEY_DURATION, duration).apply();
-//
-////        //test after
-////        boolean isOnInPreferenceAfter = mSharedPreferences.getBoolean(PREFERENCE_KEY_IS_ON_WALLPAPER, false);
-////        Log.i(TAG, "isOnInPreferenceAfter: " + String.valueOf(isOnInPreferenceAfter));
-//    }
+            int result = mJobScheduler.schedule(getJobInfoWallpaper(context,type,duration));
+            if (result == JobScheduler.RESULT_SUCCESS) {
+                Log.i(TAG, "inside needTurnOnNow RESULT_SUCCESS ");
+                mSharedPreferences.edit()
+                        .putBoolean(PREFERENCE_KEY_IS_ON_WALLPAPER, true).apply();
+                callback.onScheduleSuccess();
+            } else {
+                Log.i(TAG, "inside needTurnOnNow RESULT_FAIL ");
+                mSharedPreferences.edit()
+                        .putBoolean(PREFERENCE_KEY_IS_ON_WALLPAPER, false).apply();
+                callback.onScheduleFail();
+            }
+        }
+        mSharedPreferences.edit()
+                .putString(PREFERENCE_KEY_WALLPAPER_TYPE, type).apply();
+        mSharedPreferences.edit()
+                .putLong(PREFENCE_KEY_DURATION, duration).apply();
+
+//        //test after
+//        boolean isOnInPreferenceAfter = mSharedPreferences.getBoolean(PREFERENCE_KEY_IS_ON_WALLPAPER, false);
+//        Log.i(TAG, "isOnInPreferenceAfter: " + String.valueOf(isOnInPreferenceAfter));
+    }
 
 
     @Override
-    public void changeWallpaperStatus(long duration, String type, Context context,PhotoDataSource.ScheduleChangeWallpaper callback) {
+    public void changeWallpaperStatusAPIBelow21(long duration, String type, Context context,PhotoDataSource.ScheduleChangeWallpaper callback) {
         boolean isOnInPreference = mSharedPreferences.getBoolean(PREFERENCE_KEY_IS_ON_WALLPAPER, false);
         Log.i(TAG, "isOnInPreference is " + String.valueOf(isOnInPreference));
         Log.i(TAG, "TYPE IS : " + type);

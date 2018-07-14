@@ -43,6 +43,8 @@ import retrofit2.Response;
 
 import javax.inject.Inject;
 
+import static com.forabetterlife.dtq.myunsplash.prod.Inject.*;
+
 public class PhotosActivity extends DaggerAppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
@@ -193,7 +195,7 @@ public class PhotosActivity extends DaggerAppCompatActivity
             mPresenter.resetToFirstPage();
         } else if (id == R.id.nav_wallpaper) {
             WallpaperFragment wallpaperFragment = new WallpaperFragment();
-            WallpaperPresenter presenter = new WallpaperPresenter(com.forabetterlife.dtq.myunsplash.prod.Inject.provideRepository(this),
+            WallpaperPresenter presenter = new WallpaperPresenter(provideRepository(this),
                     wallpaperFragment, WallpaperType.FAVORITE);
             getSupportFragmentManager().beginTransaction()
                     .replace(R.id.contentFrame, wallpaperFragment)

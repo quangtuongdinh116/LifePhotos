@@ -2,7 +2,9 @@ package com.forabetterlife.dtq.myunsplash.data;
 
 import android.arch.lifecycle.LiveData;
 import android.content.Context;
+import android.os.Build;
 import android.support.annotation.NonNull;
+import android.util.Log;
 
 import com.forabetterlife.dtq.myunsplash.data.local.FavoriteEntity;
 import com.forabetterlife.dtq.myunsplash.data.local.LocalDataSource;
@@ -26,6 +28,8 @@ import static com.google.common.base.Preconditions.checkNotNull;
 
 @Singleton
 public class PhotoRepository implements PhotoDataSource {
+    private static final String TAG = "PhotoRepository";
+
     private static PhotoRepository INSTANCE;
 
     @NonNull
@@ -113,13 +117,24 @@ public class PhotoRepository implements PhotoDataSource {
     }
 
     @Override
+    public void changeWallpaperStatusAPIBelow21(long duration, String type, Context context, ScheduleChangeWallpaper callback) {
+        mLocalDataSource.changeWallpaperStatusAPIBelow21(duration,type,context,callback);
+    }
+
+    @Override
     public void saveLastSearchWantedPhotoId(String lastSearchId) {
         mLocalDataSource.saveLastSearchWantedPhotoId(lastSearchId);
     }
 
     @Override
     public void changeWallpaperStatus(long duration, String type, Context context,PhotoDataSource.ScheduleChangeWallpaper callback) {
-        mLocalDataSource.changeWallpaperStatus(duration, type, context,callback);
+        if (Build.VERSION.SDK_INT >= 21) {
+            Log.i(TAG, "Build.VERSION.SDK_INT >= 21");
+            mLocalDataSource.changeWallpaperStatus(duration, type, context,callback);
+        } else {
+            mLocalDataSource.changeWallpaperStatusAPIBelow21(duration,type,context,callback);
+        }
+
     }
 
     @Override

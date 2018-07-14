@@ -110,6 +110,11 @@ public class RemoteDataSource implements PhotoDataSource {
     }
 
     @Override
+    public void changeWallpaperStatusAPIBelow21(long duration, String type, Context context, ScheduleChangeWallpaper callback) {
+
+    }
+
+    @Override
     public void saveLastSearchWantedPhotoId(String lastSearchId) {
 
     }
