@@ -399,6 +399,8 @@ public class PhotosFragment extends PhotosVisibleFragment implements PhotosContr
 
     @Override
     public void showLoadAllPhotosError() {
+        if (getView() == null)
+            return;
         Snackbar.make(getView(),"Error occured when loaded photos",Snackbar.LENGTH_LONG).show();
         Log.i(TAG, "inside show load photos error");
         if (mSwipeContainer.isRefreshing()) {

@@ -1,14 +1,6 @@
 apply plugin: 'com.android.application'
 
 android {
-    signingConfigs {
-        releaselifephoto {
-            keyAlias 'lifephotoalias'
-            keyPassword 'asdfghjk'
-            storeFile file('C:/Users/DTQ/Desktop/Life Photos/lifephoto.jks')
-            storePassword 'asdfghjk'
-        }
-    }
     compileSdkVersion 27
     defaultConfig {
         applicationId "com.forabetterlife.dtq.myunsplash"
@@ -24,10 +16,10 @@ android {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
             debuggable true
-            signingConfig signingConfigs.releaselifephoto
+
         }
         debug {
-            signingConfig signingConfigs.releaselifephoto
+
         }
     }
     flavorDimensions "default"

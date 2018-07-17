@@ -173,7 +173,8 @@ public class PhotoDetailFragment extends DaggerFragment implements PhotoDetailCo
 //        Picasso.get()
 //                .load(photoUrl)
 //                .into(photoIV);
-        artistNameTV.setText("Photo by " + photo.getUser().getName() + " on Unsplash");
+
+        artistNameTV.setText(artistNameTV.getContext().getString(R.string.photo_by,photo.getUser().getName()));
 //        descriptionTV.setText(photo.getDescription().toString());
         Integer num_of_likes = photo.getLikes();
 //        if (num_of_likes == null) {
@@ -207,6 +208,8 @@ public class PhotoDetailFragment extends DaggerFragment implements PhotoDetailCo
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (getView() == null)
+            return;
         if (requestCode == 12345 && resultCode == Activity.RESULT_OK) {
             Snackbar.make(getView(), "Wallpaper has changed!", Snackbar.LENGTH_LONG).show();
         }
