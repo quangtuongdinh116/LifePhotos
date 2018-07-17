@@ -139,10 +139,7 @@ public class SettingsPrefActivity extends AppCompatPreferenceActivity{
 
         @Override
         public void showScheduleSuccessMessage() {
-            if (getView() != null) {
-                Snackbar.make(getView(),"Schedule success!",Snackbar.LENGTH_LONG).show();
-            }
-
+            showSnackBar(getString(R.string.schedule_success_message));
         }
 
         @Override
@@ -165,7 +162,18 @@ public class SettingsPrefActivity extends AppCompatPreferenceActivity{
                 Snackbar.make(getView(),"Stop fail!",Snackbar.LENGTH_LONG).show();
             }
         }
+
+        @Override
+        public void showSnackBar(String message) {
+            if (getView() == null)
+                return;
+            Snackbar.make(getView(), message, Snackbar.LENGTH_LONG).show();
+        }
+
+
     }
+
+
 
     public static void addListenerToPreference(Preference preference, Preference.OnPreferenceChangeListener listener) {
         preference.setOnPreferenceChangeListener(listener);

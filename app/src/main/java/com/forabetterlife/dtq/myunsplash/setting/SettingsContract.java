@@ -17,5 +17,6 @@ public interface SettingsContract {
         void showScheduleFailMessage();
         void showStopSuccessMessage();
         void showStopFailMessage();
+        void showSnackBar(String message);
     }
 }
