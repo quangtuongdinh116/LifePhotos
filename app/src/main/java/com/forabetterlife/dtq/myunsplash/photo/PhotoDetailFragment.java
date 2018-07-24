@@ -51,7 +51,6 @@ public class PhotoDetailFragment extends DaggerFragment implements PhotoDetailCo
 
     private static final String BUNDLE_KEY_PHOTO = "bundle_key_photo";
 
-
     @Inject
     PhotoDetailContract.Presenter mPresenter;
 
@@ -59,9 +58,6 @@ public class PhotoDetailFragment extends DaggerFragment implements PhotoDetailCo
 
     AdjustableImageView photoIV;
     TextView artistNameTV;
-    TextView descriptionTV;
-//    TextView number_of_likeTV;
-
 
     FloatingActionButton favoriteFab;
 
@@ -69,8 +65,6 @@ public class PhotoDetailFragment extends DaggerFragment implements PhotoDetailCo
     public PhotoDetailFragment() {
 
     }
-
-
 
     public static PhotoDetailFragment getInstance(String jsonPhotoString) {
         Bundle bundle = new Bundle();
@@ -169,20 +163,7 @@ public class PhotoDetailFragment extends DaggerFragment implements PhotoDetailCo
                     .load(photoUrl)
                     .into(photoIV);
         }
-
-//        Picasso.get()
-//                .load(photoUrl)
-//                .into(photoIV);
-
         artistNameTV.setText(artistNameTV.getContext().getString(R.string.photo_by,photo.getUser().getName()));
-//        descriptionTV.setText(photo.getDescription().toString());
-        Integer num_of_likes = photo.getLikes();
-//        if (num_of_likes == null) {
-//            number_of_likeTV.setText("");
-//        } else {
-//            int int_num_of_likes = num_of_likes.intValue();
-//            number_of_likeTV.setText(String.valueOf(int_num_of_likes));
-//        }
         if(isFavorite) {
             favoriteFab.setImageDrawable(getResources().getDrawable(R.drawable.ic_favorite_black_24dp));
         } else {
@@ -261,10 +242,6 @@ public class PhotoDetailFragment extends DaggerFragment implements PhotoDetailCo
 
         photoIV = (AdjustableImageView) rootView.findViewById(R.id.photo_image_detail);
         artistNameTV = (TextView) rootView.findViewById(R.id.artist_name);
-
-//        number_of_likeTV = (TextView) rootView.findViewById(R.id.number_of_likes);
-
-
 
         favoriteFab = (FloatingActionButton) getActivity().findViewById(R.id.fab_favorite);
         favoriteFab.setOnClickListener(new View.OnClickListener() {

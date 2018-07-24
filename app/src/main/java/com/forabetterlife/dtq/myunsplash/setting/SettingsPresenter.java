@@ -30,13 +30,13 @@ public class SettingsPresenter implements SettingsContract.Presenter {
         mRepository.changeWantedPhotoServiceStatus(turnOn, new PhotoDataSource.ScheduleFetchNewWantedPhoto() {
             @Override
             public void onScheduleSuccess() {
-                Log.i(TAG, "inside changeWantedPhotoServiceStatus onScheduleSuccess ");
+
                 mView.showScheduleSuccessMessage();
             }
 
             @Override
             public void onScheduleFail() {
-                Log.i(TAG, "inside changeWantedPhotoServiceStatus onScheduleFail ");
+
                 mView.showScheduleFailMessage();
             }
 

@@ -30,7 +30,7 @@ import com.bumptech.glide.request.Request;
 import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.target.SizeReadyCallback;
 import com.bumptech.glide.request.transition.Transition;
-import com.forabetterlife.dtq.myunsplash.GlideApp;
+import com.forabetterlife.dtq.myunsplash.utils.GlideApp;
 import com.forabetterlife.dtq.myunsplash.MyUnSplash;
 import com.forabetterlife.dtq.myunsplash.R;
 import com.forabetterlife.dtq.myunsplash.data.PhotoDataSource;
@@ -88,9 +88,9 @@ public class WallpaperHelper {
     }
 
     public void changeWallpaper(final JobParameters jobParameters) {
-        Log.i(TAG, "INSIDE changeWallpaper");
+
         String type = jobParameters.getExtras().getString(LocalDataSource.BUNDLE_KEY_TYPE_WALLPAPER, MyUnSplash.FAVORITE);
-        Log.i(TAG, "type is: " + type);
+
         if (type.equals(MyUnSplash.FAVORITE)) {
           changeFavoriteWallpapers(jobParameters);
         } else if (type.equals(MyUnSplash.WANTED_PHOTO)) {
@@ -157,7 +157,7 @@ public class WallpaperHelper {
         mRepository.loadFavorites(new PhotoDataSource.LoadFavoritesCallback() {
             @Override
             public void onLoadSuccess(List<FavoriteEntity> favoriteList) {
-                Log.i(TAG, "INSIDE onLoadSuccess");
+
                 checkNotNull(favoriteList);
                 int size = favoriteList.size();
                 if (size == 0 ) {
@@ -167,10 +167,10 @@ public class WallpaperHelper {
                     mService.jobFinished(jobParameters,true);
                     return;
                 }
-                Log.i(TAG, "size = " + size);
+
 
                 int randomPosition = Utils.generateRandomNumber(size);
-                Log.i(TAG, "randomPosition = " + String.valueOf(randomPosition));
+
                 List<FavoriteEntity> finalList = getFavotiteCanBeWallpaper(favoriteList);
                 if (favoriteList.size() == 0) {
                     mService.jobFinished(jobParameters, true);
@@ -180,7 +180,7 @@ public class WallpaperHelper {
                 FavoriteEntity favoriteEntity = finalList.get(randomPosition);
 
                 final String photoUrl = favoriteEntity.getRegularUrl();
-                Log.i(TAG, "photoUrl = " + photoUrl);
+
                 String photoId = favoriteEntity.getId();
                 setWallpaper(photoUrl, jobParameters);
             }
@@ -209,19 +209,18 @@ public class WallpaperHelper {
                 List<PhotoResponse> photoResponseList = searchPhotoResponse.getResults();
 
                 if (photoResponseList == null || photoResponseList.size() == 0) {
-                    Log.i(TAG, "inside photoResponseList == null || photoResponseList.size() == 0");
+
                     sendErrorNotification(mService,"Error happened when changed wallpaper",
                             "No photos found for your wanted photo search keyword!");
                     mService.jobFinished(jobParameters,true);
                     return;
                 } else {
-                    Log.i(TAG, "inside photoResponseList != null || photoResponseList.size() != 0");
-                    Log.i(TAG, "SIZE IS: " + photoResponseList.size());
+
                     List<PhotoResponse> listOfWallpapers = new ArrayList<>();
                     for (PhotoResponse photoResponse : photoResponseList) {
 
                         if (photoResponse.getHeight()/photoResponse.getWidth() > 0.83) {
-                            Log.i(TAG, "photoResponse.getHeight() : " + String.valueOf(photoResponse.getHeight()));
+
                             listOfWallpapers.add(photoResponse);
                         }
                     }
@@ -233,13 +232,12 @@ public class WallpaperHelper {
                         PhotoResponse chosenPhotoResponse = listOfWallpapers.get(randomPosition);
                         int chosenHeight = chosenPhotoResponse.getHeight();
                         int chosenWidth = chosenPhotoResponse.getWidth();
-                        Log.i(TAG, "chosenHeight IS: " + String.valueOf(chosenHeight));
-                        Log.i(TAG, "chosenWidth IS: " + String.valueOf(chosenWidth));
+
 
                         String url = chosenPhotoResponse.getUrls().getRegular();
                         setWallpaper(url,jobParameters);
                     } else {
-                        Log.i(TAG, "ilistOfWallpapers.size() < 0");
+
                         mService.jobFinished(jobParameters, true);
                     }
                 }
@@ -247,7 +245,7 @@ public class WallpaperHelper {
 
             @Override
             public void onLoadFail() {
-                Log.i(TAG, "INSIDE onLoadFail");
+
                 mService.jobFinished(jobParameters, true);
 
             }
@@ -256,66 +254,6 @@ public class WallpaperHelper {
     }
 
     private void setWallpaper(final String url, final JobParameters jobParameters) {
-
-//        target = new Target() {
-//            @Override
-//            public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
-//                Log.i(TAG, "inside  onBitmapLoaded");
-//                Log.i(TAG, "url is: " + url);
-//                Log.i(TAG, "BITMAP SIZE height: " + bitmap.getHeight() + "bitmap width: " + bitmap.getWidth());
-//                if (bitmap.getHeight() < 1000) {
-//                    mService.jobFinished(jobParameters, true);
-//                    return;
-//                }
-//                DisplayMetrics displayMetrics = new DisplayMetrics();
-//                    WindowManager windowManager = (WindowManager) mService.getSystemService(Context.WINDOW_SERVICE);
-//                    windowManager.getDefaultDisplay().getMetrics(displayMetrics);
-//                    int height = displayMetrics.heightPixels;
-//
-//                    int width = displayMetrics.widthPixels;
-//                Log.i(TAG, " height: " + String.valueOf(height));
-//                Log.i(TAG, " width: " + String.valueOf(width));
-//                WallpaperManager wallpaperManager = WallpaperManager.getInstance(mService);
-//                try {
-////                    DisplayMetrics displayMetrics = new DisplayMetrics();
-////                    WindowManager windowManager = (WindowManager) mService.getSystemService(Context.WINDOW_SERVICE);
-////                    windowManager.getDefaultDisplay().getMetrics(displayMetrics);
-////                    int height = displayMetrics.heightPixels;
-////                    int width = displayMetrics.widthPixels;
-////                    Bitmap scaledBitmap = Bitmap.createScaledBitmap(bitmap, width, height, true);
-//
-////                    WallpaperManager wm = WallpaperManager.getInstance(mService);
-////                    int w = bitmap.getWidth();
-////                    int h = bitmap.getHeight();
-////                    wallpaperManager.clear();
-//                    wallpaperManager.setBitmap(bitmap);
-////                    wallpaperManager.suggestDesiredDimensions(w, h);
-//                    mService.jobFinished(jobParameters,true);
-//                } catch (IOException e) {
-//                    e.printStackTrace();
-//                }
-//            }
-//
-//            @Override
-//            public void onBitmapFailed(Drawable errorDrawable) {
-//                Log.i(TAG, "INSIDE onBitmapFailed");
-//                mService.jobFinished(jobParameters, false);
-//            }
-//
-//
-//            @Override
-//            public void onPrepareLoad(Drawable placeHolderDrawable) {
-//                Log.i(TAG, "INSIDE onPrepareLoad");
-//            }
-//        };
-//        Picasso.Builder builder = new Picasso.Builder(mService);
-////        Picasso.get().load(url)
-////                .into(target);
-//        Picasso.with(mService.getApplicationContext())
-//                .setLoggingEnabled(true);
-//        Picasso.with(mService.getApplicationContext())
-//                .load(url)
-//                .into(target);
 
 
         WindowManager wm = (WindowManager) mService.getApplicationContext().getSystemService(Context.WINDOW_SERVICE);

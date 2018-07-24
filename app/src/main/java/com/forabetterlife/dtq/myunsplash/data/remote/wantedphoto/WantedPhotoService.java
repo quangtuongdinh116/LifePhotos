@@ -20,14 +20,7 @@ public class WantedPhotoService extends JobService {
 
     @Override
     public boolean onStartJob(JobParameters params) {
-        Log.i(TAG, "on start job: " + params.getJobId());
-        Log.i(TAG, "query " + params.getExtras().getString(LocalDataSource.BUNDLE_KEY_SEARCH_QUERY));
-        Log.i(TAG, "getId " + params.getExtras().getString(LocalDataSource.BUNDLE_KEY_SEARCH_ID));
-//        if (mAsyncTask == null) {
-//            mAsyncTask = new WantedPhotoSyncTask(this, Inject.provideWantedPhotoService());
-//            mAsyncTask.execute(params);
-//            return true;
-//        }
+
         if (mWantedPhotoRemote == null) {
             mWantedPhotoRemote = new WantedPhotoRemote(this,Inject.provideWantedPhotoService() );
            mWantedPhotoRemote.searchPhotoAndNotify(params);

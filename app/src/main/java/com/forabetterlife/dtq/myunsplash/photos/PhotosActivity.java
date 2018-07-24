@@ -100,14 +100,13 @@ public class PhotosActivity extends DaggerAppCompatActivity
 
     @Override
     protected void onResume() {
-        Log.i(TAG, "inside onResume");
+
         super.onResume();
 
         //highlight item in navigation view menu
         if (navigationView != null) {
             if (mPresenter != null) {
-                Log.i(TAG, "inside mPresenter != null");
-                Log.i(TAG, "CATEGORY IS: " + mPresenter.getCategory());
+
                int id = R.id.nav_all_photos;
                 switch (mPresenter.getCategory()) {
                     case SHOW_ALL:
@@ -209,7 +208,7 @@ public class PhotosActivity extends DaggerAppCompatActivity
         } else if (id == R.id.nav_wanted_photo) {
             restoreToNewState();
             String searchKeyWantedPhoto = mPresenter.getSearchQueryWantedPhoto();
-            Log.i(TAG, "SEARCH QUERY IS: " + searchKeyWantedPhoto);
+
             addFragmentToActivity(PhotoCategory.SHOW_WANTED);
             mPresenter.setSearchQuery(searchKeyWantedPhoto);
         }  else if (id == R.id.nav_downloaded_photo) {
@@ -219,7 +218,7 @@ public class PhotosActivity extends DaggerAppCompatActivity
             Intent intent = new Intent(Intent.ACTION_VIEW);
             intent.setDataAndType(uri,"resource/folder");
             if ( intent.resolveActivity(getPackageManager()) != null) {
-                Log.i(TAG, "app found");
+
                 startActivity(Intent.createChooser(intent,"Choose app to open"));
             } else {
                 AlertDialog.Builder builder = new AlertDialog.Builder(this)

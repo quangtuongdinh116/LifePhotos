@@ -89,9 +89,6 @@ public class  WantedPhotoRemote {
                         mJobService.sendOrderedBroadcast(broadcastIntent,PERMISSION,null,null, Activity.RESULT_OK,null,null);
                     }
 
-//                    result.result = jobParameters[0];
-//                    result.hasNewPhoto = mHasNewPhoto;
-
                 }
 
             }

@@ -21,28 +21,18 @@ public class WantedPhotoBroadcastReceiver extends BroadcastReceiver {
 
     @Override
     public void onReceive(Context context, Intent intent) {
-        Log.i(TAG, "receive new intent with action: " + intent.getAction());
+
         if (intent != null) {
             if(intent.getIntExtra(WantedPhotoRemote.BROADCAST_INTENT_EXTRA_REQUEST_CODE,0) == 0) {
                 if (getResultCode() == Activity.RESULT_OK) {
-                    Log.i(TAG, "inside result ok");
                     Notification notification = (Notification) intent.getParcelableExtra(WantedPhotoRemote.BROADCAST_INTENT_EXTRA_NOTI);
-                    if (notification == null) {
-                        Log.i(TAG, "notification is null");
-                    } else {
-                        Log.i(TAG, "notification is not null");
-                    }
+
                     int requestCode = intent.getIntExtra(WantedPhotoRemote.BROADCAST_INTENT_EXTRA_REQUEST_CODE,0);
-                    Log.i(TAG, "to string is" + notification.toString());
-
-
-
-
 
                     NotificationManagerCompat notificationManagerCompat = NotificationManagerCompat.from(context);
                     notificationManagerCompat.notify(requestCode,notification);
                 } else {
-                    Log.i(TAG, "inside result not ok");
+
                 }
 
             }

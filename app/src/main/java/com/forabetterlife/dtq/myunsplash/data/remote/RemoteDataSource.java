@@ -143,7 +143,7 @@ public class RemoteDataSource implements PhotoDataSource {
     SearchService.OnRequestPhotosListener mSearchPhotoListener = new SearchService.OnRequestPhotosListener() {
         @Override
         public void onRequestPhotosSuccess(Call<SearchPhotoResponse> call, Response<SearchPhotoResponse> response, SearchPhotoByQueryCallback callback) {
-            Log.i(TAG, "response code is: " + response.code());
+
             if (response.code() == 200) {
                 SearchPhotoResponse searchPhotoResponse = response.body();
                 callback.onLoadSuccess(searchPhotoResponse);
@@ -163,7 +163,7 @@ public class RemoteDataSource implements PhotoDataSource {
 
         @Override
         public void onRequestPhotosSuccess(Call<List<PhotoResponse>> call, Response<List<PhotoResponse>> response, LoadAllPhotosCallback callback) {
-            Log.i(TAG, "response code is: " + response.code());
+
             if (response.code() == 200) {
                 List<PhotoResponse> responseList = response.body();
                 callback.onLoadSuccess(responseList);

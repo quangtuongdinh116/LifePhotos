@@ -27,7 +27,6 @@ public class WallpaperDialog extends DialogFragment {
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         View view = LayoutInflater.from(getActivity()).inflate(R.layout.dialog_wallpaper, null, false);
 
-
         return new AlertDialog.Builder(getActivity())
                 .setTitle("Setting wallpaper...")
                 .setNegativeButton("CANCEL", null)

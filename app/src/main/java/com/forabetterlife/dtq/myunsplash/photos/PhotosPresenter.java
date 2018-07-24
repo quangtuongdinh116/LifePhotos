@@ -59,14 +59,6 @@ public class PhotosPresenter implements PhotosContract.Presenter {
 
     boolean isSearching = false;
 
-//    public PhotosPresenter(@NonNull PhotosContract.View view, @NonNull PhotoRepository repository, @NonNull PhotoCategory category) {
-//        mView = view;
-//        mRepository = repository;
-//        PHOTO_CATEGORY = category;
-//
-//        mView.setPresenter(this);
-//    }
-
     @Inject
     PhotosPresenter(PhotoRepository photoRepository) {
         mRepository = photoRepository;
@@ -89,15 +81,15 @@ public class PhotosPresenter implements PhotosContract.Presenter {
             mCurrentPage++;
         }
         if (mView != null && isFirstPage) {
-            Log.i(TAG, "inside mView != null");
+
             mView.setLoadingIndicator(true);
         }
-        Log.i(TAG, "CURRENT PAGE IS: " + mCurrentPage);
+
 
 
         //load photos based on category begins
         if (PHOTO_CATEGORY == PhotoCategory.SHOW_ALL) {
-//            Log.i(TAG, "inside show all");
+
             mRepository.loadAllPhotos(new PhotoDataSource.LoadAllPhotosCallback() {
                 @Override
                 public void onLoadSuccess(List<PhotoResponse> photoResponseList) {
@@ -120,11 +112,11 @@ public class PhotosPresenter implements PhotosContract.Presenter {
             if (mView != null) {
                 mView.setLoadingIndicator(true);
             }
-//            Log.i(TAG, "inside show favorite else");
+
             mRepository.loadFavorites(new PhotoDataSource.LoadFavoritesCallback() {
                 @Override
                 public void onLoadSuccess(List<FavoriteEntity> favoriteList) {
-//                    Log.i(TAG, "inside load success favorite");
+
                     List<PhotoResponse> photoResponseList = new ArrayList<>();
                     for (FavoriteEntity favoriteEntity : favoriteList){
                         PhotoResponse photoResponse = new PhotoResponse();
@@ -141,7 +133,7 @@ public class PhotosPresenter implements PhotosContract.Presenter {
                         photoResponse.setUser(user);
                         photoResponseList.add(photoResponse);
                     }
-//                    Log.i(TAG, "size is: " + photoResponseList.size());
+
                     if (mView == null || !mView.isActive()) {
                         return;
                     }
@@ -151,7 +143,7 @@ public class PhotosPresenter implements PhotosContract.Presenter {
 
                 @Override
                 public void onLoadFail() {
-//                    Log.i(TAG, "inside on Load fail favorite");
+
                 }
             });
         } else if (PHOTO_CATEGORY == PhotoCategory.SHOW_WANTED) {
@@ -169,7 +161,7 @@ public class PhotosPresenter implements PhotosContract.Presenter {
             mRepository.loadDownloadedPhotos(new PhotoDataSource.LoadDownloadedPhotosCallback() {
                 @Override
                 public void onLoadSuccess(List<DownloadedPhotoEntity> downloadedList) {
-//                    Log.i(TAG, "inside load success favorite");
+
                     List<PhotoResponse> photoResponseList = new ArrayList<>();
                     for (DownloadedPhotoEntity downloadedEntity : downloadedList){
                         PhotoResponse photoResponse = new PhotoResponse();
@@ -186,7 +178,7 @@ public class PhotosPresenter implements PhotosContract.Presenter {
                         photoResponse.setUser(user);
                         photoResponseList.add(photoResponse);
                     }
-//                    Log.i(TAG, "size is: " + photoResponseList.size());
+
                     if (mView == null || !mView.isActive()) {
                         return;
                     }
@@ -195,7 +187,7 @@ public class PhotosPresenter implements PhotosContract.Presenter {
 
                 @Override
                 public void onLoadFail() {
-//                    Log.i(TAG, "inside on Load fail downloaded");
+
                 }
             });
         }
@@ -213,7 +205,7 @@ public class PhotosPresenter implements PhotosContract.Presenter {
 
     @Override
     public void searchPhotoByQuery(String query) {
-        Log.i(TAG, "inside searchPhotoByQuery with query: " + query);
+
         if(Strings.isNullOrEmpty(query))
             return;
         setSearchQuery(query);
@@ -228,8 +220,6 @@ public class PhotosPresenter implements PhotosContract.Presenter {
                 mView.setLoadingIndicator(true);
             }
 
-
-        Log.i(TAG, "inside searchPhotoByQuery with mCurrentPage: " + mCurrentPage);
         mRepository.searchPhotoByQuery(query, new PhotoDataSource.SearchPhotoByQueryCallback() {
             @Override
             public void onLoadSuccess(SearchPhotoResponse searchPhotoResponse) {

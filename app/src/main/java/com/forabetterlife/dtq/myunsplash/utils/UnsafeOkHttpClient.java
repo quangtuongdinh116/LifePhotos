@@ -1,4 +1,4 @@
-package com.forabetterlife.dtq.myunsplash;
+package com.forabetterlife.dtq.myunsplash.utils;
 
 import java.security.cert.CertificateException;
 

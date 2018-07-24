@@ -45,18 +45,6 @@ public class WallpaperPresenter implements WallpaperContract.Presenter {
 
     @Override
     public void changeAutoWallpaperStatus(long duration, String type, Context context) {
-//        WallpaperType wallpaperType = WallpaperType.FAVORITE;
-//        switch (type) {
-//            case MyUnSplash.FAVORITE:
-//                wallpaperType = WallpaperType.FAVORITE;
-//                break;
-//            case MyUnSplash.WANTED_PHOTO:
-//                wallpaperType =WallpaperType.WANTED;
-//                break;
-//            default:
-//                wallpaperType = WallpaperType.FAVORITE;
-//                break;
-//        }
         Log.i(TAG, "TYPE IS: " + type);
        mRepository.changeWallpaperStatus(duration, type, context, new PhotoDataSource.ScheduleChangeWallpaper() {
            @Override

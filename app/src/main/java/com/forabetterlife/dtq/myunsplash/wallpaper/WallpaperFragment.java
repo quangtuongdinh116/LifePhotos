@@ -112,7 +112,7 @@ public class WallpaperFragment extends Fragment implements WallpaperContract.Vie
             public void onChanged(@Nullable List<WorkStatus> workStatuses) {
                 // If there are no matching work statuses, do nothing
                 if (workStatuses == null || workStatuses.isEmpty()) {
-                    Log.i(TAG, "INSIDE workStatuses == null || workStatuses.isEmpty()");
+
                     return;
                 }
 
@@ -122,22 +122,22 @@ public class WallpaperFragment extends Fragment implements WallpaperContract.Vie
                 if (workStatus != null) {
                     switch (workStatus.getState()) {
                         case ENQUEUED:
-                            Log.i(TAG, "ENQUEUE");
+
                             break;
                         case FAILED:
-                            Log.i(TAG, "FAILED");
+
                             break;
                         case BLOCKED:
-                            Log.i(TAG, "BLOCKED");
+
                             break;
                         case RUNNING:
-                            Log.i(TAG, "RUNNING");
+
                             break;
                         case SUCCEEDED:
-                            Log.i(TAG, "SUCCEEDED");
+
                             break;
                         case CANCELLED:
-                            Log.i(TAG, "CANCELLED");
+
                             break;
                     }
                 } else {

@@ -62,15 +62,6 @@ public class PhotoDetailPresenter implements PhotoDetailContract.Presenter {
         this.downloadReference = downloadReference;
     }
 
-//    public PhotoDetailPresenter(@NonNull PhotoDetailContract.View view, @NonNull PhotoRepository repository, @NonNull String photoJsonString) {
-//        mView = view;
-//        mRepository = repository;
-//        this.photoJsonString = photoJsonString;
-//        mPhotoResponse = new Gson().fromJson(photoJsonString,PhotoResponse.class);
-//
-//        mView.setPresenter(this);
-//    }
-
     @Inject
     PhotoDetailPresenter(@Nullable String photoJsonString,
                         PhotoRepository photoRepository ) {
@@ -112,7 +103,7 @@ public class PhotoDetailPresenter implements PhotoDetailContract.Presenter {
         mRepository.reportDownload(mPhotoResponse.getId(),mReportDownloadListener);
         String filename = mPhotoResponse.getId() + "_" + "raw" + MyUnSplash.DOWNLOAD_PHOTO_FORMAT;
         String qualityOfPhoto = mRepository.getPhotoDownloadQuality();
-        Log.i(TAG,"Quality of photo is: " + qualityOfPhoto);
+
         String urlOfPhoto = Utils.getPhotoUrlBaseOnQuality(qualityOfPhoto, mPhotoResponse);
         DownloadManager.Request request = new DownloadManager.Request(Uri.parse(urlOfPhoto))
                 .setTitle(filename)
@@ -143,31 +134,15 @@ public class PhotoDetailPresenter implements PhotoDetailContract.Presenter {
                         int status  = cursor.getInt(cursor.getColumnIndex(DownloadManager.COLUMN_STATUS));
                         switch (status) {
                             case DownloadManager.STATUS_SUCCESSFUL:
-//                        getApplicationContext().sendBroadcast(new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, downloadManager.getUriForDownloadedFile(downloadReference)));
+
                                 mView.sendBroadcast(downloadReference,downloadManager);
                                 Uri uri = downloadManager.getUriForDownloadedFile(downloadReference);
                                 try {
-//                            Log.d(TAG, "Crop and Set: " + uri.toString());
-//                            Intent wallpaperIntent = WallpaperManager.getInstance(context).getCropAndSetWallpaperIntent(uri);
-//                            wallpaperIntent.setDataAndType(uri, "image/jpg");
-//                            wallpaperIntent.putExtra("mimeType", "image/jpg");
-//                            startActivityForResult(wallpaperIntent, 13451);
                                     mView.startActivityWallpaper(uri);
-
                                 } catch (Exception e) {
-//                            Log.d(TAG, "Chooser: " + uri.toString());
-//                            Intent wallpaperIntent = new Intent(Intent.ACTION_ATTACH_DATA);
-//                            wallpaperIntent.setDataAndType(uri, "image/jpg");
-//                            wallpaperIntent.putExtra("mimeType", "image/jpg");
-//                            wallpaperIntent.addCategory(Intent.CATEGORY_DEFAULT);
-//                            wallpaperIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-//                            wallpaperIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-//                            wallpaperIntent.addFlags(Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
-//                            startActivity(Intent.createChooser(wallpaperIntent, getString(R.string.set_as_wallpaper)));
                                     mView.startActivityWallpapeWhenExceptionOccured(uri);
-
                                 }
-//                        wallpaperDialog.setDownloadFinished(true);
+
                                 mView.setDownloadFinish();
 
                                 break;
@@ -176,7 +151,6 @@ public class PhotoDetailPresenter implements PhotoDetailContract.Presenter {
                         }
                     }
 
-//                wallpaperDialog.dismiss();
                     mView.dismissWallPaperDialog();
 
                     cursor.close();
@@ -198,7 +172,6 @@ public class PhotoDetailPresenter implements PhotoDetailContract.Presenter {
         favoriteEntity.setSmallUrl(mPhotoResponse.getUrls().getSmall());
         favoriteEntity.setThumbUrl(mPhotoResponse.getUrls().getThumb());
         favoriteEntity.setArtistName(mPhotoResponse.getUser().getName());
-
         favoriteEntity.setHeight(mPhotoResponse.getHeight());
         favoriteEntity.setWidth(mPhotoResponse.getWidth());
 

@@ -48,12 +48,12 @@ public class MyUnSplash extends DaggerApplication {
 
     private Drawable drawable;
 
-    private RefWatcher refWatcher;
+//    private RefWatcher refWatcher;
 
-    public static RefWatcher getRefWatcher(Context context) {
-        MyUnSplash application = (MyUnSplash) context.getApplicationContext();
-        return application.refWatcher;
-    }
+//    public static RefWatcher getRefWatcher(Context context) {
+//        MyUnSplash application = (MyUnSplash) context.getApplicationContext();
+//        return application.refWatcher;
+//    }
 
     @Override
     public void onCreate() {
@@ -63,7 +63,7 @@ public class MyUnSplash extends DaggerApplication {
             // You should not init your app in this process.
             return;
         }
-        refWatcher = LeakCanary.install(this);
+//        refWatcher = LeakCanary.install(this);
         initialize();
     }
 

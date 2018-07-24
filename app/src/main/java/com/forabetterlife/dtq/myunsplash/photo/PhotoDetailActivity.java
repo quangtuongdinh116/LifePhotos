@@ -31,31 +31,25 @@ public class PhotoDetailActivity extends DaggerAppCompatActivity {
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
         getSupportActionBar().setTitle("");
 
         // add back arrow to toolbar
-        if (getSupportActionBar() != null){
+        if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
             getSupportActionBar().setDisplayShowHomeEnabled(true);
         }
-
-
 
         if (getIntent() == null || getIntent().getStringExtra(EXTRA_PHOTO) == null) {
             Toast.makeText(this, "Can not load information about this photo", Toast.LENGTH_LONG).show();
             finish();
         }
-//        String jsonPhotoString = getIntent().getStringExtra(EXTRA_PHOTO);
+
         PhotoDetailFragment photoDetailFragment = (PhotoDetailFragment) getSupportFragmentManager().findFragmentById(R.id.contentFrame);
         if (photoDetailFragment == null) {
-            photoDetailFragment =injectedFragment;
+            photoDetailFragment = injectedFragment;
             getSupportFragmentManager().beginTransaction()
                     .add(R.id.contentFrame, photoDetailFragment)
                     .commit();
         }
-//        new PhotoDetailPresenter(photoDetailFragment, Inject.provideRepository(getApplicationContext()),jsonPhotoString);
     }
-
-
 }

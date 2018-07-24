@@ -1,4 +1,4 @@
-package com.forabetterlife.dtq.myunsplash;
+package com.forabetterlife.dtq.myunsplash.utils;
 
 import android.support.annotation.NonNull;
 import android.util.Log;

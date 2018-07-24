@@ -185,10 +185,6 @@ public class SettingsPrefActivity extends AppCompatPreferenceActivity{
 
     public static void addListenerToBooleanPreference(Preference preference, Preference.OnPreferenceChangeListener listener) {
         preference.setOnPreferenceChangeListener(listener);
-//        sPreferenceChangeListener.onPreferenceChange(preference,
-//                PreferenceManager
-//                        .getDefaultSharedPreferences(preference.getContext())
-//                        .getBoolean(preference.getKey(), true));
     }
 
 
@@ -203,9 +199,7 @@ public class SettingsPrefActivity extends AppCompatPreferenceActivity{
                 if (preference instanceof ListPreference) {
                     Log.i("HELLO","INSIDE preference instanceof ListPreference");
                     ListPreference listPreference = (ListPreference) preference;
-//                    String chosenValue = listPreference.getValue();
-//                    String chosenEntry = listPreference.getEntries()[Integer.parseInt(chosenValue)-1].toString();
-//                    listPreference.setSummary(chosenEntry);
+
                     int index = listPreference.findIndexOfValue(value);
                     listPreference.setSummary(index >= 0? listPreference.getEntries()[index] : null);
                 } else if (preference instanceof EditTextPreference) {

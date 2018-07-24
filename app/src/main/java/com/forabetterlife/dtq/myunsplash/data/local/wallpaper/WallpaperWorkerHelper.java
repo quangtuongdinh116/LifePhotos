@@ -3,7 +3,6 @@ package com.forabetterlife.dtq.myunsplash.data.local.wallpaper;
 import android.app.DownloadManager;
 import android.app.Notification;
 import android.app.WallpaperManager;
-import android.app.job.JobParameters;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
@@ -20,21 +19,17 @@ import android.view.Display;
 import android.view.WindowManager;
 
 
-import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.DataSource;
 import com.bumptech.glide.load.engine.GlideException;
 import com.bumptech.glide.request.Request;
 import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.target.SizeReadyCallback;
 import com.bumptech.glide.request.transition.Transition;
-import com.forabetterlife.dtq.myunsplash.GlideApp;
-import com.forabetterlife.dtq.myunsplash.MyGlideApp;
-import com.forabetterlife.dtq.myunsplash.MyGlideModule;
+import com.forabetterlife.dtq.myunsplash.utils.GlideApp;
 import com.forabetterlife.dtq.myunsplash.MyUnSplash;
 import com.forabetterlife.dtq.myunsplash.data.PhotoDataSource;
 import com.forabetterlife.dtq.myunsplash.data.PhotoRepository;
 import com.forabetterlife.dtq.myunsplash.data.local.FavoriteEntity;
-import com.forabetterlife.dtq.myunsplash.data.local.LocalDataSource;
 import com.forabetterlife.dtq.myunsplash.data.model.PhotoResponse;
 import com.forabetterlife.dtq.myunsplash.data.model.SearchPhotoResponse;
 import com.forabetterlife.dtq.myunsplash.utils.Utils;
@@ -74,7 +69,7 @@ public class WallpaperWorkerHelper {
     }
 
     public void changeWallpaper(String type) {
-        Log.i(TAG, String.format("inside changeWallpaper with type is %s", type));
+
         if (type.equals(MyUnSplash.FAVORITE)) {
             changeFavoriteWallpapers();
         } else if (type.equals(MyUnSplash.WANTED_PHOTO)) {
@@ -85,7 +80,7 @@ public class WallpaperWorkerHelper {
     }
 
     private void changeRandomWallpapers() {
-        Log.i(TAG, "INSIDE changeRandomWallpapers");
+
 
         int randomPage = Utils.generateRandomNumber(100);
 
@@ -127,11 +122,11 @@ public class WallpaperWorkerHelper {
     }
 
     private void changeFavoriteWallpapers() {
-        Log.i(TAG, "INSIDE changeFavoriteWallpapers");
+
         mRepository.loadFavorites(new PhotoDataSource.LoadFavoritesCallback() {
             @Override
             public void onLoadSuccess(List<FavoriteEntity> favoriteList) {
-                Log.i(TAG, "INSIDE changeFavoriteWallpapers onLoadSuccess");
+
 
                 checkNotNull(favoriteList);
                 int size = favoriteList.size();
@@ -224,18 +219,12 @@ public class WallpaperWorkerHelper {
 
 
     private void setWallpaper(final String url) {
-        Log.i(TAG, String.format("INSIDE setWallpaper with url is: %s",url));
+
 
         target = new com.squareup.picasso.Target() {
             @Override
             public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
-                Log.i(TAG, "INSIDE onBitmapLoaded");
-                Log.i(TAG, "bitmap height is: " + String.valueOf(bitmap.getHeight()));
 
-//                if (bitmap.getHeight() < 1000) {
-//
-//                    return;
-//                }
                 DisplayMetrics displayMetrics = new DisplayMetrics();
                 WindowManager windowManager = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
                 windowManager.getDefaultDisplay().getMetrics(displayMetrics);
@@ -253,33 +242,17 @@ public class WallpaperWorkerHelper {
 
             @Override
             public void onBitmapFailed(Drawable errorDrawable) {
-                Log.i(TAG, "INSIDE onBitmapFailed");
+
             }
 
 
             @Override
             public void onPrepareLoad(Drawable placeHolderDrawable) {
-                Log.i(TAG, "INSIDE onPrepareLoad");
+
             }
         };
         Picasso.Builder builder = new Picasso.Builder(context);
-//        Picasso.get().load(url)
-//                .into(target);
-//
-//        Picasso.with(context)
-//                .setLoggingEnabled(true);
-//        Picasso.with(context)
-//                .load(url)
-//                .into(target);
 
-
-
-//        DisplayMetrics displayMetrics = new DisplayMetrics();
-//        WindowManager windowManager = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
-//        windowManager.getDefaultDisplay().getMetrics(displayMetrics);
-//        int height = displayMetrics.heightPixels;
-//
-//        int width = displayMetrics.widthPixels;
 
         WindowManager wm = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
         Display display = wm.getDefaultDisplay();
@@ -297,11 +270,11 @@ public class WallpaperWorkerHelper {
                     @Override
                     public boolean onLoadFailed(@Nullable GlideException e, Object model, com.bumptech.glide.request.target.Target<Bitmap> target, boolean isFirstResource) {
                         // Log the GlideException here (locally or with a remote logging framework):
-                        Log.e(TAG, "Load failed", e);
+
 
                         // You can also log the individual causes:
                         for (Throwable t : e.getRootCauses()) {
-                            Log.e(TAG, "Caused by", t);
+
                         }
                         // Or, to log all root causes locally, you can use the built in helper method:
                         e.logRootCauses(TAG);

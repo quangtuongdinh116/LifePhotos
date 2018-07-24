@@ -26,13 +26,10 @@ public class WallpaperService extends JobService {
 
     @Override
     public boolean onStartJob(JobParameters params) {
-//        registerReceiver(receiver, filter);
-        Log.i(TAG, "inside on StartJob");
-
         int jobId = params.getJobId();
-        Log.i(TAG, "jobId is: " + jobId);
+
         String type = params.getExtras().getString(LocalDataSource.BUNDLE_KEY_TYPE_WALLPAPER, MyUnSplash.FAVORITE);
-        Log.i(TAG, "type is: " + type);
+
         if (mWallpaperHelper == null) {
             mWallpaperHelper = new WallpaperHelper(this, Inject.provideRepository(this));
             mWallpaperHelper.changeWallpaper(params);
@@ -43,21 +40,12 @@ public class WallpaperService extends JobService {
 
     @Override
     public boolean onStopJob(JobParameters params) {
-//        unregisterReceiver(receiver);
-        Log.i(TAG, "inside on StopJob");
+
         if (mWallpaperHelper != null) {
             mWallpaperHelper = null;
         }
         return false;
     }
 
-//    IntentFilter filter = new IntentFilter(DownloadManager.ACTION_DOWNLOAD_COMPLETE);
-//
-//    BroadcastReceiver receiver = new BroadcastReceiver() {
-//        @Override
-//        public void onReceive(Context context, Intent intent) {
-//            long reference = intent.getLongExtra(DownloadManager.EXTRA_DOWNLOAD_ID, -1);
-//            mWallpaperHelper.handleDownloadResult(reference);
-//        }
-//    };
+
 }
