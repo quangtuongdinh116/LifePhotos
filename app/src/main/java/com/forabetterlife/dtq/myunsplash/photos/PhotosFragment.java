@@ -232,7 +232,7 @@ public class PhotosFragment extends PhotosVisibleFragment implements PhotosContr
                 return false;
             }
         });
-        mRecyclerView.setItemViewCacheSize(15);
+        mRecyclerView.setItemViewCacheSize(5);
 
         mRecyclerView.setAdapter(mPhotoAdapter);
 
@@ -245,7 +245,6 @@ public class PhotosFragment extends PhotosVisibleFragment implements PhotosContr
                 loadMore();
             }
         });
-
 
     }
 

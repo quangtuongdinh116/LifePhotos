@@ -37,7 +37,7 @@ public class MyUnSplash extends DaggerApplication {
 
     public static final double CAN_BE_WALLPAPER = 0.83;
 
-    public static final int DEFAULT_PER_PAGE = 50;
+    public static final int DEFAULT_PER_PAGE = 30;
 
     public static final String KEY_WALLPAPER_TYPE = "KEY_WALLPAPER_TYPE";
 
@@ -48,7 +48,7 @@ public class MyUnSplash extends DaggerApplication {
 
     private Drawable drawable;
 
-//    private RefWatcher refWatcher;
+    private RefWatcher refWatcher;
 
 //    public static RefWatcher getRefWatcher(Context context) {
 //        MyUnSplash application = (MyUnSplash) context.getApplicationContext();

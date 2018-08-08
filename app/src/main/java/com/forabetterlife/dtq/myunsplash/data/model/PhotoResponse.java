@@ -4,15 +4,23 @@ package com.forabetterlife.dtq.myunsplash.data.model;
  * Created by DTQ on 3/22/2018.
  */
 
+import android.animation.ObjectAnimator;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 
 import java.util.List;
 
+import com.bumptech.glide.GenericTransitionOptions;
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.request.RequestOptions;
+import com.bumptech.glide.request.transition.ViewPropertyTransition;
+import com.bumptech.glide.signature.ObjectKey;
+import com.forabetterlife.dtq.myunsplash.MyUnSplash;
 import com.forabetterlife.dtq.myunsplash.R;
 import com.forabetterlife.dtq.myunsplash.utils.Utils;
 import com.google.gson.annotations.Expose;
@@ -215,10 +223,27 @@ public class PhotoResponse extends AbstractItem<PhotoResponse, PhotoResponse.Pho
     @Override
     public void bindView(PhotoViewHolder holder, List<Object> payloads) {
         super.bindView(holder, payloads);
+
+        DisplayMetrics displaymetrics = MyUnSplash.getInstance().getResources().getDisplayMetrics();
+        float finalHeight = displaymetrics.widthPixels / ((float)width/(float)height);
+
+        ViewPropertyTransition.Animator fadeAnimation = new ViewPropertyTransition.Animator() {
+            @Override
+            public void animate(View view) {
+                ObjectAnimator fadeAnim = ObjectAnimator.ofFloat(view, "alpha", 0f, 1f);
+                fadeAnim.setDuration(500);
+                fadeAnim.start();
+            }
+        };
+
+        RequestOptions requestOptions = new RequestOptions().signature(new ObjectKey(String.valueOf(System.currentTimeMillis())))
+                .dontAnimate()
+                .diskCacheStrategy(DiskCacheStrategy.ALL);
         Glide.with(holder.mImageView.getContext())
-//                    .applyDefaultRequestOptions(options)
                 .load(Utils.getPhotoUrlBaseOnQuality(quality,this))
+                .transition(GenericTransitionOptions.with(fadeAnimation))
                 .into(holder.mImageView);
+        holder.mImageView.setMinimumHeight((int) finalHeight);
 
     }
 

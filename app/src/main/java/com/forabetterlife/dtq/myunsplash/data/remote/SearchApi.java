@@ -14,7 +14,6 @@ public interface SearchApi {
 
     @GET("search/photos")
     Call<SearchPhotoResponse> searchPhotoByQuery(@Query("page") int page,
-                                                 @Query("per_page") int perpage,
                                                  @Query("query") String query,
                                                  @Query("client_id") String access_token);
 }
