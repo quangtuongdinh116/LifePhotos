@@ -19,7 +19,15 @@ public interface PhotoApi {
     @GET("photos")
     Call<List<PhotoResponse>> getPhotos(@Query("page") int page,
                                         @Query("per_page") int per_page,
-                                        @Query("client_id") String access_key);
+                                        @Query("client_id") String access_key,
+                                        @Query("order_by") String order_by);
+
+    @GET("photos/curated")
+    Call<List<PhotoResponse>> getCuratedPhotos(@Query("page") int page,
+                                       @Query("per_page") int per_page,
+                                               @Query("client_id") String access_key,
+                                       @Query("order_by") String order_by);
+
 
     @GET("photos/{id}/download")
     Call<ResponseBody> reportDownload(@Path("id") String id);

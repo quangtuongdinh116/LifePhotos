@@ -24,6 +24,7 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.DecodeFormat;
@@ -54,7 +55,7 @@ import javax.inject.Inject;
  */
 
 @ActivityScoped
-public class PhotosFragment extends PhotosVisibleFragment implements PhotosContract.View  {
+public class PhotosFragment extends PhotosVisibleFragment implements PhotosContract.View, PhotosFilterBottomSheetDialog.PhotosFilterChangeListener  {
     private static final String TAG = "PhotosFragment";
 
     @Inject
@@ -120,7 +121,7 @@ public class PhotosFragment extends PhotosVisibleFragment implements PhotosContr
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-
+        setRetainInstance(true);
         View rootView = inflater.inflate(R.layout.fragment_all_photos, container, false);
 
         mRecyclerView = (RecyclerView) rootView.findViewById(R.id.all_photos_recycler_view);
@@ -200,6 +201,8 @@ public class PhotosFragment extends PhotosVisibleFragment implements PhotosContr
                     return false;
                 }
             });
+
+
         }
 
     }
@@ -214,6 +217,11 @@ public class PhotosFragment extends PhotosVisibleFragment implements PhotosContr
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+
+        if (item.getItemId() == R.id.menu_item_filter) {
+            PhotosFilterBottomSheetDialog.newInstance(mPresenter.getFilterOptions())
+                    .show(getChildFragmentManager(), "PhotosFilterBottomSheetDialog");
+        }
 
         return super.onOptionsItemSelected(item);
     }
@@ -378,6 +386,29 @@ public class PhotosFragment extends PhotosVisibleFragment implements PhotosContr
     @Override
     public boolean isActive() {
         return isAdded();
+    }
+
+    @Override
+    public void showToast(String message) {
+        Toast.makeText(getContext(), message, Toast.LENGTH_LONG).show();
+    }
+
+    @Override
+    public void onFilterApply() {
+        setUpRecyclerView();
+        mPresenter.setIsSearching(true);
+        mPresenter.setIsNewStatus();
+        mPresenter.onFilterApply();
+    }
+
+    @Override
+    public void onTypeSelected(String selectedType) {
+        mPresenter.onTypeSelected(selectedType);
+    }
+
+    @Override
+    public void onSortOptionSelected(String selectedSortOption) {
+        mPresenter.onSortSelected(selectedSortOption);
     }
 
 

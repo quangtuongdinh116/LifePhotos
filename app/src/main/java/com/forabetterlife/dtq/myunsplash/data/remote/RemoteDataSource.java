@@ -1,11 +1,14 @@
 package com.forabetterlife.dtq.myunsplash.data.remote;
 
 import android.arch.lifecycle.LiveData;
+import android.arch.persistence.room.util.StringUtil;
 import android.content.Context;
 import android.support.annotation.NonNull;
+import android.text.TextUtils;
 import android.util.Log;
 
 import com.forabetterlife.dtq.myunsplash.MyUnSplash;
+import com.forabetterlife.dtq.myunsplash.data.model.FilterOptionsModel;
 import com.forabetterlife.dtq.myunsplash.data.service.PhotoService;
 import com.forabetterlife.dtq.myunsplash.data.PhotoDataSource;
 import com.forabetterlife.dtq.myunsplash.data.service.SearchService;
@@ -22,6 +25,8 @@ import javax.inject.Singleton;
 import androidx.work.WorkStatus;
 import retrofit2.Call;
 import retrofit2.Response;
+
+import static com.forabetterlife.dtq.myunsplash.data.model.FilterOptionsModel.FilterType.*;
 
 /**
  * Created by DTQ on 3/22/2018.
@@ -55,8 +60,25 @@ public class RemoteDataSource implements PhotoDataSource {
 
 
     @Override
-    public void loadAllPhotos(LoadAllPhotosCallback callback, int page) {
-        mPhotoService.requestPhotos(page,MyUnSplash.DEFAULT_PER_PAGE, MyUnSplash.getAppId(MyUnSplash.getInstance()),mPhotoRequestListener,callback);
+    public void loadAllPhotos(LoadAllPhotosCallback callback, int page, FilterOptionsModel filter) {
+        if (filter == null)
+            return;
+
+        if (TextUtils.isEmpty(filter.getSort()))
+            return;
+
+        if (TextUtils.isEmpty(filter.getType()))
+            return;
+
+        switch (filter.getType()) {
+            case ALL:
+                mPhotoService.requestPhotos(page,MyUnSplash.DEFAULT_PER_PAGE, MyUnSplash.getAppId(MyUnSplash.getInstance()),mPhotoRequestListener,callback, filter.getSort());
+                break;
+            case CURATED:
+                mPhotoService.requestCuratedPhotos(page,MyUnSplash.DEFAULT_PER_PAGE, MyUnSplash.getAppId(MyUnSplash.getInstance()),mPhotoRequestListener,callback, filter.getSort());
+                break;
+        }
+
     }
 
     @Override

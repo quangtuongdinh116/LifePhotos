@@ -17,6 +17,7 @@ import com.forabetterlife.dtq.myunsplash.MyUnSplash;
 import com.forabetterlife.dtq.myunsplash.data.PhotoDataSource;
 import com.forabetterlife.dtq.myunsplash.data.local.wallpaper.WallpaperService;
 import com.forabetterlife.dtq.myunsplash.data.local.wallpaper.WallpaperWorker;
+import com.forabetterlife.dtq.myunsplash.data.model.FilterOptionsModel;
 import com.forabetterlife.dtq.myunsplash.data.remote.wantedphoto.WantedPhotoService;
 import com.forabetterlife.dtq.myunsplash.data.service.PhotoService;
 import com.forabetterlife.dtq.myunsplash.utils.AppExecutors;
@@ -104,7 +105,7 @@ public class LocalDataSource implements PhotoDataSource {
 
 
     @Override
-    public void loadAllPhotos(LoadAllPhotosCallback callback, int page) {
+    public void loadAllPhotos(LoadAllPhotosCallback callback, int page, FilterOptionsModel filter) {
 
     }
 

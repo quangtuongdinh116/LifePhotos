@@ -8,6 +8,7 @@ import android.util.Log;
 
 import com.forabetterlife.dtq.myunsplash.data.local.FavoriteEntity;
 import com.forabetterlife.dtq.myunsplash.data.local.LocalDataSource;
+import com.forabetterlife.dtq.myunsplash.data.model.FilterOptionsModel;
 import com.forabetterlife.dtq.myunsplash.data.remote.RemoteDataSource;
 import com.forabetterlife.dtq.myunsplash.data.service.PhotoService;
 import com.forabetterlife.dtq.myunsplash.utils.WallpaperType;
@@ -53,8 +54,8 @@ public class PhotoRepository implements PhotoDataSource {
 
 
     @Override
-    public void loadAllPhotos(LoadAllPhotosCallback callback, int page) {
-        mRemoteDataSource.loadAllPhotos(callback, page);
+    public void loadAllPhotos(LoadAllPhotosCallback callback, int page, FilterOptionsModel filter) {
+        mRemoteDataSource.loadAllPhotos(callback, page, filter);
     }
 
     @Override

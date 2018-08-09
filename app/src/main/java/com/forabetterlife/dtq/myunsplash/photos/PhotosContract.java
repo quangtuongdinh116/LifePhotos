@@ -3,6 +3,7 @@ package com.forabetterlife.dtq.myunsplash.photos;
 import android.content.Context;
 import android.net.ConnectivityManager;
 
+import com.forabetterlife.dtq.myunsplash.data.model.FilterOptionsModel;
 import com.forabetterlife.dtq.myunsplash.data.model.PhotoResponse;
 import com.forabetterlife.dtq.myunsplash.utils.PhotoCategory;
 
@@ -31,6 +32,10 @@ public interface PhotosContract {
         boolean isSearching();
         String getSearchQuery();
         void clearMemory(Context context);
+        void onTypeSelected(String type);
+        void onSortSelected(String sort);
+        FilterOptionsModel getFilterOptions();
+        void onFilterApply();
     }
     public interface View {
         void setPresenter(PhotosContract.Presenter presenter);
@@ -42,5 +47,6 @@ public interface PhotosContract {
         void showTurnOnWantedFunction();
         void setLoadingIndicator(boolean active);
         boolean isActive();
+        void showToast(String message);
     }
 }

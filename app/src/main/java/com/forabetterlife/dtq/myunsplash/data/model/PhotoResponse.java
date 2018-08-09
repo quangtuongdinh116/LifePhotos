@@ -40,10 +40,10 @@ public class PhotoResponse extends AbstractItem<PhotoResponse, PhotoResponse.Pho
     private String updatedAt;
     @SerializedName("width")
     @Expose
-    private Integer width;
+    private int width;
     @SerializedName("height")
     @Expose
-    private Integer height;
+    private int height;
     @SerializedName("color")
     @Expose
     private String color;

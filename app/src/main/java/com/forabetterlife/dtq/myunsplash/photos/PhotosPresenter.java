@@ -4,12 +4,15 @@ import android.content.Context;
 import android.net.ConnectivityManager;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.design.widget.Snackbar;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.forabetterlife.dtq.myunsplash.data.PhotoDataSource;
 import com.forabetterlife.dtq.myunsplash.data.PhotoRepository;
 import com.forabetterlife.dtq.myunsplash.data.local.DownloadedPhotoEntity;
 import com.forabetterlife.dtq.myunsplash.data.local.FavoriteEntity;
+import com.forabetterlife.dtq.myunsplash.data.model.FilterOptionsModel;
 import com.forabetterlife.dtq.myunsplash.data.model.PhotoResponse;
 import com.forabetterlife.dtq.myunsplash.data.model.SearchPhotoResponse;
 import com.forabetterlife.dtq.myunsplash.data.model.Urls;
@@ -59,6 +62,8 @@ public class PhotosPresenter implements PhotosContract.Presenter {
 
     boolean isSearching = false;
 
+    @com.evernote.android.state.State FilterOptionsModel filterOptions = new FilterOptionsModel();
+
     @Inject
     PhotosPresenter(PhotoRepository photoRepository) {
         mRepository = photoRepository;
@@ -107,7 +112,7 @@ public class PhotosPresenter implements PhotosContract.Presenter {
                     }
                     mView.showLoadAllPhotosError();
                 }
-            }, mCurrentPage);
+            }, mCurrentPage, filterOptions);
         } else if (PHOTO_CATEGORY == PhotoCategory.SHOW_FAVORITE) {
             if (mView != null) {
                 mView.setLoadingIndicator(true);
@@ -332,6 +337,25 @@ public class PhotosPresenter implements PhotosContract.Presenter {
         mRepository.clearMemory(context);
     }
 
+    @Override
+    public void onTypeSelected(String type) {
+        filterOptions.setType(type);
+    }
+
+    @Override
+    public void onSortSelected(String sort) {
+        filterOptions.setSort(sort);
+    }
+
+    public FilterOptionsModel getFilterOptions() {
+        return filterOptions;
+    }
+
+    @Override
+    public void onFilterApply() {
+        loadPhotos(mConnectivityManager);
+
+    }
 
     private boolean isNetworkAvailableAndConnected(ConnectivityManager connectivityManager) {
 

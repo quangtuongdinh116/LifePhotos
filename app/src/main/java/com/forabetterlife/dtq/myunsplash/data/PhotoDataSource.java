@@ -5,6 +5,7 @@ import android.content.Context;
 
 import com.forabetterlife.dtq.myunsplash.data.local.DownloadedPhotoEntity;
 import com.forabetterlife.dtq.myunsplash.data.local.FavoriteEntity;
+import com.forabetterlife.dtq.myunsplash.data.model.FilterOptionsModel;
 import com.forabetterlife.dtq.myunsplash.data.model.PhotoResponse;
 import com.forabetterlife.dtq.myunsplash.data.model.SearchPhotoResponse;
 import com.forabetterlife.dtq.myunsplash.data.service.PhotoService;
@@ -19,7 +20,7 @@ import androidx.work.WorkStatus;
  */
 
 public interface PhotoDataSource {
-    void loadAllPhotos(LoadAllPhotosCallback callback, int page);
+    void loadAllPhotos(LoadAllPhotosCallback callback, int page, FilterOptionsModel filter);
     void searchPhotoByQuery(String query, SearchPhotoByQueryCallback callback, int page);
     void reportDownload(String id, PhotoService.OnReportDownloadListener callback);
     void isFavorite(String id, CheckFavoriteStatusCallback callback);

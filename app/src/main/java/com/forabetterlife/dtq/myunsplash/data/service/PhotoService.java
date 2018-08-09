@@ -28,8 +28,28 @@ public class PhotoService {
         return new PhotoService();
     }
 
-    public void requestPhotos(int page, int per_page,String access_key, final OnRequestPhotosListener l, final PhotoDataSource.LoadAllPhotosCallback callback) {
-        Call<List<PhotoResponse>> getPhotos = buildApi(buildClient()).getPhotos(page, per_page,access_key);
+    public void requestPhotos(int page, int per_page,String access_key, final OnRequestPhotosListener l, final PhotoDataSource.LoadAllPhotosCallback callback, String sort) {
+        Call<List<PhotoResponse>> getPhotos = buildApi(buildClient()).getPhotos(page, per_page,access_key, sort);
+        getPhotos.enqueue(new Callback<List<PhotoResponse>>() {
+            @Override
+            public void onResponse(Call<List<PhotoResponse>> call, Response<List<PhotoResponse>> response) {
+                if (l != null) {
+                    l.onRequestPhotosSuccess(call, response,callback);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<PhotoResponse>> call, Throwable t) {
+                if (l != null) {
+                    l.onRequestPhotosFailed(call, t,callback);
+                }
+            }
+        });
+        call = getPhotos;
+    }
+
+    public void requestCuratedPhotos(int page, int per_page,String access_key, final OnRequestPhotosListener l, final PhotoDataSource.LoadAllPhotosCallback callback, String sort) {
+        Call<List<PhotoResponse>> getPhotos = buildApi(buildClient()).getCuratedPhotos(page, per_page,access_key, sort);
         getPhotos.enqueue(new Callback<List<PhotoResponse>>() {
             @Override
             public void onResponse(Call<List<PhotoResponse>> call, Response<List<PhotoResponse>> response) {

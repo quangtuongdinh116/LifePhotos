@@ -30,6 +30,7 @@ import com.bumptech.glide.request.Request;
 import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.target.SizeReadyCallback;
 import com.bumptech.glide.request.transition.Transition;
+import com.forabetterlife.dtq.myunsplash.data.model.FilterOptionsModel;
 import com.forabetterlife.dtq.myunsplash.utils.GlideApp;
 import com.forabetterlife.dtq.myunsplash.MyUnSplash;
 import com.forabetterlife.dtq.myunsplash.R;
@@ -130,7 +131,7 @@ public class WallpaperHelper {
             public void onLoadFail() {
 
             }
-        },randomPage);
+        },randomPage, new FilterOptionsModel());
     }
 
     private List<PhotoResponse> getPhotosCanBeWallpaper(List<PhotoResponse> sourceList) {

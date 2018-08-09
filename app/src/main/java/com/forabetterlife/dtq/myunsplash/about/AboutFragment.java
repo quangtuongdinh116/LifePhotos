@@ -55,7 +55,7 @@ public class AboutFragment extends Fragment {
             }
         });
 
-        getActivity().setTitle(getString(R.string.wallpaper_title));
+        getActivity().setTitle(getString(R.string.about_title));
 
         return root;
     }
