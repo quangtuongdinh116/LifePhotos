@@ -19,10 +19,12 @@ import com.forabetterlife.dtq.myunsplash.utils.WallpaperType;
 
 import java.util.List;
 
+
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
 import androidx.work.WorkStatus;
+import io.reactivex.Observable;
 import retrofit2.Call;
 import retrofit2.Response;
 
@@ -82,8 +84,8 @@ public class RemoteDataSource implements PhotoDataSource {
     }
 
     @Override
-    public void searchPhotoByQuery(String query, SearchPhotoByQueryCallback callback, int page) {
-        mSearchService.requestPhotos(page,query,MyUnSplash.getAppId(MyUnSplash.getInstance()),mSearchPhotoListener,callback);
+    public Observable<SearchPhotoResponse> searchPhotoByQuery(String query, int page) {
+        return mSearchService.requestPhotos(page,query,MyUnSplash.getAppId(MyUnSplash.getInstance()));
     }
 
     @Override

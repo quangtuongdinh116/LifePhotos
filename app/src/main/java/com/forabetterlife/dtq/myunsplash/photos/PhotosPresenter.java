@@ -27,6 +27,10 @@ import java.util.List;
 
 import javax.inject.Inject;
 
+import io.reactivex.Scheduler;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.schedulers.Schedulers;
+
 import static com.google.common.base.Preconditions.checkNotNull;
 
 /**
@@ -225,10 +229,32 @@ public class PhotosPresenter implements PhotosContract.Presenter {
                 mView.setLoadingIndicator(true);
             }
 
-        mRepository.searchPhotoByQuery(query, new PhotoDataSource.SearchPhotoByQueryCallback() {
-            @Override
-            public void onLoadSuccess(SearchPhotoResponse searchPhotoResponse) {
-                List<PhotoResponse> photoResponseList = searchPhotoResponse.getResults();
+//        mRepository.searchPhotoByQuery(query, new PhotoDataSource.SearchPhotoByQueryCallback() {
+//            @Override
+//            public void onLoadSuccess(SearchPhotoResponse searchPhotoResponse) {
+//                List<PhotoResponse> photoResponseList = searchPhotoResponse.getResults();
+//                if(getCategory() == PhotoCategory.SHOW_WANTED) {
+//                    if (photoResponseList != null) {
+//                        String lastSearchId = photoResponseList.get(0).getId();
+//                        saveLastSearchWantedPhotoId(lastSearchId);
+//                    }
+//
+//                }
+//                mView.showAllPhotos(photoResponseList, mRepository.getPhotoShowingQuality(), isFirstPage);
+//
+//            }
+//
+//            @Override
+//            public void onLoadFail() {
+//                mView.showLoadAllPhotosError();
+//            }
+//        }, mCurrentPage);
+
+        mRepository.searchPhotoByQuery(query, mCurrentPage)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(searchPhotoResponse -> {
+                    List<PhotoResponse> photoResponseList = searchPhotoResponse.getResults();
                 if(getCategory() == PhotoCategory.SHOW_WANTED) {
                     if (photoResponseList != null) {
                         String lastSearchId = photoResponseList.get(0).getId();
@@ -237,14 +263,10 @@ public class PhotosPresenter implements PhotosContract.Presenter {
 
                 }
                 mView.showAllPhotos(photoResponseList, mRepository.getPhotoShowingQuality(), isFirstPage);
+                }, throwable -> {
+                    mView.showLoadAllPhotosError();
+                });
 
-            }
-
-            @Override
-            public void onLoadFail() {
-                mView.showLoadAllPhotosError();
-            }
-        }, mCurrentPage);
     }
 
     private void saveLastSearchWantedPhotoId(String lastSearchId) {

@@ -9,6 +9,7 @@ import android.util.Log;
 import com.forabetterlife.dtq.myunsplash.data.local.FavoriteEntity;
 import com.forabetterlife.dtq.myunsplash.data.local.LocalDataSource;
 import com.forabetterlife.dtq.myunsplash.data.model.FilterOptionsModel;
+import com.forabetterlife.dtq.myunsplash.data.model.SearchPhotoResponse;
 import com.forabetterlife.dtq.myunsplash.data.remote.RemoteDataSource;
 import com.forabetterlife.dtq.myunsplash.data.service.PhotoService;
 import com.forabetterlife.dtq.myunsplash.utils.WallpaperType;
@@ -20,6 +21,7 @@ import javax.inject.Inject;
 import javax.inject.Singleton;
 
 import androidx.work.WorkStatus;
+import io.reactivex.Observable;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
@@ -59,11 +61,10 @@ public class PhotoRepository implements PhotoDataSource {
     }
 
     @Override
-    public void searchPhotoByQuery(String query, SearchPhotoByQueryCallback callback, int page) {
+    public Observable<SearchPhotoResponse> searchPhotoByQuery(String query, int page) {
         if(Strings.isNullOrEmpty(query))
-            return;
-        mRemoteDataSource.searchPhotoByQuery(query, callback, page);
-
+            return null;
+        return mRemoteDataSource.searchPhotoByQuery(query, page);
     }
 
     @Override

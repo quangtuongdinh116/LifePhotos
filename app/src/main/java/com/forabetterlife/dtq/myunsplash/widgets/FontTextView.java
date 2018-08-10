@@ -60,8 +60,7 @@ public class FontTextView extends AppCompatTextView {
         try {
             super.setText(text, type);
         } catch (Exception e) {
-            setText("I tried, but your OEM just sucks because they modify the framework components and therefore causing the app to crash!" + "" +
-                    ".\nFastHub");
+
 
         }
     }

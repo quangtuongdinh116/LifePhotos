@@ -18,6 +18,7 @@ import com.forabetterlife.dtq.myunsplash.data.PhotoDataSource;
 import com.forabetterlife.dtq.myunsplash.data.local.wallpaper.WallpaperService;
 import com.forabetterlife.dtq.myunsplash.data.local.wallpaper.WallpaperWorker;
 import com.forabetterlife.dtq.myunsplash.data.model.FilterOptionsModel;
+import com.forabetterlife.dtq.myunsplash.data.model.SearchPhotoResponse;
 import com.forabetterlife.dtq.myunsplash.data.remote.wantedphoto.WantedPhotoService;
 import com.forabetterlife.dtq.myunsplash.data.service.PhotoService;
 import com.forabetterlife.dtq.myunsplash.utils.AppExecutors;
@@ -38,6 +39,7 @@ import androidx.work.PeriodicWorkRequest;
 import androidx.work.State;
 import androidx.work.WorkManager;
 import androidx.work.WorkStatus;
+import io.reactivex.Observable;
 
 /**
  * Created by DTQ on 3/22/2018.
@@ -110,8 +112,8 @@ public class LocalDataSource implements PhotoDataSource {
     }
 
     @Override
-    public void searchPhotoByQuery(String query, SearchPhotoByQueryCallback callback, int page) {
-
+    public Observable<SearchPhotoResponse> searchPhotoByQuery(String query, int page) {
+        return null;
     }
 
     @Override

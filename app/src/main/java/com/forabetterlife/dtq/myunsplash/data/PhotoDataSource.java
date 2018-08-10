@@ -13,7 +13,9 @@ import com.forabetterlife.dtq.myunsplash.utils.WallpaperType;
 
 import java.util.List;
 
+
 import androidx.work.WorkStatus;
+import io.reactivex.Observable;
 
 /**
  * Created by DTQ on 3/22/2018.
@@ -21,7 +23,8 @@ import androidx.work.WorkStatus;
 
 public interface PhotoDataSource {
     void loadAllPhotos(LoadAllPhotosCallback callback, int page, FilterOptionsModel filter);
-    void searchPhotoByQuery(String query, SearchPhotoByQueryCallback callback, int page);
+//    void searchPhotoByQuery(String query, SearchPhotoByQueryCallback callback, int page);
+    Observable<SearchPhotoResponse> searchPhotoByQuery(String query, int page);
     void reportDownload(String id, PhotoService.OnReportDownloadListener callback);
     void isFavorite(String id, CheckFavoriteStatusCallback callback);
     void changeFavoriteStatus(FavoriteEntity photo);

@@ -6,11 +6,14 @@ import com.forabetterlife.dtq.myunsplash.data.model.SearchPhotoResponse;
 import com.forabetterlife.dtq.myunsplash.data.remote.SearchApi;
 import com.google.gson.GsonBuilder;
 
+
+import io.reactivex.Observable;
 import okhttp3.OkHttpClient;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
+import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 /**
@@ -27,24 +30,8 @@ public class SearchService {
     }
 
 
-    public void requestPhotos(int page, String query, String access_key, final SearchService.OnRequestPhotosListener l, final PhotoDataSource.SearchPhotoByQueryCallback callback) {
-        Call<SearchPhotoResponse> getPhotos = buildApi(buildClient()).searchPhotoByQuery(page,query ,access_key);
-        getPhotos.enqueue(new Callback<SearchPhotoResponse>() {
-            @Override
-            public void onResponse(Call<SearchPhotoResponse> call, Response<SearchPhotoResponse> response) {
-                if (l != null) {
-                    l.onRequestPhotosSuccess(call, response,callback);
-                }
-            }
-
-            @Override
-            public void onFailure(Call<SearchPhotoResponse> call, Throwable t) {
-                if (l != null) {
-                    l.onRequestPhotosFailed(call, t,callback);
-                }
-            }
-        });
-
+    public Observable<SearchPhotoResponse> requestPhotos(int page, String query, String access_key) {
+        return buildApi(buildClient()).searchPhotoByQuery(page,query,access_key);
     }
 
     private OkHttpClient buildClient() {
@@ -56,6 +43,7 @@ public class SearchService {
         return new Retrofit.Builder()
                 .baseUrl(MyUnSplash.UNSPLASH_API_BASE_URL)
                 .client(client)
+                .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
                 .addConverterFactory(
                         GsonConverterFactory.create(
                                 new GsonBuilder()

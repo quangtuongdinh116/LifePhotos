@@ -34,7 +34,7 @@ public class SearchWantedPhotoService {
     }
 
     public void searchPhotoByQuery(String query, PhotoDataSource.SearchPhotoByQueryCallback callback) {
-        mSearchService.requestPhotos(1,query, MyUnSplash.getAppId(MyUnSplash.getInstance()),mSearchPhotoListener,callback);
+        mSearchService.requestPhotos(1,query, MyUnSplash.getAppId(MyUnSplash.getInstance()));
     }
 
     SearchService.OnRequestPhotosListener mSearchPhotoListener = new SearchService.OnRequestPhotosListener() {

@@ -43,6 +43,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.schedulers.Schedulers;
+
 import static com.google.common.base.Preconditions.checkNotNull;
 
 public class WallpaperWorkerHelper {
@@ -173,48 +176,88 @@ public class WallpaperWorkerHelper {
         }
         Random rand = new Random();
         int randomPage = rand.nextInt(10);
-        mRepository.searchPhotoByQuery(query, new PhotoDataSource.SearchPhotoByQueryCallback() {
-            @Override
-            public void onLoadSuccess(SearchPhotoResponse searchPhotoResponse) {
-                List<PhotoResponse> photoResponseList = searchPhotoResponse.getResults();
+//        mRepository.searchPhotoByQuery(query, new PhotoDataSource.SearchPhotoByQueryCallback() {
+//            @Override
+//            public void onLoadSuccess(SearchPhotoResponse searchPhotoResponse) {
+//                List<PhotoResponse> photoResponseList = searchPhotoResponse.getResults();
+//
+//                if (photoResponseList == null || photoResponseList.size() == 0) {
+//                    sendErrorNotification(context,"Error happened when changed wallpaper",
+//                            "No photos found for your wanted photo search keyword!");
+//                    return;
+//                } else {
+//
+//                    List<PhotoResponse> listOfWallpapers = new ArrayList<>();
+//                    for (PhotoResponse photoResponse : photoResponseList) {
+//
+//                        if (photoResponse.getHeight()/photoResponse.getWidth() > 0.83) {
+//                            listOfWallpapers.add(photoResponse);
+//                        }
+//                    }
+//
+//                    if (listOfWallpapers.size() > 0) {
+//                        int size = listOfWallpapers.size();
+//                        Random random = new Random();
+//                        int randomPosition = random.nextInt(size);
+//                        PhotoResponse chosenPhotoResponse = listOfWallpapers.get(randomPosition);
+//                        int chosenHeight = chosenPhotoResponse.getHeight();
+//                        int chosenWidth = chosenPhotoResponse.getWidth();
+//
+//
+//                        String url = chosenPhotoResponse.getUrls().getRegular();
+//                        setWallpaper(url);
+//                    } else {
+//
+//
+//                    }
+//                }
+//            }
+//
+//            @Override
+//            public void onLoadFail() {
+//
+//            }
+//        },randomPage);
 
-                if (photoResponseList == null || photoResponseList.size() == 0) {
-                    sendErrorNotification(context,"Error happened when changed wallpaper",
-                            "No photos found for your wanted photo search keyword!");
-                    return;
-                } else {
+        mRepository.searchPhotoByQuery(query, randomPage)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(searchPhotoResponse -> {
+                    List<PhotoResponse> photoResponseList = searchPhotoResponse.getResults();
 
-                    List<PhotoResponse> listOfWallpapers = new ArrayList<>();
-                    for (PhotoResponse photoResponse : photoResponseList) {
-
-                        if (photoResponse.getHeight()/photoResponse.getWidth() > 0.83) {
-                            listOfWallpapers.add(photoResponse);
-                        }
-                    }
-
-                    if (listOfWallpapers.size() > 0) {
-                        int size = listOfWallpapers.size();
-                        Random random = new Random();
-                        int randomPosition = random.nextInt(size);
-                        PhotoResponse chosenPhotoResponse = listOfWallpapers.get(randomPosition);
-                        int chosenHeight = chosenPhotoResponse.getHeight();
-                        int chosenWidth = chosenPhotoResponse.getWidth();
-
-
-                        String url = chosenPhotoResponse.getUrls().getRegular();
-                        setWallpaper(url);
+                    if (photoResponseList == null || photoResponseList.size() == 0) {
+                        sendErrorNotification(context,"Error happened when changed wallpaper",
+                                "No photos found for your wanted photo search keyword!");
+                        return;
                     } else {
 
+                        List<PhotoResponse> listOfWallpapers = new ArrayList<>();
+                        for (PhotoResponse photoResponse : photoResponseList) {
 
+                            if (photoResponse.getHeight()/photoResponse.getWidth() > 0.83) {
+                                listOfWallpapers.add(photoResponse);
+                            }
+                        }
+
+                        if (listOfWallpapers.size() > 0) {
+                            int size = listOfWallpapers.size();
+                            Random random = new Random();
+                            int randomPosition = random.nextInt(size);
+                            PhotoResponse chosenPhotoResponse = listOfWallpapers.get(randomPosition);
+                            int chosenHeight = chosenPhotoResponse.getHeight();
+                            int chosenWidth = chosenPhotoResponse.getWidth();
+
+
+                            String url = chosenPhotoResponse.getUrls().getRegular();
+                            setWallpaper(url);
+                        } else {
+
+
+                        }
                     }
-                }
-            }
+                }, throwable -> {
 
-            @Override
-            public void onLoadFail() {
-
-            }
-        },randomPage);
+                });
 
     }
 
