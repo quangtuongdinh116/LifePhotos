@@ -6,12 +6,39 @@
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
+
+        <item name="heartBoderIcon">@drawable/ic_favorite_border_black_24dp</item>
+        <item name="heartIcon">@drawable/ic_favorite_black_24dp</item>
+
     </style>
 
     <style name="AppTheme.NoActionBar">
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
+
+        <item name="heartBoderIcon">@drawable/ic_favorite_border_black_24dp</item>
+        <item name="heartIcon">@drawable/ic_favorite_black_24dp</item>
     </style>
+
+    <style name="AppTheme.Black" parent="AppTheme.NoActionBar">
+        <item name="colorPrimary">@color/colorPrimary_black</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark_black</item>
+        <item name="colorAccent">@color/colorAccent_black</item>
+
+        <item name="heartBoderIcon">@drawable/ic_favorite_border_red_24dp</item>
+        <item name="heartIcon">@drawable/ic_favorite_red_24dp</item>
+    </style>
+
+    <style name="AppTheme.Black.ActionBar" parent="AppTheme">
+        <item name="colorPrimary">@color/colorPrimary_black</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark_black</item>
+        <item name="colorAccent">@color/colorAccent_black</item>
+
+        <item name="heartBoderIcon">@drawable/ic_favorite_border_red_24dp</item>
+        <item name="heartIcon">@drawable/ic_favorite_red_24dp</item>
+    </style>
+
+
 
     <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
 

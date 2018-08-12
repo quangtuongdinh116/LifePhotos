@@ -1,5 +1,6 @@
 package com.forabetterlife.dtq.myunsplash.photos;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -30,6 +31,7 @@ import com.forabetterlife.dtq.myunsplash.data.model.Photo;
 import com.forabetterlife.dtq.myunsplash.setting.SettingsPrefActivity;
 import com.forabetterlife.dtq.myunsplash.setting.SettingsPresenter;
 import com.forabetterlife.dtq.myunsplash.utils.PhotoCategory;
+import com.forabetterlife.dtq.myunsplash.utils.ThemeUtils;
 import com.forabetterlife.dtq.myunsplash.utils.WallpaperType;
 import com.forabetterlife.dtq.myunsplash.wallpaper.WallpaperFragment;
 import com.forabetterlife.dtq.myunsplash.wallpaper.WallpaperPresenter;
@@ -53,6 +55,8 @@ public class PhotosActivity extends DaggerAppCompatActivity
     public static final String CATEGORY_INTENT_KEY = "intent_key";
     public static final String CATEGORY_INTENT_VALUE = "intent_key";
 
+    private static final int SETTINGS_REQUEST_CODE = 1;
+
     Toolbar toolbar;
 
     @Inject
@@ -68,10 +72,17 @@ public class PhotosActivity extends DaggerAppCompatActivity
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        switch (ThemeUtils.getTheme(this)) {
+            case ThemeUtils.Theme.DARK_GREEN:
+                setTheme(R.style.AppTheme_NoActionBar);
+                break;
+            case ThemeUtils.Theme.BLACK:
+                setTheme(R.style.AppTheme_Black);
+                break;
+        }
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_main);
-
-
 
         //Set up the toolbar
         toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -102,7 +113,17 @@ public class PhotosActivity extends DaggerAppCompatActivity
 
     @Override
     protected void onResume() {
-
+        Log.i(TAG, "INSIDE onResume");
+//        switch (ThemeUtils.getTheme(this)) {
+//            case ThemeUtils.Theme.DARK_GREEN:
+//                Log.i(TAG, "INSIDE DARK_GREEN");
+//                setTheme(R.style.AppTheme_NoActionBar);
+//                break;
+//            case ThemeUtils.Theme.BLACK:
+//                Log.i(TAG, "INSIDE THEME BLACK");
+//                setTheme(R.style.AppTheme_Black);
+//                break;
+//        }
         super.onResume();
 
         //highlight item in navigation view menu
@@ -206,7 +227,7 @@ public class PhotosActivity extends DaggerAppCompatActivity
             addFragmentToActivity(PhotoCategory.SHOW_FAVORITE);
         } else if (id == R.id.nav_settings) {
             restoreToNewState();
-            startActivity(new Intent(PhotosActivity.this, SettingsPrefActivity.class));
+            startActivityForResult(new Intent(PhotosActivity.this, SettingsPrefActivity.class),SETTINGS_REQUEST_CODE);
         } else if (id == R.id.nav_wanted_photo) {
             restoreToNewState();
             String searchKeyWantedPhoto = mPresenter.getSearchQueryWantedPhoto();
@@ -247,5 +268,17 @@ public class PhotosActivity extends DaggerAppCompatActivity
         mPresenter.setIsNewStatus();
         mPresenter.resetToFirstPage();
         mPresenter.setIsSearching(false);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (resultCode != Activity.RESULT_OK)
+            return;
+        if (requestCode != SETTINGS_REQUEST_CODE)
+            return;
+
+        Intent intent = getIntent();
+        finish();
+        startActivity(intent);
     }
 }

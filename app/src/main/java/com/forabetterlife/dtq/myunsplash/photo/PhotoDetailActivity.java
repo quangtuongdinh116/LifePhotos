@@ -3,9 +3,11 @@ package com.forabetterlife.dtq.myunsplash.photo;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.widget.Toast;
 
 import com.forabetterlife.dtq.myunsplash.R;
+import com.forabetterlife.dtq.myunsplash.utils.ThemeUtils;
 
 import javax.inject.Inject;
 
@@ -26,6 +28,17 @@ public class PhotoDetailActivity extends DaggerAppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        switch (ThemeUtils.getTheme(this)) {
+            case ThemeUtils.Theme.DARK_GREEN:
+
+                setTheme(R.style.AppTheme_NoActionBar);
+                break;
+            case ThemeUtils.Theme.BLACK:
+
+                setTheme(R.style.AppTheme_Black);
+                break;
+        }
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_photo_detail);
 

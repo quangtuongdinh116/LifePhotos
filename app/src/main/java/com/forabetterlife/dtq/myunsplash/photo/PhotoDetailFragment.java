@@ -33,6 +33,7 @@ import com.forabetterlife.dtq.myunsplash.data.model.Photo;
 import com.forabetterlife.dtq.myunsplash.data.model.PhotoResponse;
 import com.forabetterlife.dtq.myunsplash.di.ActivityScoped;
 import com.forabetterlife.dtq.myunsplash.utils.PhotoDetailAction;
+import com.forabetterlife.dtq.myunsplash.utils.ThemeUtils;
 import com.forabetterlife.dtq.myunsplash.utils.Utils;
 import com.inthecheesefactory.thecheeselibrary.widget.AdjustableImageView;
 import com.squareup.picasso.Picasso;
@@ -165,9 +166,9 @@ public class PhotoDetailFragment extends DaggerFragment implements PhotoDetailCo
         }
         artistNameTV.setText(artistNameTV.getContext().getString(R.string.photo_by,photo.getUser().getName()));
         if(isFavorite) {
-            favoriteFab.setImageDrawable(getResources().getDrawable(R.drawable.ic_favorite_black_24dp));
+            favoriteFab.setImageDrawable(getResources().getDrawable(ThemeUtils.getThemeAttrDrawable(getContext(),R.attr.heartIcon)));
         } else {
-            favoriteFab.setImageDrawable(getResources().getDrawable(R.drawable.ic_favorite_border_black_24dp));
+            favoriteFab.setImageDrawable(getResources().getDrawable(ThemeUtils.getThemeAttrDrawable(getContext(),R.attr.heartBoderIcon)));
         }
     }
 
@@ -222,10 +223,11 @@ public class PhotoDetailFragment extends DaggerFragment implements PhotoDetailCo
 
     @Override
     public void showFavoriteStatus(boolean isFavorite) {
+
         if(isFavorite) {
-            favoriteFab.setImageDrawable(getResources().getDrawable(R.drawable.ic_favorite_black_24dp));
+            favoriteFab.setImageDrawable(getResources().getDrawable(ThemeUtils.getThemeAttrDrawable(getContext(),R.attr.heartIcon)));
         } else {
-            favoriteFab.setImageDrawable(getResources().getDrawable(R.drawable.ic_favorite_border_black_24dp));
+            favoriteFab.setImageDrawable(getResources().getDrawable(ThemeUtils.getThemeAttrDrawable(getContext(),R.attr.heartBoderIcon)));
         }
     }
 

@@ -14,6 +14,38 @@
         <item>SMALL</item>
         <item>THUMB</item>
     </string-array>
+
+
+    <array name="theme">
+        <item>DARK GREEN</item>
+        <item>BLACK</item>
+    </array>
+    <array name="theme_values">
+        <item>DARK GREEN</item>
+        <item>BLACK</item>
+    </array>
+
+    <array name="photo_quality">
+        <item>REGULAR</item>
+        <item>SMALL</item>
+        <item>THUMB</item>
+    </array>
+    <array name="photo_quality_values">
+        <item>REGULAR</item>
+        <item>SMALL</item>
+        <item>THUMB</item>
+    </array>
+
+    <array name="donwload_quality">
+        <item>REGULAR</item>
+        <item>SMALL</item>
+        <item>THUMB</item>
+    </array>
+    <array name="download_quality_values">
+        <item>REGULAR</item>
+        <item>SMALL</item>
+        <item>THUMB</item>
+    </array>
 </resources>
 
 

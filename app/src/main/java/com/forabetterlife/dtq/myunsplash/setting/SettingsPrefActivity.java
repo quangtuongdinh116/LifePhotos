@@ -22,27 +22,39 @@ import android.view.MenuItem;
 import com.forabetterlife.dtq.myunsplash.R;
 import com.forabetterlife.dtq.myunsplash.data.remote.wantedphoto.WantedPhotoRemote;
 import com.forabetterlife.dtq.myunsplash.prod.Inject;
+import com.forabetterlife.dtq.myunsplash.utils.ThemeUtils;
 import com.google.common.base.Strings;
 
 public class SettingsPrefActivity extends AppCompatPreferenceActivity{
     private static final String TAG = "SettingsPrefActivity";
 
-
+    public static final String THEME_CHANGE_KEY = "theme_change_key";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
+        switch (ThemeUtils.getTheme(this)) {
+            case ThemeUtils.Theme.DARK_GREEN:
+                setTheme(R.style.AppTheme);
+                break;
+            case ThemeUtils.Theme.BLACK:
+                setTheme(R.style.AppTheme_Black_ActionBar);
+                break;
+        }
+
         super.onCreate(savedInstanceState);
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         getSupportActionBar().setTitle("Settings");
 
-
-
-
-
         getFragmentManager().beginTransaction().replace(android.R.id.content, new PrefFragment())
                 .commit();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
     }
 
     @Override
@@ -58,79 +70,35 @@ public class SettingsPrefActivity extends AppCompatPreferenceActivity{
 
 
 
-    public static class PrefFragment extends PreferenceFragment implements SettingsContract.View{
+    public static class PrefFragment extends PreferenceFragment implements SettingsContract.View, Preference.OnPreferenceChangeListener {
 
-        private static SettingsContract.Presenter mPresenter;
-
-        IntentFilter intentFilter;
-
-        BroadcastReceiver mBroadcastReceiver = new BroadcastReceiver() {
-            @Override
-            public void onReceive(Context context, Intent intent) {
-                if (intent != null) {
-                    if(intent.getIntExtra(WantedPhotoRemote.BROADCAST_INTENT_EXTRA_REQUEST_CODE,0) == 0) {
-                        Snackbar.make(getView(),"You have new wanted photo!",Snackbar.LENGTH_LONG).show();
-                        setResultCode(Activity.RESULT_CANCELED);
-                    }
-                }
-            }
-        };
 
         @Override
         public void onCreate(@Nullable Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
             addPreferencesFromResource(R.xml.pref_main);
 
-            intentFilter = new IntentFilter(WantedPhotoRemote.BROADCAST_ACTION);
-
-            mPresenter = new SettingsPresenter(Inject.provideRepository(getActivity()),this);
-
             final ListPreference ListDownloadQualityPref = (ListPreference) findPreference("download_quality_list_key");
             final ListPreference ListLoadQualityPref = (ListPreference) findPreference("show_quality_list_key");
+            final ListPreference ListThemePref = (ListPreference) findPreference("theme_key");
             final EditTextPreference photoSearchKeywordPref = (EditTextPreference) findPreference(getResources().getString(R.string.photo_wanted_edit_text_preference_key));
-//            final SwitchPreference photoSearchSwitchPref = (SwitchPreference) findPreference(getResources().getString(R.string.photo_wanted_switch_preference_key));
+
+            ListDownloadQualityPref.setOnPreferenceChangeListener(this);
+            ListLoadQualityPref.setOnPreferenceChangeListener(this);
+            ListThemePref.setOnPreferenceChangeListener(this);
+            photoSearchKeywordPref.setOnPreferenceChangeListener(this);
 
 
-            setListPreferenceData(ListDownloadQualityPref);
-            setListPreferenceData(ListLoadQualityPref);
+            ListThemePref.setSummary(ListThemePref.getEntry());
+            ListDownloadQualityPref.setSummary(ListDownloadQualityPref.getEntry());
+            ListLoadQualityPref.setSummary(ListLoadQualityPref.getEntry());
 
-
-
-            addListenerToPreference(ListDownloadQualityPref,sPreferenceChangeListener);
-            ListDownloadQualityPref.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
-                @Override
-                public boolean onPreferenceClick(Preference preference) {
-                    setListPreferenceData(ListDownloadQualityPref);
-                    return false;
-                }
-            });
-
-            addListenerToPreference(ListLoadQualityPref,sPreferenceChangeListener);
-            ListDownloadQualityPref.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
-                @Override
-                public boolean onPreferenceClick(Preference preference) {
-                    setListPreferenceData(ListLoadQualityPref);
-                    return false;
-                }
-            });
-
-            addListenerToPreference(photoSearchKeywordPref,sPreferenceChangeListener);
-//            addListenerToBooleanPreference(photoSearchSwitchPref,sPreferenceChangeListener);
-
-
+            String searhKeyword = PreferenceManager.getDefaultSharedPreferences(photoSearchKeywordPref.getContext())
+                    .getString(getResources().getString(R.string.photo_wanted_edit_text_preference_key),"");
+            photoSearchKeywordPref.setText(searhKeyword);
+            photoSearchKeywordPref.setSummary(searhKeyword);
         }
 
-        @Override
-        public void onStart() {
-            super.onStart();
-            getActivity().registerReceiver(mBroadcastReceiver,intentFilter,WantedPhotoRemote.PERMISSION,null);
-        }
-
-        @Override
-        public void onStop() {
-            super.onStop();
-            getActivity().unregisterReceiver(mBroadcastReceiver);
-        }
 
         @Override
         public void setPresenter(SettingsContract.Presenter presenter) {
@@ -170,60 +138,37 @@ public class SettingsPrefActivity extends AppCompatPreferenceActivity{
             Snackbar.make(getView(), message, Snackbar.LENGTH_LONG).show();
         }
 
-
-    }
-
-
-
-    public static void addListenerToPreference(Preference preference, Preference.OnPreferenceChangeListener listener) {
-        preference.setOnPreferenceChangeListener(listener);
-        sPreferenceChangeListener.onPreferenceChange(preference,
-                PreferenceManager
-                        .getDefaultSharedPreferences(preference.getContext())
-                        .getString(preference.getKey(), ""));
-    }
-
-    public static void addListenerToBooleanPreference(Preference preference, Preference.OnPreferenceChangeListener listener) {
-        preference.setOnPreferenceChangeListener(listener);
-    }
-
-
-
-    private static Preference.OnPreferenceChangeListener sPreferenceChangeListener = new Preference.OnPreferenceChangeListener() {
+        private void restartActivity(){
+            Intent intent = getActivity().getIntent();
+            getActivity().finish();
+            startActivity(intent);
+        }
 
         @Override
-        public boolean onPreferenceChange(Preference preference, Object newValue) {
-            Log.i("HELLO","INSIDE onPreferenceChange");
-            String value = newValue.toString();
+        public boolean onPreferenceChange(Preference preference, Object o) {
 
                 if (preference instanceof ListPreference) {
-                    Log.i("HELLO","INSIDE preference instanceof ListPreference");
                     ListPreference listPreference = (ListPreference) preference;
 
-                    int index = listPreference.findIndexOfValue(value);
-                    listPreference.setSummary(index >= 0? listPreference.getEntries()[index] : null);
+                    listPreference.setValue(o.toString());
+
+                    preference.setSummary(listPreference.getEntry());
+
+                    if (preference.getKey().equals("theme_key")) {
+                        getActivity().setResult(Activity.RESULT_OK);
+                        restartActivity();
+                    }
                 } else if (preference instanceof EditTextPreference) {
-                    Log.i("HELLO","INSIDE preference instanceof EditTextPreference");
+                    String value = o.toString();
                     EditTextPreference editTextPreference = (EditTextPreference) preference;
                     editTextPreference.setSummary(value);
-                } else if (preference instanceof SwitchPreference) {
-                    Log.i(TAG, "inside value of switch change");
-                    boolean isOn = Boolean.valueOf(value);
-                    Log.i(TAG, "isOn is: " + String.valueOf(isOn));
-                    PrefFragment.mPresenter.changeWantedPhotoServiceStatus(isOn, preference.getContext());
                 }
-
             return true;
         }
-    };
-
-    protected static void setListPreferenceData(ListPreference lp) {
-        CharSequence[] entries = { "REGULAR","SMALL","THUMB"};
-        CharSequence[] entryValues = {"REGULAR","SMALL","THUMB"};
-        lp.setEntries(entries);
-        lp.setDefaultValue("REGULAR");
-        lp.setEntryValues(entryValues);
+        }
     }
 
 
-}
+
+
+

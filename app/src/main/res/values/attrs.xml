@@ -4,4 +4,9 @@
     <declare-styleable name="FontTextView">
         <attr name="drawableColor" format="color"/>
     </declare-styleable>
+
+    <declare-styleable name="ThemeDrawable">
+        <attr name="heartBoderIcon" format="reference"/>
+        <attr name="heartIcon" format="reference"/>
+    </declare-styleable>
 </resources>

@@ -5,8 +5,8 @@
             android:key="show_quality_list_key"
             android:title="Photo Quality"
             android:dialogTitle="Choose the quality of showing photos"
-            android:entries="@array/list_preference_entries"
-            android:entryValues="@array/list_preference_entry_values"
+            android:entries="@array/photo_quality"
+            android:entryValues="@array/photo_quality_values"
             android:summary="Quality of showing photos"
             android:defaultValue="REGULAR"
             >
@@ -16,8 +16,8 @@
             android:key="download_quality_list_key"
             android:title="Download Quality"
             android:dialogTitle="Choose the quality of download photo"
-            android:entries="@array/list_preference_entries"
-            android:entryValues="@array/list_preference_entry_values"
+            android:entries="@array/donwload_quality"
+            android:entryValues="@array/download_quality_values"
             android:summary="Quality of downloaded photo"
             android:defaultValue="REGULAR"
             >
@@ -32,14 +32,19 @@
             >
 
         </EditTextPreference>
+    </PreferenceCategory>
+    <PreferenceCategory android:title="Apperance">
+        <ListPreference
+            android:key="theme_key"
+            android:title="Theme"
+            android:dialogTitle="Choose the theme for app"
+            android:entries="@array/theme"
+            android:entryValues="@array/theme_values"
+            android:defaultValue="DARK GREEN"
+            android:summary="DARK GREEN"
+            >
 
-        <!--<SwitchPreference-->
-            <!--android:key="@string/photo_wanted_switch_preference_key"-->
-            <!--android:defaultValue="false"-->
-            <!--android:title="Notification"-->
-            <!--android:summary="Send notification when new photo arrives">-->
-
-        <!--</SwitchPreference>-->
+        </ListPreference>
 
     </PreferenceCategory>
 
