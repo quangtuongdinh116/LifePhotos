@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:fancy="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
@@ -9,28 +10,34 @@
     <LinearLayout
         android:paddingTop="20dp"
         android:layout_width="match_parent"
-        android:layout_height="100dp"
+        android:layout_height="75dp"
         android:orientation="horizontal"
-        android:padding="10dp"
-        android:layout_marginBottom="10dp"
+        android:padding="5dp"
+        android:layout_marginBottom="5dp"
         android:layout_gravity="center_horizontal"
         >
 
         <TextView
+            android:id="@+id/from"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/wallpaper_photos_from"
-            android:textSize="20sp"
-            android:fontFamily="sans-serif-condensed"
+            android:textSize="15sp"
             android:textColor="@android:color/black"
             android:layout_marginRight="5dp"/>
 
-        <Spinner
-            android:id="@+id/spinner"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            ></Spinner>
 
+
+            <Spinner
+                android:id="@+id/spinner"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingBottom="10dp"
+                android:paddingLeft="20dp"
+                android:paddingRight="20dp"
+                android:paddingTop="10dp"
+
+                ></Spinner>
 
 
     </LinearLayout>
@@ -45,39 +52,52 @@
         android:layout_marginBottom="30dp">
 
         <TextView
+            android:id="@+id/interval"
             android:text="@string/interval"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginRight="5dp"
-            android:textSize="20sp"
-            android:fontFamily="sans-serif-condensed"
+            android:textSize="15sp"
+
             android:textColor="@android:color/black"/>
 
-        <Button
+        <mehdi.sakout.fancybuttons.FancyButton
             android:id="@+id/interval_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/choose_interval"
-            android:textColor="@android:color/white"
-            android:layout_gravity="center_horizontal"
-            android:background="@color/colorAccent"
-            android:padding="10dp"
+            android:paddingBottom="10dp"
+            android:paddingLeft="20dp"
+            android:paddingRight="20dp"
+            android:paddingTop="10dp"
+            fancy:fb_borderColor="#FFFFFF"
+            fancy:fb_borderWidth="1dp"
+            fancy:fb_defaultColor="?attr/colorAccent"
+            fancy:fb_focusColor="?attr/colorPrimaryDark"
+            fancy:fb_iconPosition="left"
+            fancy:fb_radius="30dp"
+            fancy:fb_text="@string/choose_interval"
             android:textSize="15sp"
-            android:layout_marginLeft="10dp"/>
+            fancy:fb_textColor="#FFFFFF" />
 
     </LinearLayout>
 
-
-
-    <Button
+    <mehdi.sakout.fancybuttons.FancyButton
         android:id="@+id/start_stop_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/start_button"
-        android:textColor="@android:color/white"
-        android:fontFamily="sans-serif-condensed"
-        android:layout_gravity="center_horizontal"
-        android:background="@color/colorAccent"
-        android:textSize="15dp"/>
+        android:paddingBottom="10dp"
+        android:paddingLeft="20dp"
+        android:paddingRight="20dp"
+        android:paddingTop="10dp"
+        fancy:fb_borderColor="#FFFFFF"
+        fancy:fb_borderWidth="1dp"
+        fancy:fb_defaultColor="?attr/colorAccent"
+        fancy:fb_focusColor="?attr/colorPrimaryDark"
+        fancy:fb_iconPosition="left"
+        fancy:fb_radius="30dp"
+        fancy:fb_text="@string/start_button"
+        fancy:fb_textColor="#FFFFFF"
+        android:textSize="15sp"
+        android:layout_gravity="center_horizontal"/>
 
 </LinearLayout>

@@ -6,6 +6,7 @@ import android.graphics.drawable.Drawable;
 
 import com.forabetterlife.dtq.myunsplash.data.PhotoRepository;
 import com.forabetterlife.dtq.myunsplash.di.DaggerAppComponent;
+import com.forabetterlife.dtq.myunsplash.utils.TypeFaceHelper;
 import com.squareup.leakcanary.LeakCanary;
 import com.squareup.leakcanary.RefWatcher;
 
@@ -65,6 +66,7 @@ public class MyUnSplash extends DaggerApplication {
         }
 //        refWatcher = LeakCanary.install(this);
         initialize();
+        TypeFaceHelper.generateTypeface(this);
     }
 
     @Override

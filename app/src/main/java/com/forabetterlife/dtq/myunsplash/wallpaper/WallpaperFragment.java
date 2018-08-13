@@ -3,6 +3,7 @@ package com.forabetterlife.dtq.myunsplash.wallpaper;
 import android.app.Activity;
 import android.arch.lifecycle.Observer;
 import android.content.Intent;
+import android.graphics.Typeface;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -22,6 +23,7 @@ import android.widget.TextView;
 
 import com.forabetterlife.dtq.myunsplash.MyUnSplash;
 import com.forabetterlife.dtq.myunsplash.R;
+import com.forabetterlife.dtq.myunsplash.utils.TypeFaceHelper;
 import com.forabetterlife.dtq.myunsplash.wallpaper.durationpicker.TimeDurationPickerDialogFragment;
 import com.forabetterlife.dtq.myunsplash.wallpaper.durationpicker.TimeDurationUtil;
 
@@ -30,6 +32,7 @@ import java.util.List;
 
 import androidx.work.State;
 import androidx.work.WorkStatus;
+import mehdi.sakout.fancybuttons.FancyButton;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
@@ -44,9 +47,10 @@ public class WallpaperFragment extends Fragment implements WallpaperContract.Vie
     private static final int REQUEST_DURATION = 0;
 
     private Spinner mSpinner;
-    private Button mStartStopButton;
-    private Button mIntervalButton;
+    private FancyButton mStartStopButton;
+    private FancyButton mIntervalButton;
     private TextView mIntervalTV;
+    private TextView mFromTV;
     private ArrayAdapter<String> mArrayAdapter;
 
     private WallpaperContract.Presenter mPresenter;
@@ -58,8 +62,16 @@ public class WallpaperFragment extends Fragment implements WallpaperContract.Vie
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.fragment_auto_wallpaper, container, false);
 
+        mIntervalTV = (TextView) root.findViewById(R.id.interval);
+        mFromTV = (TextView) root.findViewById(R.id.from);
+
+        Typeface typeFace = Typeface.createFromAsset(getContext().getAssets(), "fonts/Roboto_Regular.ttf");
+        TypeFaceHelper.applyTypeface(mIntervalTV, typeFace);
+        TypeFaceHelper.applyTypeface(mFromTV, typeFace);
+
         mSpinner = (Spinner) root.findViewById(R.id.spinner);
-        mStartStopButton = (Button) root.findViewById(R.id.start_stop_button);
+
+        mStartStopButton = (FancyButton) root.findViewById(R.id.start_stop_button);
         mStartStopButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -72,7 +84,7 @@ public class WallpaperFragment extends Fragment implements WallpaperContract.Vie
             }
         });
 
-        mIntervalButton = (Button) root.findViewById(R.id.interval_button);
+        mIntervalButton = (FancyButton) root.findViewById(R.id.interval_button);
         mIntervalButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -93,8 +105,18 @@ public class WallpaperFragment extends Fragment implements WallpaperContract.Vie
         spinnerValues.add(MyUnSplash.WANTED_PHOTO);
         spinnerValues.add(MyUnSplash.RANDOM_PHOTO);
 
-        mArrayAdapter = new ArrayAdapter<String>(getActivity(),R.layout.spinner_item, spinnerValues);
+        mArrayAdapter = new ArrayAdapter<String>(getActivity(),R.layout.spinner_item, spinnerValues) {
+
+            public View getView(int position, View convertView, ViewGroup parent) {
+                View v = super.getView(position, convertView, parent);
+                Typeface externalFont = Typeface.createFromAsset(getActivity().getAssets(), "fonts/Roboto_Regular.ttf");
+                ((TextView) v).setTypeface(externalFont);
+                return v;
+            }
+        };
+
         mSpinner.setAdapter(mArrayAdapter);
+
         mSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
@@ -143,9 +165,6 @@ public class WallpaperFragment extends Fragment implements WallpaperContract.Vie
                 } else {
                     Log.i(TAG, "WORKsTATUS == NULL");
                 }
-
-
-
             }
         });
 

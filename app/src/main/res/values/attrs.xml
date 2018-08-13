@@ -9,4 +9,10 @@
         <attr name="heartBoderIcon" format="reference"/>
         <attr name="heartIcon" format="reference"/>
     </declare-styleable>
+
+    <declare-styleable name="ThemeColor">
+        <attr name="colorPrimary" format="color"/>
+        <attr name="colorPrimaryDark" format="color"/>
+        <attr name="colorAccent" format="color"/>
+    </declare-styleable>
 </resources>

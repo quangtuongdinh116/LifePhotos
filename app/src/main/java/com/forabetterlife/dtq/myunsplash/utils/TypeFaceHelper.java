@@ -17,6 +17,10 @@ public class TypeFaceHelper {
         textView.setTypeface(typeFace);
     }
 
+    public static void applyTypeface(TextView textView, Typeface typeFace) {
+        textView.setTypeface(typeFace);
+    }
+
     public static Typeface getTypeface() {
         return typeFace;
     }
