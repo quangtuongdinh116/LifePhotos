@@ -22,6 +22,7 @@ import com.forabetterlife.dtq.myunsplash.data.model.SearchPhotoResponse;
 import com.forabetterlife.dtq.myunsplash.data.remote.wantedphoto.WantedPhotoService;
 import com.forabetterlife.dtq.myunsplash.data.service.PhotoService;
 import com.forabetterlife.dtq.myunsplash.utils.AppExecutors;
+import com.forabetterlife.dtq.myunsplash.utils.Preferences;
 import com.google.common.base.Strings;
 
 import java.util.ArrayList;
@@ -276,7 +277,7 @@ public class LocalDataSource implements PhotoDataSource {
 
     @Override
     public void changeWallpaperStatus(long duration, String type, Context context,PhotoDataSource.ScheduleChangeWallpaper callback) {
-        boolean isOnInPreference = mSharedPreferences.getBoolean(PREFERENCE_KEY_IS_ON_WALLPAPER, false);
+        boolean isOnInPreference = Preferences.getWallpaperIsOnStatus(context);
 
         boolean needTurnOffNow = true;
         boolean needTurnOnNow = false;
@@ -291,8 +292,7 @@ public class LocalDataSource implements PhotoDataSource {
 
             //turn off
             mJobScheduler.cancel(jobIdWallpaper);
-            mSharedPreferences.edit()
-                    .putBoolean(PREFERENCE_KEY_IS_ON_WALLPAPER, false).apply();
+            Preferences.changeWallpaperIsOnStatus(context,false);
             callback.onStopSuccess();
         } else if (needTurnOnNow) {
 
@@ -302,13 +302,11 @@ public class LocalDataSource implements PhotoDataSource {
             int result = mJobScheduler.schedule(getJobInfoWallpaper(context,type,duration));
             if (result == JobScheduler.RESULT_SUCCESS) {
 
-                mSharedPreferences.edit()
-                        .putBoolean(PREFERENCE_KEY_IS_ON_WALLPAPER, true).apply();
+                Preferences.changeWallpaperIsOnStatus(context,true);
                 callback.onScheduleSuccess();
             } else {
 
-                mSharedPreferences.edit()
-                        .putBoolean(PREFERENCE_KEY_IS_ON_WALLPAPER, false).apply();
+                Preferences.changeWallpaperIsOnStatus(context,false);
                 callback.onScheduleFail();
             }
         }
