@@ -11,6 +11,7 @@
     <FrameLayout
         android:id="@+id/contentFrame"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"></FrameLayout>
+        android:layout_height="match_parent"
+        android:background="@android:color/transparent"></FrameLayout>
 
 </android.support.constraint.ConstraintLayout>

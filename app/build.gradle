@@ -10,6 +10,7 @@ android {
         versionName "1.0"
         buildConfigField 'String', 'DEV_APP_ID', '"361fe33720d1d2f3fcc4bcb9aa6b16de18d139f60de5f7fe3d2cdee8e1749c43"'
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        multiDexEnabled true
     }
     buildTypes {
         release {
@@ -134,4 +135,8 @@ dependencies {
     implementation 'com.squareup.retrofit2:adapter-rxjava2:2.3.0'
 
     implementation 'com.github.medyo:fancybuttons:1.9.0'
+
+    compile 'com.android.support:multidex:1.0.0'
+
+    implementation 'com.r0adkll:slidableactivity:2.0.6'
 }

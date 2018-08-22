@@ -36,6 +36,10 @@ import com.forabetterlife.dtq.myunsplash.utils.PhotoDetailAction;
 import com.forabetterlife.dtq.myunsplash.utils.ThemeUtils;
 import com.forabetterlife.dtq.myunsplash.utils.Utils;
 import com.inthecheesefactory.thecheeselibrary.widget.AdjustableImageView;
+import com.r0adkll.slidr.Slidr;
+import com.r0adkll.slidr.model.SlidrConfig;
+import com.r0adkll.slidr.model.SlidrInterface;
+import com.r0adkll.slidr.model.SlidrPosition;
 import com.squareup.picasso.Picasso;
 
 import javax.inject.Inject;
@@ -51,6 +55,8 @@ public class PhotoDetailFragment extends DaggerFragment implements PhotoDetailCo
     private static final String TAG = "PhotoDetailFragment";
 
     private static final String BUNDLE_KEY_PHOTO = "bundle_key_photo";
+
+
 
     @Inject
     PhotoDetailContract.Presenter mPresenter;
@@ -259,6 +265,7 @@ public class PhotoDetailFragment extends DaggerFragment implements PhotoDetailCo
     @Override
     public void onResume() {
         super.onResume();
+
         mPresenter.takeView(this);
         mPresenter.loadImageInformation();
         getActivity().registerReceiver(receiver, filter);

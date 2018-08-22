@@ -18,6 +18,28 @@
 
         <item name="heartBoderIcon">@drawable/ic_favorite_border_black_24dp</item>
         <item name="heartIcon">@drawable/ic_favorite_black_24dp</item>
+
+
+    </style>
+
+    <style name="AppTheme.NoActionBar.Detail">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+
+        <item name="heartBoderIcon">@drawable/ic_favorite_border_black_24dp</item>
+        <item name="heartIcon">@drawable/ic_favorite_black_24dp</item>
+
+        <item name="android:windowIsTranslucent">true</item>
+        <item name="android:windowBackground">@android:color/transparent</item>
+    </style>
+
+    <style name="AppTheme.NoActionBar.SwipeBack">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+
+        <item name="heartBoderIcon">@drawable/ic_favorite_border_black_24dp</item>
+        <item name="heartIcon">@drawable/ic_favorite_black_24dp</item>
+
     </style>
 
     <style name="AppTheme.Black" parent="AppTheme.NoActionBar">
@@ -27,6 +49,22 @@
 
         <item name="heartBoderIcon">@drawable/ic_favorite_border_red_24dp</item>
         <item name="heartIcon">@drawable/ic_favorite_red_24dp</item>
+
+
+    </style>
+
+
+    <style name="AppTheme.Black.Detail" parent="AppTheme.NoActionBar">
+        <item name="colorPrimary">@color/colorPrimary_black</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark_black</item>
+        <item name="colorAccent">@color/colorAccent_black</item>
+
+        <item name="heartBoderIcon">@drawable/ic_favorite_border_red_24dp</item>
+        <item name="heartIcon">@drawable/ic_favorite_red_24dp</item>
+
+        <item name="android:windowIsTranslucent">true</item>
+        <item name="android:windowBackground">@android:color/transparent</item>
+
     </style>
 
     <style name="AppTheme.Black.ActionBar" parent="AppTheme">
@@ -36,6 +74,13 @@
 
         <item name="heartBoderIcon">@drawable/ic_favorite_border_red_24dp</item>
         <item name="heartIcon">@drawable/ic_favorite_red_24dp</item>
+
+    </style>
+
+
+    <style name="AppTheme.NoActionBar.SlirTheme">
+        <item name="android:windowIsTranslucent">true</item>
+        <item name="android:windowBackground">@android:color/transparent</item>
     </style>
 
 

@@ -37,8 +37,8 @@
         </activity>
         <activity
             android:name=".photo.PhotoDetailActivity"
+            android:theme="@style/AppTheme.NoActionBar.SlirTheme"
             android:parentActivityName=".photos.PhotosActivity"
-            android:theme="@style/AppTheme.NoActionBar"
             >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
