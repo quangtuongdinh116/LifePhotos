@@ -32,6 +32,7 @@ import java.util.concurrent.TimeUnit;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
+import androidx.work.BackoffPolicy;
 import androidx.work.Constraints;
 import androidx.work.Data;
 
@@ -445,6 +446,7 @@ public class LocalDataSource implements PhotoDataSource {
 
         PeriodicWorkRequest.Builder builder =
                 new PeriodicWorkRequest.Builder(WallpaperWorker.class, duration, TimeUnit.MILLISECONDS)
+                        .setBackoffCriteria(BackoffPolicy.EXPONENTIAL, 30, TimeUnit.SECONDS)
                 .setConstraints(constraints)
                         .setInputData(createInputDataForType(type))
                 .addTag(MyUnSplash.TAG_OUTPUT);

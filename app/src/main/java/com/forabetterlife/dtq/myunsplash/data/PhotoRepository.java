@@ -132,6 +132,7 @@ public class PhotoRepository implements PhotoDataSource {
     public void changeWallpaperStatus(long duration, String type, Context context,PhotoDataSource.ScheduleChangeWallpaper callback) {
         if (Build.VERSION.SDK_INT >= 21) {
             mLocalDataSource.changeWallpaperStatus(duration, type, context,callback);
+//            mLocalDataSource.changeWallpaperStatusAPIBelow21(duration,type,context,callback);
         } else {
             mLocalDataSource.changeWallpaperStatusAPIBelow21(duration,type,context,callback);
         }

@@ -5,17 +5,29 @@ import android.util.Log;
 
 import com.forabetterlife.dtq.myunsplash.MyUnSplash;
 import com.forabetterlife.dtq.myunsplash.prod.Inject;
+import com.forabetterlife.dtq.myunsplash.utils.Preferences;
 
 import androidx.work.Worker;
 
 public class WallpaperWorker extends Worker {
     private static final String TAG = "WallpaperWorker";
 
+    private static final Object LOCK = new Object();
+
     private WallpaperWorkerHelper mWallpaperHelper;
 
     @NonNull
     @Override
     public WorkerResult doWork() {
+
+        synchronized (LOCK) {
+            if (Preferences.isChangeOngoing(MyUnSplash.getInstance())) {
+                return WorkerResult.FAILURE;
+            }
+        }
+
+        Preferences.changeOnChanging(MyUnSplash.getInstance(), true);
+
         String type = getInputData().getString(MyUnSplash.KEY_WALLPAPER_TYPE, null);
         Log.i(TAG, String.format("INSIDE doWork with type is %s",type));
 
@@ -28,7 +40,7 @@ public class WallpaperWorker extends Worker {
 
         } catch (Throwable throwable) {
             Log.e(TAG, "Error dowWork inside WallpaperWorker", throwable);
-            return WorkerResult.FAILURE;
+            return WorkerResult.RETRY;
         }
     }
 

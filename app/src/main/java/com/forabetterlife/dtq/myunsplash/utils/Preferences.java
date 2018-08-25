@@ -37,4 +37,12 @@ public class Preferences {
     public static void changeWallpaperIsOnStatus(Context context, Boolean value) {
         putBoolean(context, context.getResources().getString(R.string.preference_key_is_on_wallpaper),value);
     }
+
+    public static boolean isChangeOngoing(Context context) {
+        return getBoolean(context, context.getString(R.string.preference_key_changing_on_going),false);
+    }
+
+    public static void changeOnChanging(Context context, Boolean value) {
+        putBoolean(context, context.getResources().getString(R.string.preference_key_changing_on_going),value);
+    }
 }
