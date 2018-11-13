@@ -21,7 +21,8 @@ public class PhotosFilterBottomSheetDialog extends BaseBottomSheetDialog {
 
     @BindView(R.id.type_selection)
     Spinner typeSelectionSpinner;
-    @BindView(R.id.sort_selection) Spinner sortSelectionSpinner;
+    @BindView(R.id.sort_selection)
+    Spinner sortSelectionSpinner;
 
     private FilterOptionsModel currentFilterOptions;
 

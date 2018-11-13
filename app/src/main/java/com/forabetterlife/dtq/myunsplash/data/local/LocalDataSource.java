@@ -151,18 +151,13 @@ public class LocalDataSource implements PhotoDataSource {
 
     @Override
     public void changeFavoriteStatus(final FavoriteEntity photo) {
-
         Runnable runnable = new Runnable() {
             @Override
             public void run() {
-
                 FavoriteEntity image = mFavoriteDao.findPhoto(photo.getId());
-
                 if(image == null) {
-
                     mFavoriteDao.insertPhoto(photo);
                 } else {
-
                     mFavoriteDao.deletePhotoById(photo.getId());
                 }
             }
@@ -231,7 +226,6 @@ public class LocalDataSource implements PhotoDataSource {
     @Override
     public void changeWantedPhotoServiceStatus(boolean turnOn, ScheduleFetchNewWantedPhoto callback, Context context) {
 
-
         String searchQuery = getSearchQueryWantedPhoto();
         if (Strings.isNullOrEmpty(searchQuery)) {
             return;
@@ -262,8 +256,6 @@ public class LocalDataSource implements PhotoDataSource {
             mJobScheduler.cancel(jobIdWantedPhoto);
             callback.onStopSuccess();
         }
-
-
 
     }
 
@@ -334,17 +326,14 @@ public class LocalDataSource implements PhotoDataSource {
             needTurnOnNow = true;
         }
         if (needTurnOffNow) {
-
             //turn off
-            mWorkManager.cancelAllWorkByTag(MyUnSplash.CHANGE_WALLPAPER_WORK_NAME);
+            mWorkManager.cancelAllWorkByTag(MyUnSplash.TAG_OUTPUT);
             mSharedPreferences.edit()
                     .putBoolean(PREFERENCE_KEY_IS_ON_WALLPAPER, false).apply();
             callback.onStopSuccess();
         } else if (needTurnOnNow) {
-
             //turn on
             mWorkManager.cancelAllWorkByTag(MyUnSplash.TAG_OUTPUT);
-
 
             mWorkManager.enqueue(getRequest(context, type, duration));
             mSharedPreferences.edit()
@@ -412,12 +401,10 @@ public class LocalDataSource implements PhotoDataSource {
 
     private JobInfo getJobInfoWallpaper(Context context, String type, long duration) {
 
-
-
         mSharedPreferences.edit()
-                .putLong(PREFENCE_KEY_DURATION, duration);
+                .putLong(PREFENCE_KEY_DURATION, duration).commit();
         mSharedPreferences.edit()
-                .putString(PREFERENCE_KEY_WALLPAPER_TYPE, type);
+                .putString(PREFERENCE_KEY_WALLPAPER_TYPE, type).commit();
 
         PersistableBundle persistableBundle = new PersistableBundle();
         persistableBundle.putString(BUNDLE_KEY_TYPE_WALLPAPER, type);
@@ -435,14 +422,12 @@ public class LocalDataSource implements PhotoDataSource {
 
     private PeriodicWorkRequest getRequest(Context context, String type, long duration) {
 
-
         Constraints constraints = new Constraints.Builder()
                 .setRequiredNetworkType(NetworkType.CONNECTED)
                 .setRequiresCharging(false)
                 .setRequiresBatteryNotLow(false)
                 .setRequiresStorageNotLow(false)
                 .build();
-
 
         PeriodicWorkRequest.Builder builder =
                 new PeriodicWorkRequest.Builder(WallpaperWorker.class, duration, TimeUnit.MILLISECONDS)

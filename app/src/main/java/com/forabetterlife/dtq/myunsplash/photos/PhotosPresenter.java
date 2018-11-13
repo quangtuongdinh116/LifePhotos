@@ -84,17 +84,13 @@ public class PhotosPresenter implements PhotosContract.Presenter {
         }
 
         if (isFirstPage) {
-
             mCurrentPage = 1;
         } else {
             mCurrentPage++;
         }
         if (mView != null && isFirstPage) {
-
             mView.setLoadingIndicator(true);
         }
-
-
 
         //load photos based on category begins
         if (PHOTO_CATEGORY == PhotoCategory.SHOW_ALL) {
@@ -156,13 +152,10 @@ public class PhotosPresenter implements PhotosContract.Presenter {
                 }
             });
         } else if (PHOTO_CATEGORY == PhotoCategory.SHOW_WANTED) {
-            Log.i(TAG, "inside photo category == show wanted with search query ==" + mSearchQuery);
             mSearchQuery = getSearchQueryWantedPhoto();
             if (mSearchQuery != null && !mSearchQuery.isEmpty()) {
-                Log.i(TAG, "inside mSearchQuery != null");
                 searchPhotoByQuery(mSearchQuery);
             } else {
-                Log.i(TAG, "inside mSearchQuery == null");
                 mView.showTurnOnWantedFunction();
             }
         } else if (PHOTO_CATEGORY == PhotoCategory.SHOW_DOWNLOADED) {

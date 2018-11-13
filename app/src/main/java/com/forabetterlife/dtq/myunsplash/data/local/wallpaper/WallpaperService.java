@@ -26,9 +26,6 @@ public class WallpaperService extends JobService {
 
     @Override
     public boolean onStartJob(JobParameters params) {
-        int jobId = params.getJobId();
-
-        String type = params.getExtras().getString(LocalDataSource.BUNDLE_KEY_TYPE_WALLPAPER, MyUnSplash.FAVORITE);
 
         if (mWallpaperHelper == null) {
             mWallpaperHelper = new WallpaperHelper(this, Inject.provideRepository(this));
@@ -44,7 +41,7 @@ public class WallpaperService extends JobService {
         if (mWallpaperHelper != null) {
             mWallpaperHelper = null;
         }
-        return false;
+        return true;
     }
 
 

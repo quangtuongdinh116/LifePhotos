@@ -116,4 +116,9 @@ Set your keyword in \"Settings\" then view \"Wanted Photos\" in \"Wanted Photos\
     <string name="type">Type</string>
     <string name="sort">Sort</string>
     <string name="apply">Apply</string>
+
+    <string name="spinner_random">500.000 Photos</string>
+    <string name="spinner_favorite">Favorites</string>
+    <string name="spinner_wanted">Wanted Photos</string>
+
 </resources>

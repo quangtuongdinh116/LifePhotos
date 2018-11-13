@@ -34,8 +34,6 @@ public class PhotoDetailActivity extends DaggerAppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
-
-
         switch (ThemeUtils.getTheme(this)) {
             case ThemeUtils.Theme.DARK_GREEN:
                 setTheme(R.style.AppTheme_NoActionBar_Detail);
@@ -45,8 +43,6 @@ public class PhotoDetailActivity extends DaggerAppCompatActivity {
                 setTheme(R.style.AppTheme_Black_Detail);
                 break;
         }
-
-
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_photo_detail);

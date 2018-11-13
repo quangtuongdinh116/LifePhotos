@@ -56,8 +56,6 @@ public class PhotoDetailFragment extends DaggerFragment implements PhotoDetailCo
 
     private static final String BUNDLE_KEY_PHOTO = "bundle_key_photo";
 
-
-
     @Inject
     PhotoDetailContract.Presenter mPresenter;
 
@@ -79,6 +77,52 @@ public class PhotoDetailFragment extends DaggerFragment implements PhotoDetailCo
         PhotoDetailFragment photoDetailFragment = new PhotoDetailFragment();
         photoDetailFragment.setArguments(bundle);
         return photoDetailFragment;
+    }
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setHasOptionsMenu(true);
+    }
+
+    @Nullable
+    @Override
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        View rootView = inflater.inflate(R.layout.fragment_photo_detail, container, false);
+
+        photoIV = (AdjustableImageView) rootView.findViewById(R.id.photo_image_detail);
+        artistNameTV = (TextView) rootView.findViewById(R.id.artist_name);
+
+        favoriteFab = (FloatingActionButton) getActivity().findViewById(R.id.fab_favorite);
+        favoriteFab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mPresenter.handleFavoriteClick();
+            }
+        });
+
+        return rootView;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        mPresenter.takeView(this);
+        mPresenter.loadImageInformation();
+        getActivity().registerReceiver(receiver, filter);
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        getActivity().unregisterReceiver(receiver);
+    }
+
+    @Override
+    public void onDestroy() {
+        mPresenter.dropView();
+        super.onDestroy();
     }
 
     @Override
@@ -135,7 +179,6 @@ public class PhotoDetailFragment extends DaggerFragment implements PhotoDetailCo
             Intent share = new Intent(Intent.ACTION_SEND);
             share.setType("text/plain");
             share.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
-
             share.putExtra(Intent.EXTRA_SUBJECT, getString(R.string.unsplash_image));
             share.putExtra(Intent.EXTRA_TEXT,  mPresenter.getmPhotoResponse().getLinks().getHtml() + MyUnSplash.UNSPLASH_UTM_PARAMETERS);
 
@@ -214,7 +257,6 @@ public class PhotoDetailFragment extends DaggerFragment implements PhotoDetailCo
         wallpaperIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
         wallpaperIntent.addFlags(Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
         startActivity(Intent.createChooser(wallpaperIntent, "Choose application"));
-
     }
 
     @Override
@@ -229,57 +271,10 @@ public class PhotoDetailFragment extends DaggerFragment implements PhotoDetailCo
 
     @Override
     public void showFavoriteStatus(boolean isFavorite) {
-
         if(isFavorite) {
             favoriteFab.setImageDrawable(getResources().getDrawable(ThemeUtils.getThemeAttrDrawable(getContext(),R.attr.heartIcon)));
         } else {
             favoriteFab.setImageDrawable(getResources().getDrawable(ThemeUtils.getThemeAttrDrawable(getContext(),R.attr.heartBoderIcon)));
         }
-    }
-
-    @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setHasOptionsMenu(true);
-    }
-
-    @Nullable
-    @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.fragment_photo_detail, container, false);
-
-        photoIV = (AdjustableImageView) rootView.findViewById(R.id.photo_image_detail);
-        artistNameTV = (TextView) rootView.findViewById(R.id.artist_name);
-
-        favoriteFab = (FloatingActionButton) getActivity().findViewById(R.id.fab_favorite);
-        favoriteFab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mPresenter.handleFavoriteClick();
-            }
-        });
-
-        return rootView;
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-
-        mPresenter.takeView(this);
-        mPresenter.loadImageInformation();
-        getActivity().registerReceiver(receiver, filter);
-    }
-
-    @Override
-    public void onPause() {
-        super.onPause();
-        getActivity().unregisterReceiver(receiver);
-    }
-
-    @Override
-    public void onDestroy() {
-        mPresenter.dropView();
-        super.onDestroy();
     }
 }

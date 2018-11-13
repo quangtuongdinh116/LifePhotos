@@ -80,6 +80,7 @@ public class PhotosActivity extends DaggerAppCompatActivity
                 setTheme(R.style.AppTheme_Black);
                 break;
         }
+
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_main);
@@ -113,17 +114,6 @@ public class PhotosActivity extends DaggerAppCompatActivity
 
     @Override
     protected void onResume() {
-        Log.i(TAG, "INSIDE onResume");
-//        switch (ThemeUtils.getTheme(this)) {
-//            case ThemeUtils.Theme.DARK_GREEN:
-//                Log.i(TAG, "INSIDE DARK_GREEN");
-//                setTheme(R.style.AppTheme_NoActionBar);
-//                break;
-//            case ThemeUtils.Theme.BLACK:
-//                Log.i(TAG, "INSIDE THEME BLACK");
-//                setTheme(R.style.AppTheme_Black);
-//                break;
-//        }
         super.onResume();
 
         //highlight item in navigation view menu
@@ -192,9 +182,6 @@ public class PhotosActivity extends DaggerAppCompatActivity
         mPresenter.setCategory(category);
     }
 
-
-
-
     @Override
     public void onBackPressed() {
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -217,8 +204,6 @@ public class PhotosActivity extends DaggerAppCompatActivity
             mPresenter.resetToFirstPage();
         } else if (id == R.id.nav_wallpaper) {
             WallpaperFragment wallpaperFragment = new WallpaperFragment();
-            WallpaperPresenter presenter = new WallpaperPresenter(provideRepository(this),
-                    wallpaperFragment, WallpaperType.FAVORITE);
             getSupportFragmentManager().beginTransaction()
                     .replace(R.id.contentFrame, wallpaperFragment)
                     .commit();
@@ -241,7 +226,6 @@ public class PhotosActivity extends DaggerAppCompatActivity
             Intent intent = new Intent(Intent.ACTION_VIEW);
             intent.setDataAndType(uri,"resource/folder");
             if ( intent.resolveActivity(getPackageManager()) != null) {
-
                 startActivity(Intent.createChooser(intent,"Choose app to open"));
             } else {
                 AlertDialog.Builder builder = new AlertDialog.Builder(this)

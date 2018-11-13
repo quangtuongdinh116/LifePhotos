@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.arch.lifecycle.Observer;
 import android.content.Intent;
 import android.graphics.Typeface;
+import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -11,6 +12,8 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.content.ContextCompat;
+import android.support.v4.graphics.drawable.DrawableCompat;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -23,6 +26,7 @@ import android.widget.TextView;
 
 import com.forabetterlife.dtq.myunsplash.MyUnSplash;
 import com.forabetterlife.dtq.myunsplash.R;
+import com.forabetterlife.dtq.myunsplash.utils.ThemeUtils;
 import com.forabetterlife.dtq.myunsplash.utils.TypeFaceHelper;
 import com.forabetterlife.dtq.myunsplash.wallpaper.durationpicker.TimeDurationPickerDialogFragment;
 import com.forabetterlife.dtq.myunsplash.wallpaper.durationpicker.TimeDurationUtil;
@@ -34,7 +38,9 @@ import androidx.work.State;
 import androidx.work.WorkStatus;
 import mehdi.sakout.fancybuttons.FancyButton;
 
+import static android.support.v4.content.ContextCompat.getColor;
 import static com.google.common.base.Preconditions.checkNotNull;
+import static com.google.common.collect.Lists.newArrayList;
 
 /**
  * Created by DTQ on 5/26/2018.
@@ -51,11 +57,17 @@ public class WallpaperFragment extends Fragment implements WallpaperContract.Vie
     private FancyButton mIntervalButton;
     private TextView mIntervalTV;
     private TextView mFromTV;
-    private ArrayAdapter<String> mArrayAdapter;
+
+    private ArrayAdapter<String> fromAdapter;
+    private List<String> fromOptions = new ArrayList<>();
 
     private WallpaperContract.Presenter mPresenter;
 
     private static final String TAG = "WallpaperFragment";
+
+    private String randomString;
+    private String favoriteString;
+    private String wantedString;
 
     @Nullable
     @Override
@@ -98,79 +110,49 @@ public class WallpaperFragment extends Fragment implements WallpaperContract.Vie
             }
         });
 
+        randomString = getContext().getString(R.string.spinner_random);
+        favoriteString = getContext().getString(R.string.spinner_favorite);
+        wantedString = getContext().getString(R.string.spinner_wanted);
+
+        fromOptions =
+                newArrayList(favoriteString, wantedString, randomString);
 
 
-        ArrayList<String> spinnerValues = new ArrayList<>();
-        spinnerValues.add(MyUnSplash.FAVORITE);
-        spinnerValues.add(MyUnSplash.WANTED_PHOTO);
-        spinnerValues.add(MyUnSplash.RANDOM_PHOTO);
+        fromAdapter =
+                new HiddenTopArrayAdapter<String>(
+                        getContext(), R.layout.spinner_item, fromOptions) {
+                    @NonNull
+                    @Override
+                    public View getView(
+                            final int position, final View convertView, @NonNull final ViewGroup parent) {
+                        int selectedItemPosition = position;
+                        if (parent instanceof AdapterView) {
+                            selectedItemPosition = ((AdapterView) parent).getSelectedItemPosition();
+                        }
+                        TextView tv =
+                                (TextView) inflater.inflate(android.R.layout.simple_spinner_item, parent, false);
+                        tv.setPadding(0, 0, 0, 0);
+                        tv.setText(fromOptions.get(selectedItemPosition));
+                        int textColor;
 
-        mArrayAdapter = new ArrayAdapter<String>(getActivity(),R.layout.spinner_item, spinnerValues) {
-
-            public View getView(int position, View convertView, ViewGroup parent) {
-                View v = super.getView(position, convertView, parent);
-                Typeface externalFont = Typeface.createFromAsset(getActivity().getAssets(), "fonts/Roboto_Regular.ttf");
-                ((TextView) v).setTypeface(externalFont);
-                return v;
-            }
-        };
-
-        mSpinner.setAdapter(mArrayAdapter);
-
-        mSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-
-            }
-        });
-
-        mPresenter.getScheduleStatus().observe(this, new Observer<List<WorkStatus>>() {
-            @Override
-            public void onChanged(@Nullable List<WorkStatus> workStatuses) {
-                // If there are no matching work statuses, do nothing
-                if (workStatuses == null || workStatuses.isEmpty()) {
-
-                    return;
-                }
-
-                // We only care about the one output status.
-                // Every continuation has only one worker tagged TAG_OUTPUT
-                WorkStatus workStatus = workStatuses.get(0);
-                if (workStatus != null) {
-                    switch (workStatus.getState()) {
-                        case ENQUEUED:
-
-                            break;
-                        case FAILED:
-
-                            break;
-                        case BLOCKED:
-
-                            break;
-                        case RUNNING:
-
-                            break;
-                        case SUCCEEDED:
-
-                            break;
-                        case CANCELLED:
-
-                            break;
+                        textColor = ThemeUtils.getThemeAttrColor(getContext(), R.attr.colorPrimary);
+                        mSpinner.setBackgroundDrawable(getUnderline(textColor));
+                        tv.setTextColor(textColor);
+                        return tv;
                     }
-                } else {
-                    Log.i(TAG, "WORKsTATUS == NULL");
-                }
-            }
-        });
+                };
 
-
-
+        mSpinner.setAdapter(fromAdapter);
         return root;
+    }
+
+    private Drawable getUnderline(int color) {
+        Drawable drawable =
+                DrawableCompat.wrap(
+                        ContextCompat.getDrawable(getContext(), R.drawable.textfield_underline_black));
+        drawable.mutate();
+        DrawableCompat.setTint(drawable, color);
+        return drawable;
     }
 
     private boolean validate() {
@@ -237,8 +219,8 @@ public class WallpaperFragment extends Fragment implements WallpaperContract.Vie
     public void showStatus(String type, boolean isOn, long duration) {
         mPresenter.setDuration(duration);
         showDuration(duration);
-       for (int i = 0; i < mArrayAdapter.getCount(); i++) {
-           if (type.trim().equals(mArrayAdapter.getItem(i).toString())) {
+       for (int i = 0; i < fromAdapter.getCount(); i++) {
+           if (type.trim().equals(fromAdapter.getItem(i).toString())) {
                mSpinner.setSelection(i);
            }
        }

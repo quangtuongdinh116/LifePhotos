@@ -15,8 +15,6 @@ import com.google.gson.annotations.SerializedName;
 @Entity(tableName = "Favorites")
 public final class FavoriteEntity {
 
-
-
     @PrimaryKey
     @NonNull
     @ColumnInfo(name = "entryid")

@@ -22,8 +22,6 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class SearchService {
 
-
-
     public interface OnRequestPhotosListener {
         void onRequestPhotosSuccess(Call<SearchPhotoResponse> call, Response<SearchPhotoResponse> response, PhotoDataSource.SearchPhotoByQueryCallback callback);
         void onRequestPhotosFailed(Call<SearchPhotoResponse> call, Throwable t,PhotoDataSource.SearchPhotoByQueryCallback callback);

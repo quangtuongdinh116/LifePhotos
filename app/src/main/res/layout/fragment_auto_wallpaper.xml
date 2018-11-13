@@ -10,11 +10,12 @@
     <LinearLayout
         android:paddingTop="20dp"
         android:layout_width="match_parent"
-        android:layout_height="75dp"
+        android:layout_height="45dp"
         android:orientation="horizontal"
         android:padding="5dp"
         android:layout_marginBottom="5dp"
         android:layout_gravity="center_horizontal"
+        android:gravity="center_horizontal"
         >
 
         <TextView
@@ -32,10 +33,7 @@
                 android:id="@+id/spinner"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:paddingBottom="10dp"
-                android:paddingLeft="20dp"
-                android:paddingRight="20dp"
-                android:paddingTop="10dp"
+                android:background="@null"
 
                 ></Spinner>
 
@@ -70,14 +68,15 @@
             android:paddingRight="20dp"
             android:paddingTop="10dp"
             fancy:fb_borderColor="#FFFFFF"
-            fancy:fb_borderWidth="1dp"
-            fancy:fb_defaultColor="?attr/colorAccent"
+            fancy:fb_borderWidth="2dp"
+            fancy:fb_defaultColor="?attr/colorPrimary"
             fancy:fb_focusColor="?attr/colorPrimaryDark"
             fancy:fb_iconPosition="left"
             fancy:fb_radius="30dp"
             fancy:fb_text="@string/choose_interval"
             android:textSize="15sp"
-            fancy:fb_textColor="#FFFFFF" />
+            fancy:fb_textColor="@android:color/white"
+            />
 
     </LinearLayout>
 
@@ -90,13 +89,13 @@
         android:paddingRight="20dp"
         android:paddingTop="10dp"
         fancy:fb_borderColor="#FFFFFF"
-        fancy:fb_borderWidth="1dp"
-        fancy:fb_defaultColor="?attr/colorAccent"
+        fancy:fb_borderWidth="2dp"
+        fancy:fb_defaultColor="?attr/colorPrimary"
         fancy:fb_focusColor="?attr/colorPrimaryDark"
         fancy:fb_iconPosition="left"
         fancy:fb_radius="30dp"
         fancy:fb_text="@string/start_button"
-        fancy:fb_textColor="#FFFFFF"
+        fancy:fb_textColor="@android:color/white"
         android:textSize="15sp"
         android:layout_gravity="center_horizontal"/>
 

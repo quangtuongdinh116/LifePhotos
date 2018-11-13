@@ -15,20 +15,15 @@
     <style name="AppTheme.NoActionBar">
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
-
         <item name="heartBoderIcon">@drawable/ic_favorite_border_black_24dp</item>
         <item name="heartIcon">@drawable/ic_favorite_black_24dp</item>
-
-
     </style>
 
     <style name="AppTheme.NoActionBar.Detail">
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
-
         <item name="heartBoderIcon">@drawable/ic_favorite_border_black_24dp</item>
         <item name="heartIcon">@drawable/ic_favorite_black_24dp</item>
-
         <item name="android:windowIsTranslucent">true</item>
         <item name="android:windowBackground">@android:color/transparent</item>
     </style>

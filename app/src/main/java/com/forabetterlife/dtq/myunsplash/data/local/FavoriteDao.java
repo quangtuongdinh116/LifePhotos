@@ -18,7 +18,6 @@ public interface FavoriteDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insertPhoto(FavoriteEntity photo);
 
-    //xac dinh xem 1 row co nam trog database hay ko
     @Query("SELECT * FROM Favorites WHERE entryid = :id")
     FavoriteEntity findPhoto(String id);
 

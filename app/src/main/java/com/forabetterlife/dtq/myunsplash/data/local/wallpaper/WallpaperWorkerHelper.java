@@ -92,7 +92,6 @@ public class WallpaperWorkerHelper {
             @Override
             public void onLoadSuccess(List<PhotoResponse> photoResponseList) {
                 if (photoResponseList == null || photoResponseList.size() == 0) {
-
                     return;
                 }
 
@@ -100,7 +99,6 @@ public class WallpaperWorkerHelper {
                 int size = finalList.size();
                 Log.i(TAG, "SIZE IS: " + String.valueOf(size));
                 if (size == 0 ){
-
                     return;
                 }
                 int randomPosition = Utils.generateRandomNumber(size);
@@ -148,7 +146,6 @@ public class WallpaperWorkerHelper {
 
                 List<FavoriteEntity> finalList = getFavotiteCanBeWallpaper(favoriteList);
                 if (favoriteList.size() == 0) {
-
                     return;
                 }
 
@@ -176,48 +173,6 @@ public class WallpaperWorkerHelper {
         }
         Random rand = new Random();
         int randomPage = rand.nextInt(10);
-//        mRepository.searchPhotoByQuery(query, new PhotoDataSource.SearchPhotoByQueryCallback() {
-//            @Override
-//            public void onLoadSuccess(SearchPhotoResponse searchPhotoResponse) {
-//                List<PhotoResponse> photoResponseList = searchPhotoResponse.getResults();
-//
-//                if (photoResponseList == null || photoResponseList.size() == 0) {
-//                    sendErrorNotification(context,"Error happened when changed wallpaper",
-//                            "No photos found for your wanted photo search keyword!");
-//                    return;
-//                } else {
-//
-//                    List<PhotoResponse> listOfWallpapers = new ArrayList<>();
-//                    for (PhotoResponse photoResponse : photoResponseList) {
-//
-//                        if (photoResponse.getHeight()/photoResponse.getWidth() > 0.83) {
-//                            listOfWallpapers.add(photoResponse);
-//                        }
-//                    }
-//
-//                    if (listOfWallpapers.size() > 0) {
-//                        int size = listOfWallpapers.size();
-//                        Random random = new Random();
-//                        int randomPosition = random.nextInt(size);
-//                        PhotoResponse chosenPhotoResponse = listOfWallpapers.get(randomPosition);
-//                        int chosenHeight = chosenPhotoResponse.getHeight();
-//                        int chosenWidth = chosenPhotoResponse.getWidth();
-//
-//
-//                        String url = chosenPhotoResponse.getUrls().getRegular();
-//                        setWallpaper(url);
-//                    } else {
-//
-//
-//                    }
-//                }
-//            }
-//
-//            @Override
-//            public void onLoadFail() {
-//
-//            }
-//        },randomPage);
 
         mRepository.searchPhotoByQuery(query, randomPage)
                 .subscribeOn(Schedulers.io())
@@ -233,26 +188,19 @@ public class WallpaperWorkerHelper {
 
                         List<PhotoResponse> listOfWallpapers = new ArrayList<>();
                         for (PhotoResponse photoResponse : photoResponseList) {
-
-                            if (photoResponse.getHeight()/photoResponse.getWidth() > 0.83) {
+                            if (photoResponse.getHeight()/photoResponse.getWidth() > MyUnSplash.CAN_BE_WALLPAPER) {
                                 listOfWallpapers.add(photoResponse);
                             }
                         }
-
                         if (listOfWallpapers.size() > 0) {
                             int size = listOfWallpapers.size();
                             Random random = new Random();
                             int randomPosition = random.nextInt(size);
                             PhotoResponse chosenPhotoResponse = listOfWallpapers.get(randomPosition);
-                            int chosenHeight = chosenPhotoResponse.getHeight();
-                            int chosenWidth = chosenPhotoResponse.getWidth();
-
-
                             String url = chosenPhotoResponse.getUrls().getRegular();
                             setWallpaper(url);
                         } else {
-
-
+                            //do nothing
                         }
                     }
                 }, throwable -> {
@@ -264,40 +212,6 @@ public class WallpaperWorkerHelper {
 
     private void setWallpaper(final String url) {
 
-
-        target = new com.squareup.picasso.Target() {
-            @Override
-            public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
-
-                DisplayMetrics displayMetrics = new DisplayMetrics();
-                WindowManager windowManager = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
-                windowManager.getDefaultDisplay().getMetrics(displayMetrics);
-                int height = displayMetrics.heightPixels;
-
-                int width = displayMetrics.widthPixels;
-
-                WallpaperManager wallpaperManager = WallpaperManager.getInstance(context);
-                try {
-                    wallpaperManager.setBitmap(bitmap);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-
-            @Override
-            public void onBitmapFailed(Drawable errorDrawable) {
-
-            }
-
-
-            @Override
-            public void onPrepareLoad(Drawable placeHolderDrawable) {
-
-            }
-        };
-        Picasso.Builder builder = new Picasso.Builder(context);
-
-
         WindowManager wm = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
         Display display = wm.getDefaultDisplay();
         Point size = new Point();
@@ -306,7 +220,6 @@ public class WallpaperWorkerHelper {
         int height = size.y;
 
         GlideApp.with(context)
-
                 .asBitmap().load(url)
                 .override(width,height)
                 .centerCrop()
@@ -395,9 +308,6 @@ public class WallpaperWorkerHelper {
 
                     }
                 });
-
-
-
     }
 
     private List<FavoriteEntity> getFavotiteCanBeWallpaper(List<FavoriteEntity> sourceList) {

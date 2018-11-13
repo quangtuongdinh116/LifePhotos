@@ -19,7 +19,6 @@ public class Utils {
 
     public static boolean isStoragePermissionGranted(Activity activity) {
         Log.i("Utils","Build.VERSION.SDK_INT is:" + Build.VERSION.SDK_INT);
-
         if (Build.VERSION.SDK_INT >= 23) {
             if (ActivityCompat.checkSelfPermission(activity, android.Manifest.permission.WRITE_EXTERNAL_STORAGE)
                     == PackageManager.PERMISSION_GRANTED) {

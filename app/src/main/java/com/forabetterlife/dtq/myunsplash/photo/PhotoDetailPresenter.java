@@ -101,9 +101,8 @@ public class PhotoDetailPresenter implements PhotoDetailContract.Presenter {
         this.downloadManager = downloadManager;
 
         mRepository.reportDownload(mPhotoResponse.getId(),mReportDownloadListener);
-        String filename = mPhotoResponse.getId() + "_" + "raw" + MyUnSplash.DOWNLOAD_PHOTO_FORMAT;
         String qualityOfPhoto = mRepository.getPhotoDownloadQuality();
-
+        String filename = mPhotoResponse.getId() + "_" + qualityOfPhoto + MyUnSplash.DOWNLOAD_PHOTO_FORMAT;
         String urlOfPhoto = Utils.getPhotoUrlBaseOnQuality(qualityOfPhoto, mPhotoResponse);
         DownloadManager.Request request = new DownloadManager.Request(Uri.parse(urlOfPhoto))
                 .setTitle(filename)
@@ -152,7 +151,6 @@ public class PhotoDetailPresenter implements PhotoDetailContract.Presenter {
                     }
 
                     mView.dismissWallPaperDialog();
-
                     cursor.close();
                 }
                 break;

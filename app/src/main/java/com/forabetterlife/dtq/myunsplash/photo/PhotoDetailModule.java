@@ -17,7 +17,6 @@ import static com.forabetterlife.dtq.myunsplash.photo.PhotoDetailActivity.EXTRA_
 @Module
 public abstract class PhotoDetailModule {
 
-
     @FragmentScoped
     @ContributesAndroidInjector
     abstract PhotoDetailFragment photoDetailFragment();

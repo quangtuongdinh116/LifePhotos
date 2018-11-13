@@ -64,10 +64,8 @@ public class PhotosFragment extends PhotosVisibleFragment implements PhotosContr
     OnItemClickListener mOnItemClickListener = new OnItemClickListener() {
         @Override
         public void onPhotoItemClick(PhotoResponse photoResponse) {
-
             LayoutInflater inflater = LayoutInflater.from(getActivity());
             View view = inflater.inflate(R.layout.photo_item, null);
-
             ImageView imageView;
             imageView = (ImageView) view.findViewById(R.id.photo_image);
             if (imageView.getDrawable() != null)
@@ -114,8 +112,6 @@ public class PhotosFragment extends PhotosVisibleFragment implements PhotosContr
 
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
-//        mPhotosAdapter = new PhotosAdapter(new ArrayList<PhotoResponse>());
-
     }
 
     @Nullable
@@ -247,7 +243,6 @@ public class PhotosFragment extends PhotosVisibleFragment implements PhotosContr
         mRecyclerView.addOnScrollListener(new EndlessRecyclerOnScrollListener(mFooterAdapter) {
             @Override
             public void onLoadMore(int currentPage) {
-
                 mFooterAdapter.clear();
                 mFooterAdapter.add(new ProgressItem().withEnabled(false));
                 loadMore();
@@ -257,16 +252,13 @@ public class PhotosFragment extends PhotosVisibleFragment implements PhotosContr
     }
 
     private void loadMore() {
-
         if (mPresenter.getCategory() == PhotoCategory.SHOW_FAVORITE) {
             mFooterAdapter.clear();
             return;
         }
         if (mPresenter.isSearching()) {
-
             mPresenter.nextPageSearchPhotos();
         } else {
-
             mPresenter.nextPageAllPhotos();
         }
     }

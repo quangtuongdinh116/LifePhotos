@@ -29,7 +29,6 @@ public class WallpaperWorker extends Worker {
         Preferences.changeOnChanging(MyUnSplash.getInstance(), true);
 
         String type = getInputData().getString(MyUnSplash.KEY_WALLPAPER_TYPE, null);
-        Log.i(TAG, String.format("INSIDE doWork with type is %s",type));
 
         try {
             if (mWallpaperHelper == null) {
@@ -39,7 +38,6 @@ public class WallpaperWorker extends Worker {
             return WorkerResult.SUCCESS;
 
         } catch (Throwable throwable) {
-            Log.e(TAG, "Error dowWork inside WallpaperWorker", throwable);
             return WorkerResult.RETRY;
         }
     }
