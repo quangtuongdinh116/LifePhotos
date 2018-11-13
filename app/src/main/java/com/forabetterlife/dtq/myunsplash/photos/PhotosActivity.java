@@ -204,6 +204,8 @@ public class PhotosActivity extends DaggerAppCompatActivity
             mPresenter.resetToFirstPage();
         } else if (id == R.id.nav_wallpaper) {
             WallpaperFragment wallpaperFragment = new WallpaperFragment();
+            WallpaperPresenter presenter = new WallpaperPresenter(provideRepository(this),
+                    wallpaperFragment, WallpaperType.FAVORITE);
             getSupportFragmentManager().beginTransaction()
                     .replace(R.id.contentFrame, wallpaperFragment)
                     .commit();
