@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -48,7 +49,7 @@ import javax.inject.Inject;
 import static com.forabetterlife.dtq.myunsplash.prod.Inject.*;
 
 public class PhotosActivity extends DaggerAppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener {
+        implements NavigationView.OnNavigationItemSelectedListener{
 
     private String TAG = "PhotosActivity";
     private static final String CURRENT_CATEGORY_KEY = "CURRENT_CATEGORY_KEY";
@@ -110,6 +111,7 @@ public class PhotosActivity extends DaggerAppCompatActivity
             if (mPresenter != null)
                 mPresenter.setCategory(currentCategory);
         }
+
     }
 
     @Override
@@ -258,6 +260,8 @@ public class PhotosActivity extends DaggerAppCompatActivity
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        Log.i(TAG, "INSIDE onActivityResult with result code = " +
+        resultCode);
         if (resultCode != Activity.RESULT_OK)
             return;
         if (requestCode != SETTINGS_REQUEST_CODE)
@@ -267,4 +271,6 @@ public class PhotosActivity extends DaggerAppCompatActivity
         finish();
         startActivity(intent);
     }
+
+
 }

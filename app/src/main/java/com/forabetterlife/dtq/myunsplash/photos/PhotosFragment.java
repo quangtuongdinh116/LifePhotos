@@ -2,8 +2,10 @@ package com.forabetterlife.dtq.myunsplash.photos;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
@@ -55,7 +57,9 @@ import javax.inject.Inject;
  */
 
 @ActivityScoped
-public class PhotosFragment extends PhotosVisibleFragment implements PhotosContract.View, PhotosFilterBottomSheetDialog.PhotosFilterChangeListener  {
+public class PhotosFragment extends PhotosVisibleFragment implements PhotosContract.View, PhotosFilterBottomSheetDialog.PhotosFilterChangeListener,
+        SharedPreferences.OnSharedPreferenceChangeListener
+{
     private static final String TAG = "PhotosFragment";
 
     @Inject
@@ -97,6 +101,8 @@ public class PhotosFragment extends PhotosVisibleFragment implements PhotosContr
 
     Boolean isScrolling = false;
     int currentItems, totalItems, scrollOutItems;
+
+    SharedPreferences sharedPreferences;
 
     public static PhotosFragment newInstance() {
         return new PhotosFragment();
@@ -140,12 +146,16 @@ public class PhotosFragment extends PhotosVisibleFragment implements PhotosContr
         mPresenter.takeView(this);
         loadPhotos();
 
+        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
+        sharedPreferences.registerOnSharedPreferenceChangeListener(this);
+
         return rootView;
+
+
     }
 
     @Override
     public void onResume() {
-
         super.onResume();
         mPresenter.takeView(this);
 
@@ -155,6 +165,8 @@ public class PhotosFragment extends PhotosVisibleFragment implements PhotosContr
         }
 
         closeKeyboard();
+
+
     }
 
     public void loadPhotos() {
@@ -165,6 +177,7 @@ public class PhotosFragment extends PhotosVisibleFragment implements PhotosContr
     public void onDestroy() {
         super.onDestroy();
         mPresenter.dropView();
+        sharedPreferences.unregisterOnSharedPreferenceChangeListener(this);
 //        RefWatcher refWatcher = MyUnSplash.getRefWatcher(getActivity());
 //        refWatcher.watch(this);
 
@@ -401,6 +414,16 @@ public class PhotosFragment extends PhotosVisibleFragment implements PhotosContr
     @Override
     public void onSortOptionSelected(String selectedSortOption) {
         mPresenter.onSortSelected(selectedSortOption);
+    }
+
+    @Override
+    public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String s) {
+        switch (s) {
+            case "show_quality_list_key":
+                loadPhotos();
+                return;
+            default:
+        }
     }
 
 

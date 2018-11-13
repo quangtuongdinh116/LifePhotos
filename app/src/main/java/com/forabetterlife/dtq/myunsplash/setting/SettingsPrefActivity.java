@@ -158,6 +158,10 @@ public class SettingsPrefActivity extends AppCompatPreferenceActivity{
                         getActivity().setResult(Activity.RESULT_OK);
                         restartActivity();
                     }
+                    if (preference.getKey().equals("show_quality_list_key")) {
+                        getActivity().setResult(Activity.RESULT_OK);
+                    }
+
                 } else if (preference instanceof EditTextPreference) {
                     String value = o.toString();
                     EditTextPreference editTextPreference = (EditTextPreference) preference;
